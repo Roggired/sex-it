@@ -18,8 +18,8 @@
         cores: 4
         memory: 8
         image_id: fd8qddnlunna398ftcms
-        disk_type: hdd
-        disk_size: 100
+        disk_type: ssd
+        disk_size: 30
         subnet_id: e9bb9k6eudbh780hs7md
 #        secondary_subnet_id: e9bb9k6eudbh780hs7md
         assign_public_ip: true
