@@ -25,7 +25,9 @@ class PsychoProfileController(
     ): Any {
         val profile = profileService.getProfileById(id)
         return when(mode) {
-            ProfileViewMode.CLIENT -> profile.toClientView()
+            ProfileViewMode.CLIENT -> profile.toClientView(
+                psychoRating = profileService.getPsychoRatings(id)
+            )
             ProfileViewMode.PSYCHO -> profile.toPsychoView()
         }
     }

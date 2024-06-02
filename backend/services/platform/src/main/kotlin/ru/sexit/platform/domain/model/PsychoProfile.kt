@@ -13,4 +13,15 @@ class PsychoProfile(
     var price: Int,
     var isFirstFree: Boolean,
     var bio: String,
-)
+) {
+    companion object {
+        fun stub(id: Long): PsychoProfile = PsychoProfile(
+            id = id,
+            name = "",
+            email = "",
+            price = 0,
+            isFirstFree = false,
+            bio = "",
+        )
+    }
+}

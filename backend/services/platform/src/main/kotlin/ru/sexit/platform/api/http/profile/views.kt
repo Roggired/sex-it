@@ -1,6 +1,9 @@
 package ru.sexit.platform.api.http.profile
 
+import ru.sexit.platform.api.http.feedback.FeedbackView
+import ru.sexit.platform.api.http.feedback.toView
 import ru.sexit.platform.domain.model.PsychoProfile
+import ru.sexit.platform.domain.model.PsychoRating
 import java.time.LocalDateTime
 
 data class ProfilePsychoView(
@@ -32,19 +35,17 @@ data class ProfileClientView(
     val feedbacks: List<FeedbackView>,
 )
 
-fun PsychoProfile.toClientView(): ProfileClientView = ProfileClientView(
+fun PsychoProfile.toClientView(
+    psychoRating: PsychoRating
+): ProfileClientView = ProfileClientView(
     id = id,
     name = name,
     email = email,
     price = price,
     isFirstFree = isFirstFree,
     bio = bio,
-    rating = 0.0,
-    feedbacks = emptyList(),
-)
-
-data class FeedbackView(
-    val id: Long,
-    val creationTime: LocalDateTime,
-    val text: String,
+    rating = psychoRating.rating,
+    feedbacks = psychoRating.feedbacks.map {
+        it.toView()
+    },
 )

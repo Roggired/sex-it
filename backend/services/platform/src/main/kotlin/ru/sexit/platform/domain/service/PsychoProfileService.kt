@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.profile.PsychoProfileRequest
 import ru.sexit.platform.domain.model.PsychoProfile
+import ru.sexit.platform.domain.model.PsychoRating
+import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
 import ru.sexit.platform.infrastructure.AlreadyExistException
 import ru.sexit.platform.infrastructure.NotFoundException
@@ -13,6 +15,7 @@ import ru.sexit.platform.utils.log
 @Service
 class PsychoProfileService(
     private val psychoProfileRepo: PsychoProfileRepo,
+    private val feedbackRepo: FeedbackRepo,
 ) {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun updateOrCreate(id: Long, request: PsychoProfileRequest): PsychoProfile {
@@ -64,4 +67,21 @@ class PsychoProfileService(
 
     fun getProfileById(id: Long): PsychoProfile = psychoProfileRepo.findById(id)
             .orElseThrow { NotFoundException("No such profile exists") }
+
+    fun getPsychoRatings(id: Long): PsychoRating {
+        val feedbacks = feedbackRepo.findAllByPsychoProfileId(id)
+        val number = feedbacks.size
+
+        if (number == 0) {
+            return PsychoRating(
+                rating = 0.0,
+                feedbacks = emptyList(),
+            )
+        }
+
+        return PsychoRating(
+            rating = feedbacks.sumOf { it.rating }.toDouble() / number,
+            feedbacks = feedbacks,
+        )
+    }
 }
