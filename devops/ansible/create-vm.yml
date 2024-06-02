@@ -1,0 +1,33 @@
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Render user metadata
+      ansible.builtin.template:
+        src: ./vm-user-data.yml
+        dest: ./vm-user-data-renderred.yml
+    - name: Create vm
+      ycc_vm:
+        auth:
+          service_account_key: '{{ service_account_token | from_json }}'
+        name: sexit-bbb
+        hostname: sexit-bbb
+        zone_id: ru-central1-a
+        folder_id: b1gsmcdtpsi4st75hi8n
+        platform_id: "Intel Cascade Lake"
+        core_fraction: 100
+        cores: 4
+        memory: 8
+        image_id: fd8qddnlunna398ftcms
+        disk_type: hdd
+        disk_size: 100
+        subnet_id: e9bb9k6eudbh780hs7md
+#        secondary_subnet_id: e9bb9k6eudbh780hs7md
+        assign_public_ip: true
+        preemptible: true
+        metadata:
+          user-data: "{{ lookup('ansible.builtin.file', './vm-user-data-renderred.yml') }}"
+        state: present
+    - name: Delete renderred user metadata
+      ansible.builtin.file:
+        path: ./vm-user-data-renderred.yml
+        state: absent

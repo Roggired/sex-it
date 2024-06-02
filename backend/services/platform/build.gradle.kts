@@ -45,6 +45,8 @@ dependencies {
 //    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2")
 
     // validation
     implementation("jakarta.validation:jakarta.validation-api:3.0.2")
@@ -61,6 +63,7 @@ dependencies {
 
     // other
     implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("commons-codec:commons-codec:1.17.0")
 
     // test
     testImplementation("io.kotest:kotest-runner-junit5:5.5.2")

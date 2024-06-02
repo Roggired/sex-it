@@ -21,6 +21,7 @@ enum class ErrorType {
     ALREADY_EXIST,
     NOT_FOUND,
     UNEXPECTED_EXCEPTION,
+    BBB_EXCEPTION,
     ;
 }
 
@@ -32,6 +33,17 @@ class ErrorResponse(
 @ControllerAdvice
 @Order(1)
 class ExceptionHandler {
+    @ExceptionHandler
+    fun handleBbbIntegrationException(e: BbbIntegrationException): ResponseEntity<ErrorResponse> =
+        ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(
+                ErrorResponse(
+                    status = ErrorType.BBB_EXCEPTION,
+                    description = e.message,
+                )
+            ).also { log.error("BBB integration exception occurred", e) }
+
     @ExceptionHandler
     fun handleMissingServletRequestParameter(e: MissingServletRequestParameterException): ResponseEntity<ErrorResponse> =
         ResponseEntity

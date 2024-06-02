@@ -93,12 +93,19 @@ services:
 
   platform:
     build: services/platform
-    container_name: sexit-course-service
+    container_name: sexit-platform
     depends_on:
       - database
     networks:
       sexit-network:
         ipv4_address: 172.28.0.6
+
+#  bbb:
+#    image: bigbluebutton/greenlight
+#    container_name: sexit-bbb
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.7
 
 networks:
   sexit-network:

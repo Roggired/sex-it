@@ -11,6 +11,14 @@ spring:
 #      hibernate:
 #        format_sql: true
 
+bbb:
+  client-mode: real
+  url: https://roggired.ru/bigbluebutton
+  secret: ${BBB_SECRET:secret}
+  logout-url: http://localhost:8081
+  error-redirect-url: http://localhost:8081
+  duration-in-minutes: 70
+
 springdoc:
   api-docs:
     enabled: true
@@ -37,6 +45,7 @@ logging:
     ru.sexit.platform: trace
     org.apache.kafka: error
     org.springframework.kafka: error
+    org.springframework.web.client: debug
 #    org.springframework.security: trace
 #    org.springframework.jdbc.core: debug
 #    org.springframework.data: debug

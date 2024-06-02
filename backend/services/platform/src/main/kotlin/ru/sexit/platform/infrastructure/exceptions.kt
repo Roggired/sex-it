@@ -5,3 +5,4 @@ class NotFoundException(override val message: String? = null) : RuntimeException
 class InvalidDataException(override val message: String? = null) : RuntimeException(message)
 class InvalidOperationException(override val message: String? = null) : RuntimeException(message)
 class InternalServerException(override val message: String? = null) : RuntimeException(message)
+class BbbIntegrationException(override val message: String? = null) : RuntimeException(message)

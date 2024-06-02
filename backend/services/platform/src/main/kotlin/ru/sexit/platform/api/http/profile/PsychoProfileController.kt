@@ -3,6 +3,7 @@ package ru.sexit.platform.api.http.profile
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import ru.sexit.platform.domain.service.PsychoProfileService
+import ru.sexit.platform.utils.RequestMode
 
 @RestController
 @RequestMapping("/api/v1/profiles")
@@ -21,14 +22,14 @@ class PsychoProfileController(
     @GetMapping("/{id}")
     fun get(
         @PathVariable id: Long,
-        mode: ProfileViewMode,
+        mode: RequestMode,
     ): Any {
         val profile = profileService.getProfileById(id)
         return when(mode) {
-            ProfileViewMode.CLIENT -> profile.toClientView(
+            RequestMode.CLIENT -> profile.toClientView(
                 psychoRating = profileService.getPsychoRatings(id)
             )
-            ProfileViewMode.PSYCHO -> profile.toPsychoView()
+            RequestMode.PSYCHO -> profile.toPsychoView()
         }
     }
 }

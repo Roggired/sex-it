@@ -1,0 +1,28 @@
+- hosts: bbb
+  gather_facts: no
+  tasks:
+   - name: Install docker (1)
+     shell: sudo apt-get install ca-certificates curl && sudo install -m 0755 -d /etc/apt/keyrings && sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && sudo chmod a+r /etc/apt/keyrings/docker.asc
+   - name: Install docker (2)
+     shell: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+   - name: Install docker (3)
+     shell: sudo apt-get update
+   - name: Install docker (4)
+     shell: sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   - name: Post install docker (1)
+     shell: getent group docker 2>&1 > /dev/null || sudo groupadd docker
+   - name: Post install docker (2)
+     shell: sudo usermod -aG docker ops
+   - name: Configure docker mirrors
+     shell: echo "{\"registry-mirrors\":[\"https://mirror.gcr.io/\"]}" > /tmp/daemon.json && sudo mv /tmp/daemon.json /etc/docker/daemon.json
+   - name: Restart docker
+     shell: sudo systemctl restart docker.service
+   - name: Check bbb not installed
+     stat:
+       path: /etc/bigbluebutton/bigbluebutton-release
+     register: bbb_installed
+   - name: Install bbb
+     shell: wget -qO- https://raw.githubusercontent.com/bigbluebutton/bbb-install/v2.7.x-release/bbb-install.sh | sudo bash -s -- -v focal-270 -s {{ bbb_hostname }} -e {{ bbb_letsencrypt_email }} -g
+     when: not bbb_installed.stat.exists
+   - name: Create admin account in bbb
+     shell: docker exec -it greenlight-v3 bundle exec rake admin:create['admin','admin@example.com','{{ bbb_admin_password }}']
