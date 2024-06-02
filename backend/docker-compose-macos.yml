@@ -1,0 +1,20 @@
+services:
+  database:
+    ports:
+      - "31501:5432"
+
+#  keycloak:
+#    ports:
+#      - "31502:8080"
+
+#  maildev:
+#    ports:
+#      - "31503:80"
+
+#  minio:
+#    ports:
+#      - "31504:8080"
+
+  platform:
+    ports:
+      - "31505:8080"

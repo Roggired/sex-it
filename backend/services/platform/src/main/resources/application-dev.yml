@@ -1,0 +1,44 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://database/postgres
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+  model-converters:
+    pageable-converter:
+      enabled: true
+
+#kafka:
+#  url: http://broker:9092
+#  exampleConsumerGroupId: example-consumer-group
+#  exampleConcurrencyFactor: 2
+#  maxBlockTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_max.block.ms
+#  requestTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_request.timeout.ms
+#  deliveryTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_delivery.timeout.ms
+#  linger: 0s # https://kafka.apache.org/documentation/#producerconfigs_linger.ms
+#  retries: 3 # https://kafka.apache.org/documentation/#producerconfigs_retries
+#  producerId: course-service-producer
+#  exampleTopic: example.cool # DO NOT change value of this property. This value is used on consuming services in hardcoded way
+
+logging:
+  level:
+    ru.sexit.platform: trace
+    org.apache.kafka: error
+    org.springframework.kafka: error
+#    org.springframework.security: trace
+#    org.springframework.jdbc.core: debug
+#    org.springframework.data: debug
+#    org.hibernate: debug
+#    root: info

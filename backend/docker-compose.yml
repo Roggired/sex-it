@@ -1,0 +1,109 @@
+version: '3'
+services:
+  database:
+    container_name: sexit-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+#    volumes:
+#      - ./config/init-databases.sh:/docker-entrypoint-initdb.d/init-databases.sh
+    networks:
+      sexit-network:
+        ipv4_address: 172.28.0.2
+
+#  keycloak:
+#    container_name: sexit-keycloak
+#    image: bitnami/keycloak:latest
+#    depends_on:
+#      - database
+#    environment:
+#      KEYCLOAK_ADMIN: admin
+#      KEYCLOAK_ADMIN_PASSWORD: admin
+#      KEYCLOAK_DATABASE_HOST: database
+#      KEYCLOAK_DATABASE_NAME: keycloak
+#      KEYCLOAK_DATABASE_USER: keycloak
+#      KEYCLOAK_DATABASE_PASSWORD: keycloak
+#      KEYCLOAK_DATABASE_SCHEMA: public
+      # Based on https://hub.docker.com/r/bitnami/keycloak/ KEYCLOAK_EXTRA_ARGS is used to define additional arguments
+      # for kc.sh. We use --import-realm based on https://www.keycloak.org/server/importExport (22.0.1) to enable
+      # import realm on startup feature. This feature allow us to keep recreating docker containers as simple as possible
+#      KEYCLOAK_EXTRA_ARGS: --import-realm
+#    volumes:
+      # it is important to use /opt/bitnami/keycloak/data/import dir, because Keycloak uses <KEYCLOAK_HOME_DIR>/data/import
+      # directory to find json files with realms on importing realms on startup.
+      # (Have read about this here: https://stackoverflow.com/a/72262610)
+#      - ./config/sexit-realm.json:/opt/bitnami/keycloak/data/import/sexit-realm.json
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.3
+
+#  maildev:
+#    container_name: sexit-maildev
+#    image: maildev/maildev
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.4
+
+#  minio:
+#    container_name: sexit-minio
+#    image: minio/minio:RELEASE.2021-10-10T16-53-30Z
+#    command: server /data --console-address ":9001"
+#    environment:
+#      MINIO_ROOT_USER: root
+#      MINIO_ROOT_PASSWORD: root_root
+#    volumes:
+#      - ./docker-volumes/minio-data:/data
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.5
+
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:7.3.0
+#    container_name: sexit-zookeeper
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.149
+#    logging:
+#      driver: "none"
+#
+#  broker:
+#    image: confluentinc/cp-kafka:7.3.0
+#    container_name: sexit-broker
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.28.0.6:9092
+#      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+#    networks:
+#      sexit-network:
+#        ipv4_address: 172.28.0.150
+#    logging:
+#      driver: "none"
+
+  platform:
+    build: services/platform
+    container_name: sexit-course-service
+    depends_on:
+      - database
+    networks:
+      sexit-network:
+        ipv4_address: 172.28.0.6
+
+networks:
+  sexit-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
