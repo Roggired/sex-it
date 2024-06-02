@@ -42,3 +42,6 @@ logging:
 #    org.springframework.data: debug
 #    org.hibernate: debug
 #    root: info
+
+cors:
+  allowed-origins: "http://localhost:3000"
