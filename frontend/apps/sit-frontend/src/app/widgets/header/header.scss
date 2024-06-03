@@ -1,0 +1,16 @@
+@import "../../../styles";
+
+.header {
+  display: flex;
+  background-color: $light-gray;
+  padding: 16px 24px;
+  gap: 16px;
+
+  & > span:first-child {
+    margin-right: auto;
+  }
+
+  & > span {
+    cursor: pointer;
+  }
+}

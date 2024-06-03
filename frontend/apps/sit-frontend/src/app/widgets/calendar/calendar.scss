@@ -1,0 +1,56 @@
+@import "../../../styles";
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+
+  &__header {
+    align-self: center;
+    display: flex;
+    gap: 20px;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+  }
+
+  &__entry {
+    width: 160px;
+    height: 120px;
+    padding: 12px;
+    background-color: $light-gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__date {
+      display: flex;
+      justify-content: end;
+      font-size: 24px;
+
+      & > span:last-child {
+        margin-left: auto;
+      }
+    }
+
+    &__more {
+      align-self: end;
+    }
+
+    &.inactive {
+      background-color: $light;
+    }
+  }
+
+  &__slot {
+    border-radius: 4px;
+    background-color: orange;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+}

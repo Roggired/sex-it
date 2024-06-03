@@ -1,0 +1,9 @@
+{
+  "name": "sit-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sit-frontend/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project sit-frontend --web",
+  "targets": {}
+}
