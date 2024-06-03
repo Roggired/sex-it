@@ -1,6 +1,11 @@
 import './app.scss';
 import { store } from 'apps/sit-frontend/src/app/api/store';
+import { ClientApplicationViewerPage } from 'apps/sit-frontend/src/app/pages/client/application-viewer/application-viewer';
+import { ClientApplicationsPage } from 'apps/sit-frontend/src/app/pages/client/client-applications/client-applications';
+import { PsychoCalendar } from 'apps/sit-frontend/src/app/pages/client/psycho-calendar/psycho-calendar';
+import { PsychoCardPage } from 'apps/sit-frontend/src/app/pages/client/psycho-card/psycho-card';
 import { PsychoListPage } from 'apps/sit-frontend/src/app/pages/client/psycho-list/psycho-list-page';
+import { PsychoSlotPage } from 'apps/sit-frontend/src/app/pages/client/psycho-slot/psycho-slot';
 import { ApplicationViewPage } from 'apps/sit-frontend/src/app/pages/psycho/application-view/application-view-page';
 import { ApplicationsPage } from 'apps/sit-frontend/src/app/pages/psycho/applications/applications-page';
 import { CreateSlotPage } from 'apps/sit-frontend/src/app/pages/psycho/create-slot/create-slot-page';
@@ -77,6 +82,51 @@ const router = createBrowserRouter([
       <>
         <Header />
         <PsychoListPage />
+      </>
+    ),
+  },
+  {
+    path: '/client/psycho-card/:id',
+    element: (
+      <>
+        <Header />
+        <PsychoCardPage />
+      </>
+    ),
+  },
+  {
+    path: '/client/psycho-calendar/:id',
+    element: (
+      <>
+        <Header />
+        <PsychoCalendar />
+      </>
+    ),
+  },
+  {
+    path: '/client/psycho-slot/:id',
+    element: (
+      <>
+        <Header />
+        <PsychoSlotPage />
+      </>
+    ),
+  },
+  {
+    path: '/client/applications',
+    element: (
+      <>
+        <Header />
+        <ClientApplicationsPage />
+      </>
+    ),
+  },
+  {
+    path: '/client/application/:id',
+    element: (
+      <>
+        <Header />
+        <ClientApplicationViewerPage />
       </>
     ),
   },

@@ -1,0 +1,18 @@
+.psycho-slot {
+  display: flex;
+  flex-direction: column;
+  margin: 36px auto;
+  width: 40%;
+  align-items: start;
+  gap: 12px;
+
+  & > textarea {
+    resize: none;
+    align-self: stretch;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 24px;
+  }
+}

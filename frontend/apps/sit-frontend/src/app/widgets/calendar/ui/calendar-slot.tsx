@@ -1,3 +1,11 @@
-export const CalendarSlot = () => {
-  return <div className="calendar__slot">11-00 Запланировано</div>;
+type CalendarSlotProps = {
+  readonly onSlotClick?: () => void;
+};
+
+export const CalendarSlot = ({ onSlotClick }: CalendarSlotProps) => {
+  return (
+    <div className="calendar__slot" onClick={onSlotClick}>
+      11-00 Запланировано
+    </div>
+  );
 };

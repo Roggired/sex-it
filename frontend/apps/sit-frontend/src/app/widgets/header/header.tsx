@@ -12,9 +12,12 @@ export const Header = () => {
     return (
       <div className="header">
         <span>SEX-IT</span>
-        <span>Психологи</span>
-        <span>Профиль</span>
-        <span>Мои заявки</span>
+        <span onClick={() => navigate(routes.toClientPsychoList())}>
+          Психологи
+        </span>
+        <span onClick={() => navigate(routes.toClientApplications())}>
+          Мои заявки
+        </span>
         <span onClick={() => navigate(routes.toRoot())}>Выйти</span>
       </div>
     );

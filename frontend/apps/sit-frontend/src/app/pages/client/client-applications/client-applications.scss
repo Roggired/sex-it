@@ -1,0 +1,46 @@
+.client-applications {
+  display: flex;
+  flex-direction: column;
+  margin: 36px auto;
+  width: 60%;
+  gap: 24px;
+
+  &__breadcrumbs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    & > span {
+      cursor: pointer;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  &__apps {
+    display: flex;
+    gap: 12px;
+    align-self: stretch;
+
+    &__entry {
+      display: flex;
+      padding: 12px;
+      border: 1px solid black;
+      border-radius: 4px;
+      width: 100%;
+      align-items: center;
+
+      & > div:first-child {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+  }
+}

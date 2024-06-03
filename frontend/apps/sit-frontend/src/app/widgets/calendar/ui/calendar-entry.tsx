@@ -6,12 +6,14 @@ export type CalendarEntryProps = {
   readonly monthEntry: MonthEntry;
   readonly isCurrentDay: boolean;
   readonly onDayClick?: (day: number, month: number) => void;
+  readonly onSlotClick?: (slotId: number) => void;
 };
 
 export const CalendarEntry = ({
   monthEntry: { month, day, isCurrentMonth },
   isCurrentDay,
   onDayClick,
+  onSlotClick,
 }: CalendarEntryProps) => {
   return (
     <div
@@ -24,8 +26,8 @@ export const CalendarEntry = ({
         <span>{isCurrentDay && 'Сегодня'}</span>
         <span>{day}</span>
       </div>
-      <CalendarSlot />
-      <CalendarSlot />
+      <CalendarSlot onSlotClick={() => onSlotClick?.(1)} />
+      <CalendarSlot onSlotClick={() => onSlotClick?.(1)} />
       <div className="calendar__entry__more">Еще 2 слота</div>
     </div>
   );
