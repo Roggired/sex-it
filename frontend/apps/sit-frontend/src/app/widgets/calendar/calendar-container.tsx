@@ -12,7 +12,11 @@ export type MonthEntry = {
   readonly isCurrentMonth: boolean;
 };
 
-export const CalendarContainer = () => {
+type CalendarContainerProps = {
+  readonly onDayClick?: (day: number, month: number) => void;
+};
+
+export const CalendarContainer = ({ onDayClick }: CalendarContainerProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const endDateInMonth = getEndDateOfMonth(currentDate);
@@ -56,9 +60,10 @@ export const CalendarContainer = () => {
 
   return (
     <CalendarView
-      currentMonth={currentDate.getMonth()}
       monthEntries={dates}
+      onDayClick={onDayClick}
       currentDay={currentDate.getDate()}
+      currentMonth={currentDate.getMonth()}
       onNextMonthClick={() =>
         setCurrentDate(
           (date) => new Date(date.getFullYear(), date.getMonth() + 1)

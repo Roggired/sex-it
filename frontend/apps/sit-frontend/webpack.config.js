@@ -7,7 +7,7 @@ module.exports = {
     path: join(__dirname, '../../dist/apps/sit-frontend'),
   },
   devServer: {
-    port: 4200,
+    port: 3000,
     historyApiFallback: true,
   },
   plugins: [

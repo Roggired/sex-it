@@ -1,21 +1,8 @@
 import './calendar.scss';
+import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { CalendarEntry } from './ui/calendar-entry';
 import { MonthEntry } from './calendar-container';
 
-const months = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 type CalendarViewProps = {
@@ -24,6 +11,7 @@ type CalendarViewProps = {
   readonly monthEntries: Array<MonthEntry>;
   readonly onNextMonthClick: () => void;
   readonly onPrevMonthClick: () => void;
+  readonly onDayClick?: (day: number, month: number) => void;
 };
 
 export const CalendarView = ({
@@ -32,6 +20,7 @@ export const CalendarView = ({
   monthEntries,
   onNextMonthClick,
   onPrevMonthClick,
+  onDayClick,
 }: CalendarViewProps) => {
   return (
     <div className="calendar">
@@ -44,13 +33,19 @@ export const CalendarView = ({
         {days.map((day) => (
           <span key={day}>{day}</span>
         ))}
-        {monthEntries.map((monthEntry) => (
-          <CalendarEntry
-            key={`${monthEntry.month}-${monthEntry.day}`}
-            monthEntry={monthEntry}
-            isCurrentDay={monthEntry.day === currentDay}
-          />
-        ))}
+        {monthEntries.map((monthEntry) => {
+          return (
+            <CalendarEntry
+              onDayClick={onDayClick}
+              key={`${monthEntry.month}-${monthEntry.day}`}
+              monthEntry={monthEntry}
+              isCurrentDay={
+                monthEntry.day === currentDay &&
+                monthEntry.month === currentMonth
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );

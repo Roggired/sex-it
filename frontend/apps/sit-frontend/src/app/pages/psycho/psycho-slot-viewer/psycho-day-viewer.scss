@@ -1,0 +1,38 @@
+.psycho-day-viewer {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: 36px auto;
+  align-items: start;
+  gap: 24px;
+
+  &__entry {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+
+    &__header {
+      display: flex;
+      gap: 16px;
+
+      &__block {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 16px;
+        border-radius: 4px;
+        gap: 12px;
+        background-color: rgba(79, 192, 255, 1);
+
+        &.planned {
+          background-color: rgba(255, 174, 79, 1);
+        }
+      }
+    }
+
+    &__main {
+      display: flex;
+      gap: 24px;
+    }
+  }
+}

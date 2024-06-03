@@ -1,0 +1,13 @@
+.create-slot {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin: 36px auto;
+  align-items: start;
+  gap: 16px;
+
+  &__btns {
+    display: flex;
+    gap: 24px;
+  }
+}

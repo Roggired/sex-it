@@ -5,14 +5,17 @@ import { CalendarSlot } from './calendar-slot';
 export type CalendarEntryProps = {
   readonly monthEntry: MonthEntry;
   readonly isCurrentDay: boolean;
+  readonly onDayClick?: (day: number, month: number) => void;
 };
 
 export const CalendarEntry = ({
-  monthEntry: { day, isCurrentMonth },
+  monthEntry: { month, day, isCurrentMonth },
   isCurrentDay,
+  onDayClick,
 }: CalendarEntryProps) => {
   return (
     <div
+      onClick={() => onDayClick?.(day, month)}
       className={classNames('calendar__entry', {
         inactive: !isCurrentMonth,
       })}

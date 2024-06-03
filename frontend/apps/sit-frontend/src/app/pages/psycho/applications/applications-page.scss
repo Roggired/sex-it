@@ -1,0 +1,21 @@
+.applications-page {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: 36px auto;
+  align-items: stretch;
+  gap: 24px;
+
+  & > div:first-child {
+    align-self: center;
+  }
+
+  &__entry {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    background-color: rgba(255, 174, 79, 1);
+  }
+}

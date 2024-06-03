@@ -1,4 +1,10 @@
 import './app.scss';
+import { store } from 'apps/sit-frontend/src/app/api/store';
+import { ApplicationViewPage } from 'apps/sit-frontend/src/app/pages/psycho/application-view/application-view-page';
+import { ApplicationsPage } from 'apps/sit-frontend/src/app/pages/psycho/applications/applications-page';
+import { CreateSlotPage } from 'apps/sit-frontend/src/app/pages/psycho/create-slot/create-slot-page';
+import { PsychoDayViewer } from 'apps/sit-frontend/src/app/pages/psycho/psycho-slot-viewer/psycho-day-viewer';
+import { Provider } from 'react-redux';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Header } from './widgets/header/header';
 import { RootPage } from './pages/root-page';
@@ -16,16 +22,58 @@ const router = createBrowserRouter([
   },
   {
     path: '/psycho/calendar',
-    element: <CalendarPage />,
+    element: (
+      <>
+        <Header />
+        <CalendarPage />
+      </>
+    ),
+  },
+  {
+    path: '/psycho/create-slot',
+    element: (
+      <>
+        <Header />
+        <CreateSlotPage />
+      </>
+    ),
+  },
+  {
+    path: `/psycho/day/:month/:day`,
+    element: (
+      <>
+        <Header />
+        <PsychoDayViewer />
+      </>
+    ),
+  },
+  {
+    path: '/psycho/applications',
+    element: (
+      <>
+        <Header />
+        <ApplicationsPage />
+      </>
+    ),
+  },
+  {
+    path: '/psycho/applications/:appId',
+    element: (
+      <>
+        <Header />
+        <ApplicationViewPage />
+      </>
+    ),
   },
 ]);
 
 export function App() {
   return (
-    <div className="app">
-      <Header />
-      <RouterProvider router={router} />
-    </div>
+    <Provider store={store}>
+      <div className="app">
+        <RouterProvider router={router} />
+      </div>
+    </Provider>
   );
 }
 
