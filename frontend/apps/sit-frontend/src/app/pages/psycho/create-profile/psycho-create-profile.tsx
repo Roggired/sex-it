@@ -1,6 +1,6 @@
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Page } from '../../shared/page/page';
 import './psycho-create-profile.scss';
 import Alla from '../../../../assets/img.png';
@@ -18,6 +18,24 @@ export const PsychoCreateProfile = () => {
   const [desc, setDesc] = useState('Я крутая');
 
   const [updateProfile] = psychoProfileApi.useCreateOrUpdatePsychoMutation();
+
+  const { data } = psychoProfileApi.useGetPsychoQuery(psycho.id, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setName(data.name);
+      setEmail(data.email);
+      setPrice(data.price);
+      setIsFree(data.isFirstFree);
+      setDesc(data.bio);
+    }
+  }, [data]);
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <Page>

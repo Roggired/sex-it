@@ -13,7 +13,12 @@ export const RootPage = () => {
   return (
     <Page center>
       <div className="root-page">
-        <SuiButton onClick={() => setUser(client)}>
+        <SuiButton
+          onClick={() => {
+            setUser(client);
+            navigate(routes.toClientPsychoList());
+          }}
+        >
           Продолжить как Клиент
         </SuiButton>
         <SuiButton

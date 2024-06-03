@@ -8,6 +8,7 @@ const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 type CalendarViewProps = {
   readonly currentMonth: number;
   readonly currentDay: number;
+  readonly currentYear: number;
   readonly monthEntries: Array<MonthEntry>;
   readonly onNextMonthClick: () => void;
   readonly onPrevMonthClick: () => void;
@@ -17,16 +18,19 @@ type CalendarViewProps = {
 export const CalendarView = ({
   currentMonth,
   currentDay,
+  currentYear,
   monthEntries,
   onNextMonthClick,
   onPrevMonthClick,
   onDayClick,
 }: CalendarViewProps) => {
+  const realDate = new Date();
+
   return (
     <div className="calendar">
       <div className="calendar__header">
         <button onClick={onPrevMonthClick}>PREV</button>
-        {months[currentMonth]}
+        {months[currentMonth]}, {currentYear}
         <button onClick={onNextMonthClick}>NEXT</button>
       </div>
       <div className="calendar__body">
@@ -40,8 +44,8 @@ export const CalendarView = ({
               key={`${monthEntry.month}-${monthEntry.day}`}
               monthEntry={monthEntry}
               isCurrentDay={
-                monthEntry.day === currentDay &&
-                monthEntry.month === currentMonth
+                monthEntry.day === realDate.getDate() &&
+                monthEntry.month === realDate.getMonth()
               }
             />
           );

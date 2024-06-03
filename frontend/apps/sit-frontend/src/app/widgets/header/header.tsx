@@ -8,6 +8,18 @@ export const Header = () => {
   const navigate = useNavigate();
   const user = useAtomValue(userAtom);
 
+  if (user.type === 'CLIENT') {
+    return (
+      <div className="header">
+        <span>SEX-IT</span>
+        <span>Психологи</span>
+        <span>Профиль</span>
+        <span>Мои заявки</span>
+        <span onClick={() => navigate(routes.toRoot())}>Выйти</span>
+      </div>
+    );
+  }
+
   return (
     <div className="header">
       <span>SEX-IT</span>

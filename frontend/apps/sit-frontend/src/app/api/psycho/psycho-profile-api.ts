@@ -18,5 +18,11 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
         body,
       }),
     }),
+
+    getPsycho: build.query<Psycho, number>({
+      query: (id) => ({
+        url: `/v1/profiles/${id}?mode=PSYCHO`,
+      }),
+    }),
   }),
 });

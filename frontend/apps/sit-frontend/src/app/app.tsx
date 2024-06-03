@@ -1,5 +1,6 @@
 import './app.scss';
 import { store } from 'apps/sit-frontend/src/app/api/store';
+import { PsychoListPage } from 'apps/sit-frontend/src/app/pages/client/psycho-list/psycho-list-page';
 import { ApplicationViewPage } from 'apps/sit-frontend/src/app/pages/psycho/application-view/application-view-page';
 import { ApplicationsPage } from 'apps/sit-frontend/src/app/pages/psycho/applications/applications-page';
 import { CreateSlotPage } from 'apps/sit-frontend/src/app/pages/psycho/create-slot/create-slot-page';
@@ -18,7 +19,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/psycho/create-profile',
-    element: <PsychoCreateProfile />,
+    element: (
+      <>
+        <Header />
+        <PsychoCreateProfile />
+      </>
+    ),
   },
   {
     path: '/psycho/calendar',
@@ -62,6 +68,15 @@ const router = createBrowserRouter([
       <>
         <Header />
         <ApplicationViewPage />
+      </>
+    ),
+  },
+  {
+    path: '/client/psycho-list',
+    element: (
+      <>
+        <Header />
+        <PsychoListPage />
       </>
     ),
   },

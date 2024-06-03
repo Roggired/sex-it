@@ -64,6 +64,7 @@ export const CalendarContainer = ({ onDayClick }: CalendarContainerProps) => {
       onDayClick={onDayClick}
       currentDay={currentDate.getDate()}
       currentMonth={currentDate.getMonth()}
+      currentYear={currentDate.getFullYear()}
       onNextMonthClick={() =>
         setCurrentDate(
           (date) => new Date(date.getFullYear(), date.getMonth() + 1)
