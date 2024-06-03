@@ -1,0 +1,10 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  &.center {
+    align-items: center;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,52 @@
+.psycho-create-profile {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 48px auto;
+  gap: 48px;
+
+  &__header {
+    display: flex;
+    gap: 48px;
+
+    & > img {
+      width: 220px;
+      height: 220px;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+
+    &__inputs {
+      display: flex;
+      gap: 48px;
+
+      &__checkbox {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__desc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    & > textarea {
+      resize: none;
+    }
+  }
+
+  &__buttons {
+    align-self: center;
+    display: flex;
+    gap: 36px;
+  }
+}

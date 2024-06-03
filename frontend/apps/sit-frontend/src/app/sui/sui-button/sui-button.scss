@@ -1,0 +1,15 @@
+.sui-button {
+  padding: 16px 24px;
+  border-radius: 4px;
+  background-color: #C50000;
+  font-size: 14px;
+  border: none;
+  color: white;
+  cursor: pointer;
+
+  &.secondary {
+    background-color: white;
+    border: 1px solid black;
+    color: black;
+  }
+}
