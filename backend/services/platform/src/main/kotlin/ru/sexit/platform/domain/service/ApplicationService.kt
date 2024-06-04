@@ -6,6 +6,7 @@ import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
 import ru.sexit.platform.infrastructure.NotFoundException
+import ru.sexit.platform.utils.RequestMode
 import java.time.LocalDateTime
 
 @Service
@@ -57,6 +58,12 @@ class ApplicationService(
     }
 
     fun getAcceptedApplicationsByPsychoName(psychoName: String): List<AcceptedApplicationView> {
-        return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map { it.toAcceptedApplicationView() }
+        return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map {
+            val joinUrl = bbbMeetingService.joinMeeting(
+                applicationId = it.id,
+                mode = RequestMode.CLIENT,
+            )
+            it.toAcceptedApplicationView(joinUrl)
+        }
     }
 }

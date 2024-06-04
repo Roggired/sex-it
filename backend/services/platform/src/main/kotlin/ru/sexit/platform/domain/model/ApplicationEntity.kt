@@ -83,7 +83,7 @@ data class AcceptedApplication(
     val results: String?
 )
 
-fun AcceptedApplication.toAcceptedApplicationView(): AcceptedApplicationView = AcceptedApplicationView(
+fun AcceptedApplication.toAcceptedApplicationView(link: String?): AcceptedApplicationView = AcceptedApplicationView(
     id = id,
     psycho = PsychoProfileReduced(id = psychoId, name = psychoName, price = psychoPrice),
     slot = SlotWithDate(id = slotId, time = slotTime, monthId = slotMonthId, dayId = slotDayId, yearId = slotYearId),
