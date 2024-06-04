@@ -49,3 +49,9 @@ fun PsychoProfile.toClientView(
         it.toView()
     },
 )
+
+data class PsychoProfileReduced(
+    val id: Long,
+    val name: String,
+    val price: Int
+)

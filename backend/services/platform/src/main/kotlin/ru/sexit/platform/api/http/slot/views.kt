@@ -30,3 +30,11 @@ data class SlotDayView(
     val link: String?,
     val address: String?,
 )
+
+data class SlotWithDate(
+    val id: Long,
+    val time: LocalTime,
+    val monthId: Int,
+    val dayId: Int,
+    val yearId: Int
+)
