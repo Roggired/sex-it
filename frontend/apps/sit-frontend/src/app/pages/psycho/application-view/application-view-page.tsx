@@ -1,5 +1,6 @@
 import './application-view-page.scss';
 import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
+import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import app from 'apps/sit-frontend/src/app/app';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
 import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
@@ -17,6 +18,11 @@ export const ApplicationViewPage = () => {
   const [approve] = applicationsApi.useAcceptApplicationMutation();
   const [reject] = applicationsApi.useRejectApplicationMutation();
 
+  const { data: p } = psychoProfileApi.useGetPsychoQuery({
+    id: psycho.id,
+    mode: 'CLIENT',
+  });
+
   if (!appId || !data) {
     return <></>;
   }
@@ -25,8 +31,14 @@ export const ApplicationViewPage = () => {
   return (
     <div className="application-view">
       <h1>Просмотр заявки</h1>
-      {/*<b>Бесплатная консультация</b>*/}
-      {/*<span>Заявка от анонимного пользователя</span>*/}
+      <b>
+        {p?.isFirstFree ? 'Бесплатная консультация' : 'Платная консультация'}
+      </b>
+      <span>
+        {application.anonType === 'ANON'
+          ? 'Заявка от анонимного пользователя'
+          : `Заявка от ${application.clientName}`}
+      </span>
       <span>
         Отправлена: {new Date(application.creationTime).toLocaleString()}
       </span>

@@ -1,4 +1,5 @@
 import './client-applications.scss';
+import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
 import { SlotStatus } from 'apps/sit-frontend/src/app/api/slot/model';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
@@ -11,25 +12,34 @@ export const ClientApplicationsPage = () => {
     'WAIT' | 'APPROVED' | 'REJECTED'
   >('WAIT');
 
+  const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
+
+  if (!data) {
+    return <></>;
+  }
+
   return (
     <div className="client-applications">
-      <div className="client-applications__breadcrumbs">
+      {/*<div className="client-applications__breadcrumbs">
         <span onClick={() => setCurrFilter('WAIT')}>Ожидают ответа</span>
         <span onClick={() => setCurrFilter('APPROVED')}>/ Принятые</span>
         <span onClick={() => setCurrFilter('REJECTED')}>/ Отклоненные</span>
-      </div>
+      </div>*/}
       <div className="client-applications__filter">
         <SuiInput placeholder="Поиск по психологу" />
         <SuiButton>Поиск</SuiButton>
       </div>
       <div className="client-applications__apps">
-        <ApplicationEntry
-          id={1}
-          psycho="ALla"
-          date="11;11;11"
-          price={2000}
-          status="PLANNED"
-        />
+        {data.map((d) => (
+          <ApplicationEntry
+            key={d.id}
+            id={d.id}
+            psycho={d.psycho.name}
+            date={d.slot.time}
+            price={d.psycho.price}
+            status="PLANNED"
+          />
+        ))}
       </div>
     </div>
   );

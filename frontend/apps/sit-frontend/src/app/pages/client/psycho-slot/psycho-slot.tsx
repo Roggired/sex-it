@@ -59,7 +59,7 @@ export const PsychoSlotPage = () => {
     createApp({
       slotId,
       description: desc,
-      visitType: 'OFFLINE',
+      visitType: 'ONLINE',
       anonType: isAnon ? 'ANON' : 'NE_ANON',
     })
       .unwrap()

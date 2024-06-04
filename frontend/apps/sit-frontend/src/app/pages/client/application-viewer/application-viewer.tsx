@@ -1,21 +1,46 @@
 import './application-viewer.scss';
+import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
+import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
+import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
+import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
+import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
 
 export const ClientApplicationViewerPage = () => {
   const navigate = useNavigate();
+  const appId = useGetNumberPathParam('id');
 
+  //Нет ендпоинта для получения appпо id, костылю
+  const { data } = applicationsApi.useGetApplicationsQuery(psycho.id);
+
+  const { data: p } = psychoProfileApi.useGetPsychoQuery({
+    id: psycho.id,
+    mode: 'CLIENT',
+  });
+
+  if (!appId || !data) {
+    return <></>;
+  }
+  const application = data.filter((d) => d.id === appId)[0];
   return (
     <div className="application-viewer">
-      <h1>06 Май 2024 11:00</h1>
-      <b>Алла Сергеевна</b>
-      <span>Цена: 2000 руб.</span>
-      <span>Первая консультация бесплатна: да</span>
-      <span>Анонимно: да</span>
-      <span>Дистанционная консультация</span>
+      <h1>
+        {application.slot.dayId + 1} {months[application.slot.monthId]} 2024{' '}
+        {application.slot.time}
+      </h1>
+      <b>{p?.name ?? ''}</b>
+      <span>Цена: {p?.price} руб.</span>
+      <span>
+        Первая консультация бесплатна: {p?.isFirstFree ? 'Da' : 'Net'}
+      </span>
+      <span>Анонимно: {application.anonType === 'ANON'}</span>
+      {/*<span>Дистанционная консультация</span>*/}
       <div>
-        <SuiButton>Подключиться</SuiButton>
+        <SuiButton onClick={() => window.open(application?.link, '_blank')}>
+          Подключиться
+        </SuiButton>
         <SuiButton
           buttonType="secondary"
           onClick={() => navigate(routes.toBack())}

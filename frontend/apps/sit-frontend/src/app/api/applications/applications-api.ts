@@ -27,8 +27,11 @@ export const applicationsApi = gatewayApi.injectEndpoints({
     }),
 
     getAcceptedApplications: builder.query<Array<AcceptedApplication>, string>({
-      query: (params) => ({
+      query: (psychoName) => ({
         url: 'v1/applications/accepted',
+        params: {
+          psychoName,
+        },
       }),
     }),
 

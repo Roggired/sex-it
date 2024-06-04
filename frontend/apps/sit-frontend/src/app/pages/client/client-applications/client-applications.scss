@@ -24,6 +24,7 @@
 
   &__apps {
     display: flex;
+    flex-direction: column;
     gap: 12px;
     align-self: stretch;
 

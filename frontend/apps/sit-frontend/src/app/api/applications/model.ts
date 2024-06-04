@@ -20,6 +20,7 @@ export type Application = {
   description?: string;
   link?: string;
   address?: string;
+  clientName?: string;
 };
 
 export type CreateApplicationRequest = {
