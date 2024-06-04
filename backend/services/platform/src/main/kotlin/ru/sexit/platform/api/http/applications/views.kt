@@ -36,6 +36,19 @@ data class ApplicationView(
     val address: String?
 )
 
+data class ApplicationWithClientView(
+    val id: Long,
+    val clientName: String,
+    val slot: SlotWithDate,
+    val creationTime: LocalDateTime,
+    val anonType: AnonType?,
+    val visitType: VisitType?,
+    val status: SlotStatus,
+    val description: String?,
+    val link: String?,
+    val address: String?
+)
+
 data class AcceptedApplicationView(
     val id: Long,
     val psycho: PsychoProfileReduced,

@@ -13,9 +13,9 @@ interface ApplicationRepository: JpaRepository<ApplicationEntity, Long> {
         value = """
             select distinct ap from ApplicationEntity ap 
             left join ap.slot sl 
-            left join sl.psychoProfile ps 
+            left join sl.psychoProfile ps
             where ps.id = :psychoId
-            
+            and ap.status = 'NEED_REVIEW'
         """
     )
     fun findApplicationsByPsychoId(psychoId: Long): List<ApplicationEntity>?

@@ -39,8 +39,22 @@ class ApplicationController(
     @GetMapping
     fun getApplicationByPsychoId(
         @RequestParam(name = "psychoId") psychoId: Long
-    ): List<ApplicationView> {
+    ): List<ApplicationWithClientView> {
         return applicationService.getByPsychoId(psychoId)
+            .map {
+                ApplicationWithClientView(
+                    id = it.id,
+                    clientName = "Иван Иванович",
+                    slot = it.slot,
+                    creationTime = it.creationTime,
+                    anonType = it.anonType,
+                    visitType = it.visitType,
+                    status = it.status,
+                    description = it.description,
+                    link = it.link,
+                    address = it.address,
+                )
+            }
     }
 
     @GetMapping("/accepted")
