@@ -16,14 +16,18 @@ export const ApplicationsPage = () => {
   return (
     <div className="applications-page">
       <SlotPageChooser />
-      {data.map((d) => (
-        <ApplicationEntry
-          key={d.id}
-          creationDate={new Date(d.creationTime).toLocaleString()}
-          desc={d.description ?? ''}
-          onClick={() => navigate(routes.toPsychoApplication(d.id))}
-        />
-      ))}
+      {data.map((d) => {
+        const date = new Date(d.creationTime);
+        date.setHours(date.getHours() + 3);
+        return (
+          <ApplicationEntry
+            key={d.id}
+            creationDate={date.toLocaleString()}
+            desc={d.description ?? ''}
+            onClick={() => navigate(routes.toPsychoApplication(d.id))}
+          />
+        );
+      })}
     </div>
   );
 };

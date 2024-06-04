@@ -40,7 +40,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
         url: `v1/applications/${appId}/accept`,
         method: 'POST',
       }),
-      invalidatesTags: ['PsychoApps', 'CalSlots'],
+      invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
     }),
 
     rejectApplication: builder.mutation<void, number>({
@@ -48,7 +48,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
         url: `v1/applications/${appId}/reject`,
         method: 'POST',
       }),
-      invalidatesTags: ['PsychoApps', 'CalSlots'],
+      invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
     }),
   }),
 });

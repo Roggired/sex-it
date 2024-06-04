@@ -13,7 +13,7 @@ export const ClientApplicationViewerPage = () => {
   const appId = useGetNumberPathParam('id');
 
   //Нет ендпоинта для получения appпо id, костылю
-  const { data } = applicationsApi.useGetApplicationsQuery(psycho.id);
+  const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
 
   const { data: p } = psychoProfileApi.useGetPsychoQuery({
     id: psycho.id,
@@ -24,6 +24,7 @@ export const ClientApplicationViewerPage = () => {
     return <></>;
   }
   const application = data.filter((d) => d.id === appId)[0];
+  console.log(application);
   return (
     <div className="application-viewer">
       <h1>
