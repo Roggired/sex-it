@@ -104,7 +104,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/client/psycho-slot/:id',
+    path: '/client/psycho-slot/:month/:day',
     element: (
       <>
         <Header />

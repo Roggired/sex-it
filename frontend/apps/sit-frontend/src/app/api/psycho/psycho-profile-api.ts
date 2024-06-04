@@ -1,4 +1,5 @@
 import {
+  ApiMode,
   CreatePsychoProfileRequest,
   Psycho,
 } from 'apps/sit-frontend/src/app/api/psycho/model';
@@ -19,9 +20,15 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
       }),
     }),
 
-    getPsycho: build.query<Psycho, number>({
-      query: (id) => ({
-        url: `/v1/profiles/${id}?mode=PSYCHO`,
+    getPsycho: build.query<
+      Psycho,
+      {
+        id: number;
+        mode: ApiMode;
+      }
+    >({
+      query: ({ id, mode }) => ({
+        url: `/v1/profiles/${id}?mode=${mode}`,
       }),
     }),
   }),

@@ -1,3 +1,6 @@
+import { ApiMode } from 'apps/sit-frontend/src/app/api/psycho/model';
+import { SlotView } from 'apps/sit-frontend/src/app/api/slot/model';
+import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
 import { CalendarView } from './calendar-view';
 import { useMemo, useState } from 'react';
 
@@ -10,16 +13,21 @@ export type MonthEntry = {
   readonly month: number;
   readonly day: number;
   readonly isCurrentMonth: boolean;
+  readonly slots: Array<SlotView>;
 };
 
 type CalendarContainerProps = {
+  readonly psychoId: number;
+  readonly slotMode: ApiMode;
   readonly onDayClick?: (day: number, month: number) => void;
-  readonly onSlotClick?: (slotId: number) => void;
+  readonly onSlotClick?: (day: number, month: number) => void;
 };
 
 export const CalendarContainer = ({
   onDayClick,
   onSlotClick,
+  psychoId,
+  slotMode,
 }: CalendarContainerProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -30,6 +38,13 @@ export const CalendarContainer = ({
   const daysInMonth = endDateInMonth.getDate();
   const daysInPreviousMonth = endDateOfPreviousMonth.getDate();
 
+  const { data } = slotApi.useGetSlotsByMonthsQuery({
+    monthId: currentDate.getMonth(),
+    yearId: currentDate.getFullYear(),
+    psychoId: psychoId,
+    mode: slotMode,
+  });
+
   const dates: Array<MonthEntry> = useMemo(() => {
     const tmp: Array<MonthEntry> = [];
 
@@ -38,6 +53,7 @@ export const CalendarContainer = ({
         month: currentDate.getMonth() - 1,
         day: daysInPreviousMonth - i,
         isCurrentMonth: false,
+        slots: [],
       });
     }
 
@@ -46,6 +62,7 @@ export const CalendarContainer = ({
         month: currentDate.getMonth(),
         day: i + 1,
         isCurrentMonth: true,
+        slots: (data ?? []).filter((d) => d.dayId === i),
       });
     }
 
@@ -55,12 +72,13 @@ export const CalendarContainer = ({
           month: currentDate.getMonth() + 1,
           day: i + 1,
           isCurrentMonth: false,
+          slots: [],
         });
       }
     }
 
     return tmp;
-  }, [currentDate.getMonth(), currentDate.getDate()]);
+  }, [currentDate.getMonth(), currentDate.getDate(), data]);
 
   return (
     <CalendarView

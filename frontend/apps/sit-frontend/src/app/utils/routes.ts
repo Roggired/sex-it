@@ -13,7 +13,8 @@ export const routes = {
   toClientPsychoList: () => '/client/psycho-list',
   toClientPsychoCard: (id: number) => `/client/psycho-card/${id}`,
   toClientPsychoCalendar: (id: number) => `/client/psycho-calendar/${id}`,
-  toClientPsychoSlot: (id: number) => `/client/psycho-slot/${id}`,
+  toClientPsychoSlot: (month: number, day: number) =>
+    `/client/psycho-slot/${month}/${day}`,
   toClientApplications: () => `/client/applications`,
   toClientApplication: (id: number) => `/client/application/${id}`,
 };

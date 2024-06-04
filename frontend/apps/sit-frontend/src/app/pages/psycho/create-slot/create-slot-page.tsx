@@ -1,4 +1,5 @@
 import './create-slot.scss';
+import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
@@ -10,6 +11,24 @@ export const CreateSlotPage = () => {
 
   const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [time, setTime] = useState('');
+
+  const [createSlot] = slotApi.useCreateSlotMutation();
+
+  const handleClick = () => {
+    if (!date || !time) return;
+
+    const d = date.split('-');
+
+    createSlot({
+      time,
+      yearId: +d[0],
+      monthId: +d[1] - 1,
+      dayId: +d[2] - 1,
+    })
+      .unwrap()
+      .then(() => navigate(routes.toPsychoCalendarPage()))
+      .catch(() => alert('Такой слот уже есть'));
+  };
 
   return (
     <div className="create-slot">
@@ -27,9 +46,7 @@ export const CreateSlotPage = () => {
         onChange={(e) => setTime(e.target.value)}
       />
       <div className="create-slot__btns">
-        <SuiButton onClick={() => navigate(routes.toPsychoCalendarPage())}>
-          Создать
-        </SuiButton>
+        <SuiButton onClick={handleClick}>Создать</SuiButton>
         <SuiButton
           buttonType="secondary"
           onClick={() => navigate(routes.toBack())}

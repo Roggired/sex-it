@@ -1,4 +1,6 @@
 import './psycho-list.scss';
+import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
+import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
@@ -6,6 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
 
 export const PsychoListPage = () => {
+  const { data } = psychoProfileApi.useGetPsychoQuery({
+    id: psycho.id,
+    mode: 'CLIENT',
+  });
+
+  if (!data) {
+    return <></>;
+  }
+
   return (
     <div className="psycho-list">
       <div className="psycho-list__sidebar">
@@ -14,13 +25,13 @@ export const PsychoListPage = () => {
       </div>
       <div className="psycho-list__main">
         <div className="psycho-list__list">
-          {[1, 2, 3, 4].map((value) => (
+          {[data, data, data, data].map((value) => (
             <PsychoCard
-              key={value}
-              id={value}
-              name="ALla"
-              price={111}
-              rating={2.4}
+              key={value.id}
+              id={value.id}
+              name={value.name}
+              price={value.price}
+              rating={value.rating ?? 0}
             />
           ))}
         </div>
@@ -51,9 +62,9 @@ const PsychoCard = ({
       onClick={() => navigate(routes.toClientPsychoCard(id))}
     >
       <img src={Alla} />
-      <h1>{name}</h1>
+      <h3>{name}</h3>
       <span>Цена за час: {price}</span>
-      <span>Рейтинг: ${rating}</span>
+      <span>Рейтинг: {rating}</span>
     </div>
   );
 };

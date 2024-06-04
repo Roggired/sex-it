@@ -13,7 +13,7 @@ type CalendarViewProps = {
   readonly onNextMonthClick: () => void;
   readonly onPrevMonthClick: () => void;
   readonly onDayClick?: (day: number, month: number) => void;
-  readonly onSlotClick?: (slotId: number) => void;
+  readonly onSlotClick?: (day: number, month: number) => void;
 };
 
 export const CalendarView = ({
@@ -46,6 +46,7 @@ export const CalendarView = ({
               onDayClick={onDayClick}
               key={`${monthEntry.month}-${monthEntry.day}`}
               monthEntry={monthEntry}
+              slots={monthEntry.slots}
               isCurrentDay={
                 monthEntry.day === realDate.getDate() &&
                 monthEntry.month === realDate.getMonth()

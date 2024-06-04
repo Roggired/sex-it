@@ -19,9 +19,15 @@ export const PsychoCreateProfile = () => {
 
   const [updateProfile] = psychoProfileApi.useCreateOrUpdatePsychoMutation();
 
-  const { data } = psychoProfileApi.useGetPsychoQuery(psycho.id, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data } = psychoProfileApi.useGetPsychoQuery(
+    {
+      id: psycho.id,
+      mode: 'CLIENT',
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   useEffect(() => {
     if (data) {

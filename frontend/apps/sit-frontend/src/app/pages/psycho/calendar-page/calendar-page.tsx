@@ -1,3 +1,4 @@
+import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +15,8 @@ export const CalendarPage = () => {
       <div className="calendar-page">
         <SlotPageChooser />
         <CalendarContainer
+          psychoId={psycho.id}
+          slotMode="PSYCHO"
           onDayClick={(day, month) =>
             navigate(routes.toPsychoDayViewer(month, day))
           }

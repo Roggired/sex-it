@@ -38,10 +38,15 @@
     padding: 16px;
     border-radius: 4px;
     border: 1px solid black;
+    max-width: 220px;
 
     & > img {
       width: 220px;
       height: 220px;
+    }
+
+    & > h3 {
+      margin: 0;
     }
   }
 }

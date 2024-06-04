@@ -1,4 +1,5 @@
 import './psycho-calendar.scss';
+import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { CalendarContainer } from 'apps/sit-frontend/src/app/widgets/calendar/calendar-container';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +10,11 @@ export const PsychoCalendar = () => {
   return (
     <div className="psycho-calendar">
       <CalendarContainer
-        onSlotClick={(slotId) => navigate(routes.toClientPsychoSlot(slotId))}
+        psychoId={1}
+        slotMode="CLIENT"
+        onSlotClick={(day, month) =>
+          navigate(routes.toClientPsychoSlot(month, day))
+        }
       />
     </div>
   );

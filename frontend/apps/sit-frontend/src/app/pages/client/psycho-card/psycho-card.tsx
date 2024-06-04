@@ -1,5 +1,7 @@
 import './psycho-card.scss';
+import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
+import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +11,12 @@ export const PsychoCardPage = () => {
   const id = useGetNumberPathParam('id');
   const navigate = useNavigate();
 
-  if (!id) {
+  const { data } = psychoProfileApi.useGetPsychoQuery({
+    id: psycho.id,
+    mode: 'CLIENT',
+  });
+
+  if (!id || !data) {
     return <></>;
   }
 
@@ -20,17 +27,19 @@ export const PsychoCardPage = () => {
         <div>
           <div className="psycho-card__entry">
             <b>ФИО</b>
-            <span>Алла Сергеевна</span>
+            <span>{data.name}</span>
           </div>
           <div className="psycho-card__entry">
             <b>Email</b>
-            <span>alla.sergeevna@yandex.ru</span>
+            <span>{data.email}</span>
           </div>
           <div className="psycho-card__entry">
             <b>Цена консультации (руб. в час):</b>
-            <span>2000</span>
+            <span>{data.price}</span>
           </div>
-          <span>Бесплатная 1-ая консультация: да</span>
+          <span>
+            Бесплатная 1-ая консультация: {data.isFirstFree ? 'Da' : 'Net'}
+          </span>
         </div>
         <div>
           <SuiButton
@@ -48,11 +57,11 @@ export const PsychoCardPage = () => {
       </div>
       <div className="psycho-card__entry">
         <b>Рейтинг</b>
-        <span>4.4</span>
+        <span>{data.rating ?? 0}</span>
       </div>
       <div className="psycho-card__entry">
         <b>О себе</b>
-        <span>Я излечу вашу неуверенность в себе!</span>
+        <span>{data.bio}</span>
       </div>
       <b>Анонимные отзывы</b>
       <div className="psycho-card__entry">

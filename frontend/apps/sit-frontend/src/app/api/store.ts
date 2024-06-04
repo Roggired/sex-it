@@ -8,7 +8,7 @@ export const gatewayApi = createApi({
   reducerPath: 'gatewayServiceApi',
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   endpoints: () => ({}),
-  tagTypes: [],
+  tagTypes: ['DaySlots', 'CalSlots', 'PsychoApps'],
 });
 
 export const store = configureStore({
