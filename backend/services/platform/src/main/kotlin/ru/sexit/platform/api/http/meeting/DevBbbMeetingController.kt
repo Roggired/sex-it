@@ -3,6 +3,7 @@ package ru.sexit.platform.api.http.meeting
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import ru.sexit.platform.domain.model.BbbMeeting
 import ru.sexit.platform.domain.service.BbbMeetingService
 import ru.sexit.platform.utils.RequestMode
 
@@ -14,7 +15,7 @@ class DevBbbMeetingController(
     @PostMapping
     fun createMeeting(
         applicationId: Long,
-    ): Unit = bbbMeetingService.createMeeting(applicationId)
+    ): BbbMeeting = bbbMeetingService.createMeeting(applicationId)
 
     @PostMapping("/join")
     fun joinMeeting(

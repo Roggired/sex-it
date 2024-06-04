@@ -26,7 +26,7 @@ class BbbMeetingService(
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun createMeeting(
         applicationId: Long,
-    ) {
+    ): BbbMeeting {
         val existingBbbMeeting = bbbMeetingRepo.findByApplicationId(applicationId)
         if (existingBbbMeeting != null) {
             throw AlreadyExistException("Meeting already exists")
@@ -58,6 +58,7 @@ class BbbMeetingService(
         }
 
         log.info("Online consultation has been successfully created for users: ${bbbMeeting.psychoId} and ${bbbMeeting.clientId}. MeetingID: ${bbbMeeting.uuid}")
+        return bbbMeeting
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

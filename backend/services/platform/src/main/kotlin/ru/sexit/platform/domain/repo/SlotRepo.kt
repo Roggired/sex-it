@@ -25,11 +25,11 @@ interface SlotRepo: JpaRepository<Slot, Long> {
 
     @Query(
         """
-            SELECT s FROM Slot s
+            SELECT DISTINCT s FROM Slot s
             WHERE s.yearId = :yearId 
                 AND s.monthId = :monthId
                 AND (COALESCE(:dayId, NULL) IS NULL OR s.dayId = :dayId)
-                AND s.psychoProfile.id = :psychoId 
+                AND s.psychoProfile.id = :psychoId
             ORDER BY s.dayId, s.time
         """
     )

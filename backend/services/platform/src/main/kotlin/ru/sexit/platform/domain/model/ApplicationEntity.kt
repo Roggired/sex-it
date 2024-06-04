@@ -26,9 +26,23 @@ class ApplicationEntity(
     var address: String?,
     var results: String?
 ) {
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "slot_id")
     lateinit var slot: Slot
+
+    companion object {
+        fun stub(id: Long): ApplicationEntity = ApplicationEntity(
+            id = id,
+            creationTime = LocalDateTime.now(),
+            anonType = AnonType.ANON,
+            visitType = VisitType.ONLINE,
+            status = SlotStatus.EMPTY,
+            description = null,
+            link = null,
+            address = null,
+            results = null
+        )
+    }
 }
 
 

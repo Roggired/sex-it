@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.feedback.FeedbackRequest
+import ru.sexit.platform.domain.model.ApplicationEntity
 import ru.sexit.platform.domain.model.Feedback
 import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.repo.FeedbackRepo
@@ -23,7 +24,8 @@ class FeedbackService(
             text = request.text,
         ).apply {
             psychoProfile = PsychoProfile.stub(1L)
-        } // TODO: add relation to application
+            applicationEntity = ApplicationEntity.stub(appId)
+        }
     ).also {
         log.info("New feedback (id: ${it.id}) has been created")
     }

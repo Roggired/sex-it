@@ -1,0 +1,1 @@
+alter table feedbacks add column application_id bigint references applications (id) on delete cascade;

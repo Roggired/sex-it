@@ -12,6 +12,7 @@ import ru.sexit.platform.domain.model.Slot
 import ru.sexit.platform.domain.model.SlotStatus
 import ru.sexit.platform.domain.repo.SlotRepo
 import ru.sexit.platform.infrastructure.AlreadyExistException
+import ru.sexit.platform.infrastructure.InternalServerException
 import ru.sexit.platform.infrastructure.InvalidDataException
 import ru.sexit.platform.infrastructure.NotFoundException
 import ru.sexit.platform.utils.RequestMode
@@ -19,6 +20,7 @@ import ru.sexit.platform.utils.log
 
 @Service
 class SlotService(
+    private val bbbMeetingService: BbbMeetingService,
     private val slotRepo: SlotRepo,
 ) {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -77,9 +79,10 @@ class SlotService(
                 SlotMonthView(
                     id = it.id,
                     time = it.time,
-                    status = SlotStatus.EMPTY,
+                    status = calcStatusForSlot(it),
+                    dayId = it.dayId,
                 )
-            }
+            }.filter { it.status == SlotStatus.EMPTY }
             RequestMode.PSYCHO -> slotRepo.findAllSlotsByMonthOrDayForPsycho(
                 yearId = yearId,
                 monthId = monthId,
@@ -88,10 +91,23 @@ class SlotService(
                 SlotMonthView(
                     id = it.id,
                     time = it.time,
-                    status = SlotStatus.EMPTY,
+                    status = calcStatusForSlot(it),
+                    dayId = it.dayId,
                 )
             }
         }
+    }
+
+    private fun calcStatusForSlot(slot: Slot): SlotStatus {
+        val numberOfPlanned = slot.applications.count { it.status == SlotStatus.PLANNED }
+        val numberOfDone = slot.applications.count { it.status == SlotStatus.DONE }
+        val numberOfNeedReview = slot.applications.count { it.status == SlotStatus.NEED_REVIEW }
+
+        if (numberOfDone > 0) return SlotStatus.DONE
+        if (numberOfPlanned > 0) return SlotStatus.PLANNED
+        if (numberOfNeedReview > 0) return SlotStatus.NEED_REVIEW
+
+        return SlotStatus.EMPTY
     }
 
     fun getAllSlotsByDay(
@@ -115,34 +131,54 @@ class SlotService(
                 monthId = monthId,
                 dayId = dayId,
                 psychoId = psychoId
-            ).map {
-                SlotDayView(
-                    id = it.id,
-                    time = it.time,
-                    status = SlotStatus.EMPTY,
-                    anonType = null,
-                    visitType = null,
-                    description = null,
-                    link = null,
-                    address = null,
-                )
-            }
+            ).filter { calcStatusForSlot(it) == SlotStatus.EMPTY }
+                .map {
+                    SlotDayView(
+                        id = it.id,
+                        time = it.time,
+                        status = SlotStatus.EMPTY,
+                        anonType = null,
+                        visitType = null,
+                        description = null,
+                        link = null,
+                        address = null,
+                    )
+                }
             RequestMode.PSYCHO -> slotRepo.findAllSlotsByMonthOrDayForPsycho(
                 yearId = yearId,
                 monthId = monthId,
                 dayId = dayId,
                 psychoId = psychoId,
             ).map {
-                SlotDayView(
-                    id = it.id,
-                    time = it.time,
-                    status = SlotStatus.EMPTY,
-                    anonType = null,
-                    visitType = null,
-                    description = null,
-                    link = null,
-                    address = null,
-                )
+                val status = calcStatusForSlot(it)
+                if (status == SlotStatus.NEED_REVIEW || status == SlotStatus.EMPTY) {
+                    SlotDayView(
+                        id = it.id,
+                        time = it.time,
+                        status = status,
+                        anonType = null,
+                        visitType = null,
+                        description = null,
+                        link = null,
+                        address = null,
+                    )
+                } else {
+                    val targetApplication = it.applications.firstOrNull { app -> app.status == status }
+                        ?: throw InternalServerException("O_o")
+                    SlotDayView(
+                        id = it.id,
+                        time = it.time,
+                        status = status,
+                        anonType = targetApplication.anonType,
+                        visitType = targetApplication.visitType,
+                        description = targetApplication.description,
+                        link = bbbMeetingService.joinMeeting(
+                            applicationId = targetApplication.id,
+                            mode = RequestMode.PSYCHO,
+                        ),
+                        address = targetApplication.address,
+                    )
+                }
             }
         }
     }

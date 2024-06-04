@@ -8,6 +8,7 @@ enum class SlotStatus {
     DONE,
     PLANNED,
     NEED_REVIEW,
+    REJECTED
     ;
 }
 
@@ -25,4 +26,7 @@ class Slot(
     @ManyToOne
     @JoinColumn(name = "psycho_id")
     lateinit var psychoProfile: PsychoProfile
+
+    @OneToMany(mappedBy = "slot", fetch = FetchType.EAGER, cascade = [])
+    lateinit var applications: MutableList<ApplicationEntity>
 }

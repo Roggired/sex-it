@@ -1,5 +1,7 @@
 package ru.sexit.platform.api.http.slot
 
+import ru.sexit.platform.api.http.applications.AnonType
+import ru.sexit.platform.api.http.applications.VisitType
 import ru.sexit.platform.domain.model.Slot
 import ru.sexit.platform.domain.model.SlotStatus
 import java.time.LocalTime
@@ -18,13 +20,14 @@ data class SlotMonthView(
     val id: Long,
     val time: LocalTime,
     val status: SlotStatus,
+    val dayId: Int
 )
 
 data class SlotDayView(
     val id: Long,
     val time: LocalTime,
-    val anonType: String?, // TODO enum
-    val visitType: String?, // TODO enum
+    val anonType: AnonType?,
+    val visitType: VisitType?,
     val status: SlotStatus,
     val description: String?,
     val link: String?,

@@ -16,4 +16,8 @@ class Feedback(
     @ManyToOne(fetch = FetchType.LAZY, cascade = [])
     @JoinColumn(name = "psycho_id")
     lateinit var psychoProfile: PsychoProfile
+
+    @OneToOne(cascade = [])
+    @JoinColumn(name = "application_id")
+    lateinit var applicationEntity: ApplicationEntity
 }

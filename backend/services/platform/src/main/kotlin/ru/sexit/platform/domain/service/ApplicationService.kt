@@ -37,17 +37,17 @@ class ApplicationService(
         val application =
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
         application.status = SlotStatus.PLANNED
-//        if(application.visitType == VisitType.ONLINE) {
-//            bbbMeetingService.createMeeting(application.id)
-//            application.link = bbbMeetingService.
-//        }
+        if(application.visitType == VisitType.ONLINE) {
+            bbbMeetingService.createMeeting(application.id)
+            application.link = null
+        }
     }
 
     @Transactional
     fun rejectApplication(id: Long) {
         val application =
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
-        application.status = SlotStatus.EMPTY //fixme
+        application.status = SlotStatus.REJECTED
     }
 
     fun getByPsychoId(psychoId: Long): List<ApplicationView> {
