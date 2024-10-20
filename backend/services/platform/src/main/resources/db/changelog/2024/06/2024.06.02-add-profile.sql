@@ -7,5 +7,3 @@ CREATE TABLE psycho_profiles
     is_first_free BOOLEAN      NOT NULL,
     bio           TEXT         NOT NULL
 );
-
-INSERT INTO psycho_profiles(name, email, price, is_first_free, bio) VALUES ('Алла Сергеевна', 'alla.sergeevna@example.com', 2000, TRUE, 'Я супер крутая бабуля!!!');

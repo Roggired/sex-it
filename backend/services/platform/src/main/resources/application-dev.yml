@@ -12,7 +12,7 @@ spring:
 #        format_sql: true
 
 bbb:
-  client-mode: real
+  client-mode: stub
   url: https://roggired.ru/bigbluebutton
   secret: ${BBB_SECRET:secret}
   logout-url: http://localhost:8081
