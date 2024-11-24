@@ -39,6 +39,8 @@ class SecurityConfig(
                 authorize(HttpMethod.POST, "/api/v1/slots", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize(HttpMethod.DELETE, "/api/v1/slots/*", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize("/api/v1/slots/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
+                authorize("/api/v1/subscriptions", hasAuthority(SexItPermissions.PSYCHO.name))
+                authorize("/api/v1/subscriptions/*", hasAuthority(SexItPermissions.PSYCHO.name))
 
                 authorize("/swagger-ui/*", permitAll)
                 authorize("/v3/api-docs/**", permitAll)
