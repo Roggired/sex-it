@@ -60,7 +60,7 @@ security:
       first-name: Admin
       last-name: Admin
   keycloak:
-    base-url: http://172.28.0.3:8080
+    base-url: http://localhost:31502
     jwks-endpoint: /realms/Sex-IT/protocol/openid-connect/certs
     authorize-endpoint: /realms/Sex-IT/protocol/openid-connect/auth
     token-endpoint: /realms/Sex-IT/protocol/openid-connect/token
@@ -73,8 +73,8 @@ security:
 
 keycloak:
   admin:
-    base-url: http://172.28.0.3:8080/admin/realms/Sex-IT/
-    authentication-base-url: http://172.28.0.3:8080/
+    base-url: http://keycloak:8080/admin/realms/Sex-IT/
+    authentication-base-url: http://keycloak:8080/
     admin-client-id: admin-cli
     admin-username: admin
     admin-password: admin
