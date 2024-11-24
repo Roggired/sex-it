@@ -12,7 +12,7 @@ export type CalendarEntryProps = {
 };
 
 export const CalendarEntry = ({
-  monthEntry: { month, day, isCurrentMonth },
+  monthEntry: { month, day, isCurrentMonth, isHoliday },
   isCurrentDay,
   onDayClick,
   onSlotClick,
@@ -28,6 +28,7 @@ export const CalendarEntry = ({
       }}
       className={classNames('calendar__entry', {
         inactive: !isCurrentMonth,
+        holiday: isHoliday
       })}
     >
       <div className="calendar__entry__date">

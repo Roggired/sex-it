@@ -7,9 +7,19 @@
   gap: 20px;
 
   &__header {
+    margin-top: 24px;
     align-self: center;
     display: flex;
+    align-items: center;
     gap: 20px;
+    user-select: none;
+    font-weight: 700;
+
+    svg {
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+    }
   }
 
   &__body {
@@ -17,6 +27,11 @@
     grid-template-columns: repeat(7, 1fr);
     grid-column-gap: 1px;
     grid-row-gap: 1px;
+  }
+
+  &__day_name {
+    margin: 0 auto 24px;
+    font-weight: 700;
   }
 
   &__entry {
@@ -44,6 +59,15 @@
 
     &.inactive {
       background-color: $light;
+      color: #808080;
+    }
+
+    &.holiday {
+      color: #C50000;
+    }
+
+    &.holiday.inactive {
+      color: #FF7979;
     }
   }
 

@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
-
-const BASE_URL = 'http://172.28.0.6:8080/api';
+import {baseQueryWithTokenRefresh} from "../auth/interceptor";
 
 export const gatewayApi = createApi({
   reducerPath: 'gatewayServiceApi',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  // baseQuery: fetchBaseQuery({ baseUrl: process.env['NX_GATEWAY_URL'] }),
+  // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:31505/' }),
+  baseQuery: baseQueryWithTokenRefresh,
   endpoints: () => ({}),
   tagTypes: ['DaySlots', 'CalSlots', 'PsychoApps'],
 });

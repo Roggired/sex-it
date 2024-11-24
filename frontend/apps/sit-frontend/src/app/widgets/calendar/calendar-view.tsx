@@ -2,8 +2,9 @@ import './calendar.scss';
 import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { CalendarEntry } from './ui/calendar-entry';
 import { MonthEntry } from './calendar-container';
+import {FaChevronLeft, FaChevronRight} from "react-icons/fa6";
 
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const days = ['ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'];
 
 type CalendarViewProps = {
   readonly currentMonth: number;
@@ -31,13 +32,13 @@ export const CalendarView = ({
   return (
     <div className="calendar">
       <div className="calendar__header">
-        <button onClick={onPrevMonthClick}>PREV</button>
+        <FaChevronLeft onClick={onPrevMonthClick} />
         {months[currentMonth]}, {currentYear}
-        <button onClick={onNextMonthClick}>NEXT</button>
+        <FaChevronRight onClick={onNextMonthClick} />
       </div>
       <div className="calendar__body">
         {days.map((day) => (
-          <span key={day}>{day}</span>
+          <span key={day} className="calendar__day_name">{day}</span>
         ))}
         {monthEntries.map((monthEntry) => {
           return (

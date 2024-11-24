@@ -9,7 +9,7 @@ export const SuiInput = ({ label, ...rest }: SuiInput) => {
   const id = useId();
   return (
     <div className="sui-input">
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && <label htmlFor={id}>{label}:</label>}
       <input id={id} {...rest} />
     </div>
   );

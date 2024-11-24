@@ -11,26 +11,26 @@ export const Header = () => {
   if (user.type === 'CLIENT') {
     return (
       <div className="header">
-        <span>SEX-IT</span>
-        <span onClick={() => navigate(routes.toClientPsychoList())}>
+        <h3>SEX-IT</h3>
+        <h4 onClick={() => navigate(routes.toClientPsychoList())}>
           Психологи
-        </span>
-        <span onClick={() => navigate(routes.toClientApplications())}>
+        </h4>
+        <h4 onClick={() => navigate(routes.toClientApplications())}>
           Мои заявки
-        </span>
-        <span onClick={() => navigate(routes.toRoot())}>Выйти</span>
+        </h4>
+        <h4 onClick={() => navigate(routes.toRoot())}>Выйти</h4>
       </div>
     );
   }
 
   return (
     <div className="header">
-      <span>SEX-IT</span>
-      <span onClick={() => navigate(routes.toCreatePsychoPage())}>Профиль</span>
-      <span onClick={() => navigate(routes.toPsychoCalendarPage())}>
+      <h3>SEX-IT</h3>
+      <h4 onClick={() => navigate(routes.toCreatePsychoPage())}>Профиль</h4>
+      <h4 onClick={() => navigate(routes.toPsychoCalendarPage())}>
         Консультации
-      </span>
-      <span onClick={() => navigate(routes.toRoot())}>Выйти</span>
+      </h4>
+      <h4 onClick={() => navigate(routes.toRoot())}>Выйти</h4>
     </div>
   );
 };

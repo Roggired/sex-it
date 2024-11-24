@@ -61,7 +61,7 @@ export const PsychoCreateProfile = () => {
             />
             <div className="psycho-create-profile__main__inputs">
               <SuiInput
-                label="Цена консультации (руб. в час):"
+                label="Цена консультации (руб. в час)"
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(+e.target.value)}

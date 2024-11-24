@@ -6,9 +6,12 @@ import { CalendarContainer } from '../../../widgets/calendar/calendar-container'
 import { Page } from '../../shared/page/page';
 import './calendar-page.scss';
 import { SlotPageChooser } from '../../shared/slot-page-chooser/slot-page-chooser';
+import {useState} from "react";
+import {SuiModal} from "../../../sui/modal/sui-modal";
 
 export const CalendarPage = () => {
   const navigate = useNavigate();
+  const [isOpened, setIsOpened] = useState(false)
 
   return (
     <Page>
@@ -22,11 +25,15 @@ export const CalendarPage = () => {
           }
         />
         <SuiButton
-          onClick={() => navigate(routes.toPsychoCreateSlot())}
+          // onClick={() => navigate(routes.toPsychoCreateSlot())}
+          onClick={() => setIsOpened(prev => !prev)}
           className="calendar-page__fab"
         >
           Новый слот
         </SuiButton>
+        <SuiModal isOpen={isOpened} handleClose={() => {}}>
+          <h1>HELLOOOOO</h1>
+        </SuiModal>
       </div>
     </Page>
   );

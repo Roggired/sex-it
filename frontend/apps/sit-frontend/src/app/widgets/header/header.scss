@@ -3,14 +3,15 @@
 .header {
   display: flex;
   background-color: $light-gray;
-  padding: 16px 24px;
+  padding: 0px 24px;
   gap: 16px;
 
-  & > span:first-child {
+  & > h3:first-child {
     margin-right: auto;
   }
 
-  & > span {
+  & > h4 {
     cursor: pointer;
+    font-weight: 400;
   }
 }

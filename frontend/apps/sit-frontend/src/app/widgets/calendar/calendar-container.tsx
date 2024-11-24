@@ -13,6 +13,7 @@ export type MonthEntry = {
   readonly month: number;
   readonly day: number;
   readonly isCurrentMonth: boolean;
+  readonly isHoliday?: boolean;
   readonly slots: Array<SlotView>;
 };
 
@@ -77,7 +78,11 @@ export const CalendarContainer = ({
       }
     }
 
-    return tmp;
+    console.log(tmp)
+    return tmp.map((e, index) => ({
+      ...e,
+      isHoliday: [5,6,12,13,19,20,26,27,33,34].includes(index)
+    }))
   }, [currentDate.getMonth(), currentDate.getDate(), data]);
 
   return (

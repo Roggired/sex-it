@@ -19,6 +19,10 @@ docker compose -f docker-compose.yml -f docker-compose-macos.yml up
 1. Перейти в backend  
 2. Запустить:  
 ```bash
+./gradlew clean build && docker compose -f docker-compose.yml -f docker-compose-macos.yml up --force-recreate --build
+```
+
+```bash
 ./gradlew clean build && docker compose up --force-recreate --build
 ```
 3. Чтобы запустить `platform` в режиме интеграции с BBB:

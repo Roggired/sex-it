@@ -11,11 +11,13 @@ import { ApplicationsPage } from 'apps/sit-frontend/src/app/pages/psycho/applica
 import { CreateSlotPage } from 'apps/sit-frontend/src/app/pages/psycho/create-slot/create-slot-page';
 import { PsychoDayViewer } from 'apps/sit-frontend/src/app/pages/psycho/psycho-slot-viewer/psycho-day-viewer';
 import { Provider } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {BrowserRouter, createBrowserRouter, RouterProvider, useRoutes} from 'react-router-dom';
 import { Header } from './widgets/header/header';
 import { RootPage } from './pages/root-page';
 import { PsychoCreateProfile } from './pages/psycho/create-profile/psycho-create-profile';
 import { CalendarPage } from './pages/psycho/calendar-page/calendar-page';
+import {baseRoutes} from "./auth/base-routes";
+import {routes} from "./utils/routes";
 
 const router = createBrowserRouter([
   {
@@ -132,12 +134,28 @@ const router = createBrowserRouter([
   },
 ]);
 
+const Routing = () => {
+  return useRoutes(
+    baseRoutes({
+      homeRoute: routes.toRoot(),
+      header: <Header />,
+      footer: <></>,
+      appRoutes: [
+        {
+          path: '',
+          element: <RootPage />,
+        },
+      ]
+    })
+  )
+}
+
 export function App() {
   return (
     <Provider store={store}>
-      <div className="app">
-        <RouterProvider router={router} />
-      </div>
+      <BrowserRouter>
+        <Routing />
+      </BrowserRouter>
     </Provider>
   );
 }
