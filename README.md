@@ -42,3 +42,10 @@ docker compose -f docker-compose.yml -f docker-compose-macos.yml up
 ## Установка BBB в облаке
 
 см. [доку](./devops/ansible/README.md)
+
+## Обновить dump Keycloak
+
+```bash
+docker exec -it sexit-keycloak bash -c "kc.sh export --realm Sex-IT --file /tmp/sexit-realm.json" &&  
+docker cp sexit-keycloak:/tmp/sexit-realm.json ./config/sexit-realm.json
+```
