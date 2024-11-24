@@ -1,4 +1,4 @@
-package ru.sexit.platform.infrastructure.bbb.model
+package ru.sexit.platform.infrastructure.integration.bbb.model
 
 import ru.sexit.platform.config.properties.BbbProps
 import java.util.UUID

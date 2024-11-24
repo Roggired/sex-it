@@ -1,4 +1,4 @@
-package ru.sexit.platform.infrastructure.bbb.model
+package ru.sexit.platform.infrastructure.integration.bbb.model
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 

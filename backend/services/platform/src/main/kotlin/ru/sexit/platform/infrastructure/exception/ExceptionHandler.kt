@@ -1,4 +1,4 @@
-package ru.sexit.platform.infrastructure
+package ru.sexit.platform.infrastructure.exception
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import org.springframework.core.annotation.Order
@@ -22,16 +22,19 @@ enum class ErrorType {
     NOT_FOUND,
     UNEXPECTED_EXCEPTION,
     BBB_EXCEPTION,
+    UNAUTHORIZED,
+    DOWNSTREAM_SERVICE_IN_UNAVAILABLE,
     ;
 }
 
 class ErrorResponse(
     val status: ErrorType,
     val description: String?,
+    val exceptionId: String? = null,
 )
 
 @ControllerAdvice
-@Order(1)
+@Order(2)
 class ExceptionHandler {
     @ExceptionHandler
     fun handleBbbIntegrationException(e: BbbIntegrationException): ResponseEntity<ErrorResponse> =

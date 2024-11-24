@@ -1,16 +1,16 @@
-package ru.sexit.platform.infrastructure.bbb.client
+package ru.sexit.platform.infrastructure.integration.bbb.client
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import ru.sexit.platform.config.properties.BbbProps
-import ru.sexit.platform.infrastructure.bbb.model.BbbCreateMeetingRequest
-import ru.sexit.platform.infrastructure.bbb.model.BbbJoinMeetingRequest
-import ru.sexit.platform.infrastructure.bbb.model.BbbJoinMeetingResponse
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbCreateMeetingRequest
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbJoinMeetingRequest
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbJoinMeetingResponse
 import ru.sexit.platform.utils.log
 
 @Service
-@ConditionalOnProperty(value = ["bbb.client-mode"], havingValue = "real")
-class RealBbbClient(
+@ConditionalOnProperty(value = ["bbb.client-mode"], havingValue = "stub", matchIfMissing = true)
+class StubBbbClient(
     private val bbbProps: BbbProps,
 ): BbbClient {
     override fun createMeeting(request: BbbCreateMeetingRequest) {
@@ -21,9 +21,7 @@ class RealBbbClient(
             params = request.toParamsMap(bbbProps),
         )
 
-        bbbRestTemplate(evaluatedRequest)
-
-        log.info("Successfully created meeting with id: ${request.meetingId}")
+        log.info("BBB CREATE Request stub has been evaluated: $evaluatedRequest")
     }
 
     override fun joinMeeting(request: BbbJoinMeetingRequest): BbbJoinMeetingResponse {
@@ -34,7 +32,7 @@ class RealBbbClient(
             params = request.toParamsMap(bbbProps),
         )
 
-        log.info("Successfully generated JOIN url for meeting id: ${request.meetingId} and user id: ${request.userId}")
+        log.info("BBB JOIN Request stub has been evaluated: $evaluatedRequest")
 
         return BbbJoinMeetingResponse(
             redirectUrl = evaluatedRequest,

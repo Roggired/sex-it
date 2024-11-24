@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
-import ru.sexit.platform.infrastructure.NotFoundException
+import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.utils.RequestMode
 import java.time.LocalDateTime
 

@@ -11,10 +11,10 @@ import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.Slot
 import ru.sexit.platform.domain.model.SlotStatus
 import ru.sexit.platform.domain.repo.SlotRepo
-import ru.sexit.platform.infrastructure.AlreadyExistException
-import ru.sexit.platform.infrastructure.InternalServerException
-import ru.sexit.platform.infrastructure.InvalidDataException
-import ru.sexit.platform.infrastructure.NotFoundException
+import ru.sexit.platform.infrastructure.exception.AlreadyExistException
+import ru.sexit.platform.infrastructure.exception.InternalServerException
+import ru.sexit.platform.infrastructure.exception.InvalidDataException
+import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.utils.RequestMode
 import ru.sexit.platform.utils.log
 

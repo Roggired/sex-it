@@ -28,17 +28,56 @@ springdoc:
     pageable-converter:
       enabled: true
 
-#kafka:
-#  url: http://broker:9092
-#  exampleConsumerGroupId: example-consumer-group
-#  exampleConcurrencyFactor: 2
-#  maxBlockTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_max.block.ms
-#  requestTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_request.timeout.ms
-#  deliveryTimeout: 10s # https://kafka.apache.org/documentation/#producerconfigs_delivery.timeout.ms
-#  linger: 0s # https://kafka.apache.org/documentation/#producerconfigs_linger.ms
-#  retries: 3 # https://kafka.apache.org/documentation/#producerconfigs_retries
-#  producerId: course-service-producer
-#  exampleTopic: example.cool # DO NOT change value of this property. This value is used on consuming services in hardcoded way
+security:
+  dev-only:
+    api-key-header: X-Sexit-Api-Key
+    psycho:
+      api-key: psycho-api-key
+      id: b934ff51-c5fe-45d9-b259-f67d1999ccc2
+      username: psycho
+      email: psycho@example.com
+      first-name: Psycho
+      last-name: Psycho
+    psycho-friend:
+      api-key: psycho-friend-api-key
+      id: 1fd6d68c-38a2-439a-a22f-1737a65c149e
+      username: psycho_friend@example.com
+      email: psycho_friend@example.com
+      first-name: Psycho
+      last-name: Friend
+    client:
+      api-key: client-api-key
+      id: 8c3959e3-f87b-4828-a645-509525979bfb
+      username: client@example.com
+      email: client@example.com
+      first-name: Client
+      last-name: Client
+    admin:
+      api-key: admin-api-key
+      id: de061760-613b-4c0f-937b-1db593b2ac64
+      username: admin@example.com
+      email: admin@example.com
+      first-name: Admin
+      last-name: Admin
+  keycloak:
+    base-url: http://172.28.0.3:8080
+    jwks-endpoint: /realms/Sex-IT/protocol/openid-connect/certs
+    authorize-endpoint: /realms/Sex-IT/protocol/openid-connect/auth
+    token-endpoint: /realms/Sex-IT/protocol/openid-connect/token
+    logout-endpoint: /realms/Sex-IT/protocol/openid-connect/logout
+    client-id: sexit-backend
+    client-secret: yiMNl8vS3Z38RYxFuOE6g6ngJsjz5KaL
+    post-logout-redirect-to-newdex-url: http://localhost:3000
+    use-state-for-csrf-protection: true
+    state-lifetime: 5m
+
+keycloak:
+  admin:
+    base-url: http://172.28.0.3:8080/admin/realms/Sex-IT/
+    authentication-base-url: http://172.28.0.3:8080/
+    admin-client-id: admin-cli
+    admin-username: admin
+    admin-password: admin
 
 logging:
   level:

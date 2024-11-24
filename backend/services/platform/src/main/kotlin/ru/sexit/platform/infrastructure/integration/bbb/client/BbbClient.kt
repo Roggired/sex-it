@@ -1,4 +1,4 @@
-package ru.sexit.platform.infrastructure.bbb.client
+package ru.sexit.platform.infrastructure.integration.bbb.client
 
 import org.apache.commons.codec.digest.DigestUtils
 import org.springframework.http.HttpEntity
@@ -6,11 +6,11 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.client.RestTemplate
-import ru.sexit.platform.infrastructure.BbbIntegrationException
-import ru.sexit.platform.infrastructure.bbb.model.BbbCreateMeetingRequest
-import ru.sexit.platform.infrastructure.bbb.model.BbbGeneralResponse
-import ru.sexit.platform.infrastructure.bbb.model.BbbJoinMeetingRequest
-import ru.sexit.platform.infrastructure.bbb.model.BbbJoinMeetingResponse
+import ru.sexit.platform.infrastructure.exception.BbbIntegrationException
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbCreateMeetingRequest
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbGeneralResponse
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbJoinMeetingRequest
+import ru.sexit.platform.infrastructure.integration.bbb.model.BbbJoinMeetingResponse
 import ru.sexit.platform.utils.log
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets

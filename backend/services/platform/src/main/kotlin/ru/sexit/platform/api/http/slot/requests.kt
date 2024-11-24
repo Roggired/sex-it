@@ -2,7 +2,7 @@ package ru.sexit.platform.api.http.slot
 
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
-import ru.sexit.platform.infrastructure.InvalidDataException
+import ru.sexit.platform.infrastructure.exception.InvalidDataException
 import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.LocalTime

@@ -8,8 +8,8 @@ import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.PsychoRating
 import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
-import ru.sexit.platform.infrastructure.AlreadyExistException
-import ru.sexit.platform.infrastructure.NotFoundException
+import ru.sexit.platform.infrastructure.exception.AlreadyExistException
+import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.utils.log
 
 @Service

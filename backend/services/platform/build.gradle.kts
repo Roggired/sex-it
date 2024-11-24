@@ -38,7 +38,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-undertow")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // security
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.security:spring-security-oauth2-resource-server:6.1.3")
+    implementation("org.springframework.security:spring-security-oauth2-jose:6.1.3")
 
     // jackson
     implementation("org.jetbrains.kotlin:kotlin-reflect") // spring data introspection
@@ -54,8 +58,11 @@ dependencies {
     // documentation
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
-    // kafka
-//    implementation("org.springframework.kafka:spring-kafka")
+    // Http client
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
     // database
     implementation("org.liquibase:liquibase-core")
