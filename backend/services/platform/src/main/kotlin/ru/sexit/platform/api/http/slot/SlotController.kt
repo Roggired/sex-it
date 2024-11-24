@@ -2,7 +2,6 @@ package ru.sexit.platform.api.http.slot
 
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import ru.sexit.platform.domain.model.Slot
 import ru.sexit.platform.domain.service.SlotService
 import ru.sexit.platform.utils.RequestMode
 
@@ -26,12 +25,12 @@ class SlotController(
         @RequestParam(required = false) yearId: Int?,
         monthId: Int,
         mode: RequestMode,
-        @RequestParam(required = false) psychoId: Long?
+        @RequestParam(required = true) psychoId: Long
     ): List<SlotMonthView> = slotService.getAllSlotsByMonth(
         yearId = yearId ?: 2024,
         monthId = monthId,
         mode = mode,
-        psychoId = psychoId ?: 1L,
+        psychoProfileId = psychoId,
     )
 
     @GetMapping("/by-day")
@@ -40,12 +39,12 @@ class SlotController(
         monthId: Int,
         dayId: Int,
         mode: RequestMode,
-        @RequestParam(required = false) psychoId: Long?
+        @RequestParam(required = true) psychoId: Long
     ): List<SlotDayView> = slotService.getAllSlotsByDay(
         yearId = yearId ?: 2024,
         monthId = monthId,
         dayId = dayId,
         mode = mode,
-        psychoId = psychoId ?: 1L,
+        psychoId = psychoId,
     )
 }

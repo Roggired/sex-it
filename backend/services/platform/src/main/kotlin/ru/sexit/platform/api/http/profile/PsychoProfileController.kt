@@ -32,4 +32,7 @@ class PsychoProfileController(
             RequestMode.PSYCHO -> profile.toPsychoView()
         }
     }
+
+    @GetMapping("/my")
+    fun getMyProfile(): ProfilePsychoView = profileService.getMyProfile().toPsychoView()
 }

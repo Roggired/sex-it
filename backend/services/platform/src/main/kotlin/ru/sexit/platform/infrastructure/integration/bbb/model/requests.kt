@@ -22,7 +22,7 @@ enum class BbbUserRole {
 }
 
 data class BbbJoinMeetingRequest(
-    val userId: Long,
+    val userId: String,
     val userFullName: String,
     val meetingId: UUID,
     val userRole: BbbUserRole,

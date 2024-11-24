@@ -8,6 +8,7 @@ class PsychoProfile(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    var userId: String,
     var name: String,
     var email: String,
     var price: Int,
@@ -17,6 +18,7 @@ class PsychoProfile(
     companion object {
         fun stub(id: Long): PsychoProfile = PsychoProfile(
             id = id,
+            userId = "",
             name = "",
             email = "",
             price = 0,

@@ -10,7 +10,6 @@ class BbbMeeting(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val uuid: UUID,
-    val psychoId: Long,
-    val clientId: Long,
+    val psychoProfileId: Long,
     val applicationId: Long,
 )

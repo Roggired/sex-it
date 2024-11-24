@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.sexit.platform.domain.model.Application
+import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.service.ApplicationService
 
 @RestController
@@ -18,49 +20,25 @@ class ApplicationController(
     @PostMapping
     fun createApplication(
         @RequestBody applicationRequest: NewApplicationRequest
-    ): ApplicationViewCreated {
-        return applicationService.createApplication(applicationRequest)
-    }
+    ): ApplicationView = applicationService.createApplication(applicationRequest).toView()
 
     @PostMapping("/{id}/accept")
     fun acceptApplication(
         @PathVariable("id") id: Long
-    ) {
-        applicationService.acceptApplication(id)
-    }
+    ): Unit = applicationService.acceptApplication(id)
 
     @PostMapping("/{id}/reject")
     fun rejectApplication(
         @PathVariable("id") id: Long
-    ) {
-        applicationService.rejectApplication(id)
-    }
+    ): Unit = applicationService.rejectApplication(id)
 
     @GetMapping
     fun getApplicationByPsychoId(
         @RequestParam(name = "psychoId") psychoId: Long
-    ): List<ApplicationWithClientView> {
-        return applicationService.getByPsychoId(psychoId)
-            .map {
-                ApplicationWithClientView(
-                    id = it.id,
-                    clientName = "Иван Иванович",
-                    slot = it.slot,
-                    creationTime = it.creationTime,
-                    anonType = it.anonType,
-                    visitType = it.visitType,
-                    status = it.status,
-                    description = it.description,
-                    link = it.link,
-                    address = it.address,
-                )
-            }
-    }
+    ): List<ApplicationWithClientView> = applicationService.getByPsychoId(psychoId)
 
     @GetMapping("/accepted")
     fun getAcceptedApplication(
         @RequestParam("psychoName") psychoName: String
-    ): List<AcceptedApplicationView> {
-        return applicationService.getAcceptedApplicationsByPsychoName(psychoName)
-    }
+    ): List<AcceptedApplicationView> = applicationService.getAcceptedApplicationsByPsychoName(psychoName)
 }

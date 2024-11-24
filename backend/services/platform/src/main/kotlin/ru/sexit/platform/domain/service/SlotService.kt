@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.slot.SlotDayView
 import ru.sexit.platform.api.http.slot.SlotMonthView
 import ru.sexit.platform.api.http.slot.SlotRequest
-import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.Slot
 import ru.sexit.platform.domain.model.SlotStatus
 import ru.sexit.platform.domain.repo.SlotRepo
@@ -22,16 +21,19 @@ import ru.sexit.platform.utils.log
 class SlotService(
     private val bbbMeetingService: BbbMeetingService,
     private val slotRepo: SlotRepo,
+    private val psychoProfileService: PsychoProfileService,
 ) {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun createSlot(request: SlotRequest): Slot {
         request.validateDate()
+        val psychoProfile = psychoProfileService.getMyProfile()
         val isSlotCaptured = slotRepo.isSlotAlreadyCaptured(
             yearId = request.yearId,
             monthId = request.monthId,
             dayId = request.dayId,
             timeFrom = request.time.minusHours(1),
             timeTo = request.time.plusHours(1),
+            psychoProfileId = psychoProfile.id
         )
 
         if (isSlotCaptured) {
@@ -46,9 +48,9 @@ class SlotService(
                 dayId = request.dayId,
                 time = request.time,
             ).apply {
-                psychoProfile = PsychoProfile.stub(1L) // TODO only for arch
+                this.psychoProfile = psychoProfile
             }
-        ).also { log.info("New slot ${it.dayId + 1}.${it.monthId + 1}.${it.yearId} ${it.time} has been created") }
+        ).also { log.info("New slot ${it.dayId + 1}.${it.monthId + 1}.${it.yearId} ${it.time} has been created for psycho profile: ${it.psychoProfile.id}") }
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -64,7 +66,7 @@ class SlotService(
         yearId: Int = 2024,
         monthId: Int,
         mode: RequestMode,
-        psychoId: Long = 1L,
+        psychoProfileId: Long = 1L,
     ): List<SlotMonthView> {
         if (monthId < 0 || monthId > 11) {
             throw InvalidDataException("Invalid monthId")
@@ -74,7 +76,7 @@ class SlotService(
             RequestMode.CLIENT -> slotRepo.findAllSlotsByMonthOrDayForClient(
                 yearId = yearId,
                 monthId = monthId,
-                psychoId = psychoId
+                psychoId = psychoProfileId
             ).map {
                 SlotMonthView(
                     id = it.id,
@@ -86,7 +88,7 @@ class SlotService(
             RequestMode.PSYCHO -> slotRepo.findAllSlotsByMonthOrDayForPsycho(
                 yearId = yearId,
                 monthId = monthId,
-                psychoId = psychoId,
+                psychoId = psychoProfileId,
             ).map {
                 SlotMonthView(
                     id = it.id,

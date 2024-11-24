@@ -24,7 +24,8 @@ class Application(
     val description: String?,
     var link: String?,
     var address: String?,
-    var results: String?
+    var results: String?,
+    val userId: String
 ) {
     @ManyToOne
     @JoinColumn(name = "slot_id")
@@ -40,7 +41,8 @@ class Application(
             description = null,
             link = null,
             address = null,
-            results = null
+            results = null,
+            userId = "",
         )
     }
 }
@@ -56,13 +58,6 @@ fun Application.toView(): ApplicationView = ApplicationView(
     description = description,
     link = link,
     address = address
-)
-
-fun Application.toViewCreated(): ApplicationViewCreated = ApplicationViewCreated(
-    slotId = slot.id,
-    anonType = anonType,
-    visitType = visitType,
-    description = description
 )
 
 data class AcceptedApplication(

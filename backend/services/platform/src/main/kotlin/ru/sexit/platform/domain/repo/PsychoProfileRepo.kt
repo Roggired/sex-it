@@ -7,4 +7,6 @@ import ru.sexit.platform.domain.model.PsychoProfile
 @Repository
 interface PsychoProfileRepo : JpaRepository<PsychoProfile, Long> {
     fun findByEmail(email: String): PsychoProfile?
+
+    fun findByUserId(userId: String): PsychoProfile?
 }

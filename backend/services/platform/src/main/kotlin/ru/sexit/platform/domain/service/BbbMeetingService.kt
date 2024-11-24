@@ -1,5 +1,7 @@
 package ru.sexit.platform.domain.service
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
@@ -7,11 +9,13 @@ import ru.sexit.platform.domain.model.BbbMeeting
 import ru.sexit.platform.domain.repo.BbbMeetingRepo
 import ru.sexit.platform.infrastructure.exception.AlreadyExistException
 import ru.sexit.platform.infrastructure.exception.BbbIntegrationException
+import ru.sexit.platform.infrastructure.exception.InvalidOperationException
 import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.infrastructure.integration.bbb.client.BbbClient
 import ru.sexit.platform.infrastructure.integration.bbb.model.BbbCreateMeetingRequest
 import ru.sexit.platform.infrastructure.integration.bbb.model.BbbJoinMeetingRequest
 import ru.sexit.platform.infrastructure.integration.bbb.model.BbbUserRole
+import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 import ru.sexit.platform.utils.RequestMode
 import ru.sexit.platform.utils.log
 import java.io.IOException
@@ -22,11 +26,17 @@ class BbbMeetingService(
     private val bbbMeetingRepo: BbbMeetingRepo,
     private val bbbClient: BbbClient,
 ) {
-    // TODO: integrate with apps
+    @Suppress("VarCouldBeVal")
+    @Lazy
+    @field:Autowired
+    private lateinit var applicationService: ApplicationService
+
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun createMeeting(
         applicationId: Long,
     ): BbbMeeting {
+        val application = applicationService.getById(applicationId)
+
         val existingBbbMeeting = bbbMeetingRepo.findByApplicationId(applicationId)
         if (existingBbbMeeting != null) {
             throw AlreadyExistException("Meeting already exists")
@@ -37,15 +47,14 @@ class BbbMeetingService(
                 id = 0L,
                 uuid = UUID.randomUUID(),
                 applicationId = applicationId,
-                psychoId = 1L, // TODO: stub
-                clientId = 2L, // TODO: stub
+                psychoProfileId = application.slot.psychoProfile.id,
             )
         )
 
         try {
             bbbClient.createMeeting(
                 request = BbbCreateMeetingRequest(
-                    name = "Consultation between ${bbbMeeting.psychoId} and ${bbbMeeting.clientId}",
+                    name = "Consultation for PsychoProfile: ${bbbMeeting.psychoProfileId} and Application: ${bbbMeeting.applicationId}",
                     meetingId = bbbMeeting.uuid,
                 )
             )
@@ -57,7 +66,7 @@ class BbbMeetingService(
             throw e
         }
 
-        log.info("Online consultation has been successfully created for users: ${bbbMeeting.psychoId} and ${bbbMeeting.clientId}. MeetingID: ${bbbMeeting.uuid}")
+        log.info("Online consultation has been successfully created for PsychoProfile: ${bbbMeeting.psychoProfileId} and Application: ${bbbMeeting.applicationId}. MeetingID: ${bbbMeeting.uuid}")
         return bbbMeeting
     }
 
@@ -87,20 +96,25 @@ class BbbMeetingService(
         mode: RequestMode,
     ): String {
         val bbbMeeting = getMeetingByApplicationId(applicationId)
+        val application = applicationService.getById(applicationId)
 
         val joinRequest = when(mode) {
-            RequestMode.CLIENT -> BbbJoinMeetingRequest(
-                userId = 2L,
-                userFullName = "Мария Карасёва",
-                meetingId = bbbMeeting.uuid,
-                userRole = BbbUserRole.VIEWER,
-            )
-            RequestMode.PSYCHO -> BbbJoinMeetingRequest(
-                userId = 1L,
-                userFullName = "Сергей Викторович",
-                meetingId = bbbMeeting.uuid,
-                userRole = BbbUserRole.MODERATOR,
-            )
+            RequestMode.CLIENT -> if (application.userId == getRequestAuthorUserInfo().id) {
+                BbbJoinMeetingRequest(
+                    userId = application.userId,
+                    userFullName = "Мария Карасёва",
+                    meetingId = bbbMeeting.uuid,
+                    userRole = BbbUserRole.VIEWER,
+                )
+            } else throw InvalidOperationException("Request author is not the client")
+            RequestMode.PSYCHO -> if (application.slot.psychoProfile.userId == getRequestAuthorUserInfo().id) {
+                BbbJoinMeetingRequest(
+                    userId = application.slot.psychoProfile.userId,
+                    userFullName = "Сергей Викторович",
+                    meetingId = bbbMeeting.uuid,
+                    userRole = BbbUserRole.MODERATOR,
+                )
+            } else throw InvalidOperationException("Request author is not the psycho")
         }
 
         return bbbClient.joinMeeting(joinRequest).redirectUrl

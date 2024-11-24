@@ -1,5 +1,6 @@
 package ru.sexit.platform.domain.service
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
@@ -10,15 +11,43 @@ import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
 import ru.sexit.platform.infrastructure.exception.AlreadyExistException
 import ru.sexit.platform.infrastructure.exception.NotFoundException
+import ru.sexit.platform.infrastructure.integration.DownstreamServices
+import ru.sexit.platform.infrastructure.integration.IntegrationRetrofitClient
+import ru.sexit.platform.infrastructure.integration.keycloak.admin.api.KeycloakAdminAPI
+import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.KeycloakError
+import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 import ru.sexit.platform.utils.log
 
 @Service
 class PsychoProfileService(
     private val psychoProfileRepo: PsychoProfileRepo,
     private val feedbackRepo: FeedbackRepo,
+
+    private val keycloakAdminAPI: KeycloakAdminAPI,
+    @Qualifier("keycloakAdminIntegrationRetrofitClient")
+    private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
 ) {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun updateOrCreate(id: Long, request: PsychoProfileRequest): PsychoProfile {
+        val keycloakUser = integrationClient.invokeExternalService(
+            downstreamService = DownstreamServices.KEYCLOAK,
+        ) {
+            keycloakAdminAPI.getUserRepresentationById(getRequestAuthorUserInfo().id)
+        }.content!!
+
+        if (keycloakUser.email != request.email) {
+            integrationClient.invokeExternalService(
+                downstreamService = DownstreamServices.KEYCLOAK,
+            ) {
+                keycloakAdminAPI.updateUser(
+                    id = getRequestAuthorUserInfo().id,
+                    user = keycloakUser.copy(
+                        email = request.email,
+                    )
+                )
+            }
+        }
+
         if (id == 0L) {
             return create(request)
                 .also { log.info("Profile (id: ${it.id}) has been created") }
@@ -37,6 +66,7 @@ class PsychoProfileService(
         return psychoProfileRepo.save(
             PsychoProfile(
                 id = 0L,
+                userId = getRequestAuthorUserInfo().id,
                 name = request.name,
                 email = request.email,
                 price = request.price,
@@ -67,6 +97,10 @@ class PsychoProfileService(
 
     fun getProfileById(id: Long): PsychoProfile = psychoProfileRepo.findById(id)
             .orElseThrow { NotFoundException("No such profile exists") }
+
+    fun getMyProfile(): PsychoProfile = psychoProfileRepo.findByUserId(
+        getRequestAuthorUserInfo().id
+    ) ?: throw NotFoundException("No profile found")
 
     fun getPsychoRatings(id: Long): PsychoRating {
         val feedbacks = feedbackRepo.findAllByPsychoProfileId(id)

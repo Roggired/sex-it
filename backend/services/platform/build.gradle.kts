@@ -38,6 +38,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-undertow")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.keycloak:keycloak-core:26.0.6")
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")

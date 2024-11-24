@@ -16,14 +16,6 @@ enum class VisitType {
     OFFLINE
 }
 
-data class ApplicationViewCreated(
-    val slotId: Long,
-    val anonType: AnonType,
-    val visitType: VisitType,
-    val description: String?
-)
-
-
 data class ApplicationView(
     val id: Long,
     val slot: SlotWithDate,

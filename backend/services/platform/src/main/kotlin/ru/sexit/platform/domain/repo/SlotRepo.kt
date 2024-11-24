@@ -12,7 +12,7 @@ interface SlotRepo: JpaRepository<Slot, Long> {
         """
             SELECT COUNT(*) > 0 FROM Slot s
             WHERE s.yearId = :yearId AND s.monthId = :monthId AND s.dayId = :dayId
-            AND s.time >= :timeFrom AND s.time <= :timeTo
+            AND s.time > :timeFrom AND s.time < :timeTo AND s.psychoProfile.id = :psychoProfileId
         """
     )
     fun isSlotAlreadyCaptured(
@@ -21,6 +21,7 @@ interface SlotRepo: JpaRepository<Slot, Long> {
         dayId: Int,
         timeFrom: LocalTime,
         timeTo: LocalTime,
+        psychoProfileId: Long,
     ): Boolean
 
     @Query(

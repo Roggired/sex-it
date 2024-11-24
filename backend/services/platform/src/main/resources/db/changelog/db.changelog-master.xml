@@ -11,4 +11,8 @@
     <include file="/db/changelog/2024/06/2024.06.04-add-application-to-feedback.sql"/>
     <include file="/db/changelog/2024/11/2024.11.24-add-keycloak-state-entity.sql"/>
     <include file="/db/changelog/2024/11/2024.11.24-add-subscriptions.sql"/>
+    <include file="/db/changelog/2024/11/2024.11.24-add-user-id-to-psycho-profile.sql"/>
+    <include file="/db/changelog/2024/11/2024.11.24-add-user-id-to-application.sql"/>
+    <include file="/db/changelog/2024/11/2024.11.24-recreate--bbb-meetings.sql"/>
+    <include file="/db/changelog/2024/11/2024.11.24-change-default-psycho-profile-email.sql"/>
 </databaseChangeLog>

@@ -1,11 +1,20 @@
 package ru.sexit.platform.domain.service
 
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.applications.*
+import ru.sexit.platform.api.http.slot.SlotWithDate
+import ru.sexit.platform.api.http.slot.toShortView
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
 import ru.sexit.platform.infrastructure.exception.NotFoundException
+import ru.sexit.platform.infrastructure.integration.DownstreamServices
+import ru.sexit.platform.infrastructure.integration.IntegrationRetrofitClient
+import ru.sexit.platform.infrastructure.integration.keycloak.admin.api.KeycloakAdminAPI
+import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.KeycloakError
+import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.toUserInfo
+import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 import ru.sexit.platform.utils.RequestMode
 import java.time.LocalDateTime
 
@@ -13,10 +22,13 @@ import java.time.LocalDateTime
 class ApplicationService(
     private val applicationRepository: ApplicationRepository,
     private val slotService: SlotService,
-    private val bbbMeetingService: BbbMeetingService
+    private val bbbMeetingService: BbbMeetingService,
+    private val keycloakAdminAPI: KeycloakAdminAPI,
+    @Qualifier("keycloakAdminIntegrationRetrofitClient")
+    private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
 ) {
     @Transactional
-    fun createApplication(applicationRequest: NewApplicationRequest): ApplicationViewCreated {
+    fun createApplication(applicationRequest: NewApplicationRequest): Application {
         val slot = slotService.getById(applicationRequest.slotId)
         return applicationRepository.save(
             Application(
@@ -28,9 +40,10 @@ class ApplicationService(
                 status = SlotStatus.NEED_REVIEW,
                 link = null,
                 address = null,
-                results = null
+                results = null,
+                userId = getRequestAuthorUserInfo().id,
             ).also { it.slot = slot }
-        ).toViewCreated()
+        )
     }
 
     @Transactional
@@ -51,11 +64,41 @@ class ApplicationService(
         application.status = SlotStatus.REJECTED
     }
 
-    fun getByPsychoId(psychoId: Long): List<ApplicationView> {
+    fun getByPsychoId(psychoId: Long): List<ApplicationWithClientView> {
         val applications = applicationRepository.findApplicationsByPsychoId(psychoId)
             ?: throw NotFoundException("No applications by psychoId: $psychoId")
-        return applications.map { it.toView() }
+
+        val users = applications.map {
+            integrationClient.invokeExternalService(
+                downstreamService = DownstreamServices.KEYCLOAK,
+            ) {
+                keycloakAdminAPI.getUserRepresentationById(it.userId)
+            }.content!!
+        }.associateBy { it.id }
+
+        return applications.map {
+            ApplicationWithClientView(
+                id = it.id,
+                clientName = users[it.userId]!!.fullName,
+                slot = SlotWithDate(
+                    id = it.slot.id,
+                    time = it.slot.time,
+                    monthId = it.slot.monthId,
+                    dayId = it.slot.dayId,
+                    yearId = it.slot.yearId,
+                ),
+                creationTime = it.creationTime,
+                anonType = it.anonType,
+                visitType = it.visitType,
+                status = it.status,
+                description = it.description,
+                link = it.link,
+                address = it.address,
+            )
+        }
     }
+
+    fun getById(id: Long): Application = applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
 
     fun getAcceptedApplicationsByPsychoName(psychoName: String): List<AcceptedApplicationView> {
         return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map {

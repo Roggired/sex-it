@@ -1,5 +1,6 @@
 package ru.sexit.platform.infrastructure.integration.keycloak.admin.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import ru.sexit.platform.domain.model.UserInfo
 import ru.sexit.platform.infrastructure.exception.InternalServerException
@@ -19,7 +20,9 @@ data class KeycloakUserRepresentation(
     val username: String?,
     val realmRoles: List<String>?
 ) {
+    @JsonIgnore
     val patronymic = attributes?.let { extractPatronymic(attributes) }
+    @JsonIgnore
     val fullName = patronymic?.let { "$lastName $firstName $patronymic" } ?: "$lastName $firstName"
 }
 
