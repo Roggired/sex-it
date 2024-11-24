@@ -28,5 +28,5 @@ class Slot(
     lateinit var psychoProfile: PsychoProfile
 
     @OneToMany(mappedBy = "slot", fetch = FetchType.EAGER, cascade = [])
-    lateinit var applications: MutableList<ApplicationEntity>
+    lateinit var applications: MutableList<Application>
 }

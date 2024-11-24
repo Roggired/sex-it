@@ -19,5 +19,5 @@ class Feedback(
 
     @OneToOne(cascade = [])
     @JoinColumn(name = "application_id")
-    lateinit var applicationEntity: ApplicationEntity
+    lateinit var applicationEntity: Application
 }

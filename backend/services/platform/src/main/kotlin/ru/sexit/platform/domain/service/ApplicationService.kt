@@ -19,7 +19,7 @@ class ApplicationService(
     fun createApplication(applicationRequest: NewApplicationRequest): ApplicationViewCreated {
         val slot = slotService.getById(applicationRequest.slotId)
         return applicationRepository.save(
-            ApplicationEntity(
+            Application(
                 id = 0L,
                 creationTime = LocalDateTime.now(),
                 anonType = applicationRequest.anonType,

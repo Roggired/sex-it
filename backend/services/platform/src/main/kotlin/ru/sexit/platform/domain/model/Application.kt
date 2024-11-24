@@ -10,7 +10,7 @@ import java.time.LocalTime
 
 @Entity
 @Table(name = "applications")
-class ApplicationEntity(
+class Application(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -31,7 +31,7 @@ class ApplicationEntity(
     lateinit var slot: Slot
 
     companion object {
-        fun stub(id: Long): ApplicationEntity = ApplicationEntity(
+        fun stub(id: Long): Application = Application(
             id = id,
             creationTime = LocalDateTime.now(),
             anonType = AnonType.ANON,
@@ -46,7 +46,7 @@ class ApplicationEntity(
 }
 
 
-fun ApplicationEntity.toView(): ApplicationView = ApplicationView(
+fun Application.toView(): ApplicationView = ApplicationView(
     id = id,
     slot = SlotWithDate(slot.id, slot.time, slot.monthId, slot.dayId, slot.yearId),
     creationTime = creationTime,
@@ -58,7 +58,7 @@ fun ApplicationEntity.toView(): ApplicationView = ApplicationView(
     address = address
 )
 
-fun ApplicationEntity.toViewCreated(): ApplicationViewCreated = ApplicationViewCreated(
+fun Application.toViewCreated(): ApplicationViewCreated = ApplicationViewCreated(
     slotId = slot.id,
     anonType = anonType,
     visitType = visitType,
