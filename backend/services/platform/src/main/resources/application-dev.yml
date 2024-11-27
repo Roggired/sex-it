@@ -60,7 +60,8 @@ security:
       first-name: Admin
       last-name: Admin
   keycloak:
-    base-url: http://localhost:31502
+    public-base-url: http://localhost:31502
+    internal-base-url: http://keycloak:8080
     jwks-endpoint: /realms/Sex-IT/protocol/openid-connect/certs
     authorize-endpoint: /realms/Sex-IT/protocol/openid-connect/auth
     token-endpoint: /realms/Sex-IT/protocol/openid-connect/token

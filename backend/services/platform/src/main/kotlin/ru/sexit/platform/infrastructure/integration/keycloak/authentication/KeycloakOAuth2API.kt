@@ -59,7 +59,7 @@ class KeycloakOAuth2API(
         val body = response.body
         if (body == null) {
             log.error("Keycloak returned OK response, " +
-                    "but no body on ${keycloakProperties.baseUrl}${keycloakProperties.tokenEndpoint}. " +
+                    "but no body on ${keycloakProperties.internalBaseUrl}${keycloakProperties.tokenEndpoint}. " +
                     "ResponseStatus: ${response.statusCode.value()}. ")
             throw InternalServerException("Keycloak returned ok status, but empty body")
         }
@@ -84,7 +84,7 @@ class KeycloakOAuth2API(
     ): ResponseEntity<R> {
         return try {
             RestTemplate().exchange(
-                "${keycloakProperties.baseUrl}$endpoint",
+                "${keycloakProperties.internalBaseUrl}$endpoint",
                 method,
                 httpEntity,
                 responseType

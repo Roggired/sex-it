@@ -7,7 +7,9 @@ import java.time.Duration
 
 @ConfigurationProperties(prefix = "security.keycloak")
 data class KeycloakSecurityProperties(
-    val baseUrl: String,
+    // two urls because of Mac OS
+    val publicBaseUrl: String,
+    val internalBaseUrl: String,
     val jwksEndpoint: String,
     val authorizeEndpoint: String,
     val tokenEndpoint: String,
@@ -18,7 +20,7 @@ data class KeycloakSecurityProperties(
     val stateLifetime: Duration,
 ) {
     fun getAuthorizeUrl(redirectUri: String): KeycloakGeneratedAuthorizeUrl {
-        val authorizeUrl = "$baseUrl$authorizeEndpoint" +
+        val authorizeUrl = "$publicBaseUrl$authorizeEndpoint" +
                 "?response_type=code" +
                 "&client_id=$clientId" +
                 "&redirect_uri=$redirectUri"
@@ -39,9 +41,9 @@ data class KeycloakSecurityProperties(
         )
     }
 
-    fun getLogoutUrl(redirectUri: String): String = "$baseUrl$logoutEndpoint?post_logout_redirect_uri=$redirectUri&client_id=$clientId"
+    fun getLogoutUrl(redirectUri: String): String = "$publicBaseUrl$logoutEndpoint?post_logout_redirect_uri=$redirectUri&client_id=$clientId"
 
-    fun getJwksUrl(): String = "$baseUrl$jwksEndpoint"
+    fun getJwksUrl(): String = "$internalBaseUrl$jwksEndpoint"
 
     companion object {
         const val GRANT_TYPE_AUTHORIZATION_CODE = "authorization_code"

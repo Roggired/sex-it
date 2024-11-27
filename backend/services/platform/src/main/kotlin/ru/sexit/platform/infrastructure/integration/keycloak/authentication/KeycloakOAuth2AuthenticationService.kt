@@ -53,7 +53,7 @@ class KeycloakOAuth2AuthenticationService(
             redirectUri = request.redirectUri,
         )
 
-        log.debug("Successfully obtain tokens from Keycloak: ${keycloakProperties.baseUrl}${keycloakProperties.tokenEndpoint}")
+        log.debug("Successfully obtain tokens from Keycloak: ${keycloakProperties.internalBaseUrl}${keycloakProperties.tokenEndpoint}")
         return keycloakAccess
     }
 
@@ -73,7 +73,7 @@ class KeycloakOAuth2AuthenticationService(
             refreshToken = request.refreshToken
         )
 
-        log.debug("Successfully refresh tokens from keycloak: ${keycloakProperties.baseUrl}${keycloakProperties.tokenEndpoint}")
+        log.debug("Successfully refresh tokens from keycloak: ${keycloakProperties.internalBaseUrl}${keycloakProperties.tokenEndpoint}")
         return keycloakAccess
     }
 }
