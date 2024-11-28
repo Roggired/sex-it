@@ -9,7 +9,7 @@ import {Authorization, clearTokens, getCachedAuthorizationIfExists, saveAuthoriz
 
 const mutex = new Mutex()
 // const GATEWAY_URL = process.env['NX_GATEWAY_URL']
-const GATEWAY_URL = 'http://localhost:31505/'
+const GATEWAY_URL = 'http://localhost:31505/api/v1'
 
 const baseQuery = fetchBaseQuery({ baseUrl: GATEWAY_URL })
 

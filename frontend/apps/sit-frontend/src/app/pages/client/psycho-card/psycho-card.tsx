@@ -1,20 +1,23 @@
 import './psycho-card.scss';
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export const PsychoCardPage = () => {
   const id = useGetNumberPathParam('id');
   const navigate = useNavigate();
+  const { id: pid } = useAtomValue(userDataAtom)
 
-  const { data } = psychoProfileApi.useGetPsychoQuery({
-    id: psycho.id,
+  const { data } = psychoProfileApi.useGetPsychoQuery( pid ? {
+    id: pid,
     mode: 'CLIENT',
-  });
+  } : skipToken);
 
   if (!id || !data) {
     return <></>;

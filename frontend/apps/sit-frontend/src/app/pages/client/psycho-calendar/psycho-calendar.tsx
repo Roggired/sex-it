@@ -1,5 +1,4 @@
 import './psycho-calendar.scss';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { CalendarContainer } from 'apps/sit-frontend/src/app/widgets/calendar/calendar-container';
 import { useNavigate } from 'react-router-dom';

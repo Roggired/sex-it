@@ -49,7 +49,7 @@ export const baseRoutes = ({
     ],
   },
   {
-    path: '/newdex',
+    path: '/sexit',
     element: isAuthorized() ? (
       <BasePage header={header} footer={footer}>
         <Outlet />

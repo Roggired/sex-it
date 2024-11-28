@@ -9,19 +9,19 @@ export type User = UserInfo & {
 }
 
 export interface UserInfo {
+  readonly id: number
   readonly name: string
   readonly surname: string
   readonly patronymic?: string
 }
 
 export enum Role {
-  STUDENT = 'STUDENT',
-  COURSE_AUTHOR = 'COURSE_AUTHOR',
-  TEACHER = 'TEACHER',
-  HEAD_TEACHER = 'HEAD_TEACHER',
+  CLIENT = 'CLIENT',
+  PSYCHO = 'PSYCHO',
 }
 
 type JWTPayload = {
+  readonly iat: number
   readonly email: string
   readonly family_name: string
   readonly given_name: string
@@ -42,12 +42,15 @@ export const parseRoleFromJWT = (token?: string | null): Array<Role> => {
 export const parseUserNameFromJWT = (token?: string | null): UserInfo => {
   if (!token)
     return {
+      id: 0,
       name: '',
       surname: '',
       patronymic: '',
     }
   const decodedToken = jwtDecode(token) as JWTPayload
+  console.log(decodedToken)
   return {
+    id: decodedToken.iat,
     name: decodedToken.given_name,
     surname: decodedToken.family_name,
     patronymic: decodedToken?.patronymic_name,
@@ -56,14 +59,14 @@ export const parseUserNameFromJWT = (token?: string | null): UserInfo => {
 
 export const useUserRoles = (): {
   readonly roles: Array<Role>
-  readonly isTeacher: () => boolean
-  readonly isHeadTeacher: () => boolean
+  readonly isPsycho: boolean
+  readonly isClient: boolean
 } => {
   const roles = useAtomValue(roleAtom)
 
   return {
     roles,
-    isTeacher: () => Role.TEACHER in roles,
-    isHeadTeacher: () => roles.includes(Role.HEAD_TEACHER),
+    isPsycho: roles.includes(Role.PSYCHO),
+    isClient: roles.includes(Role.CLIENT),
   }
 }

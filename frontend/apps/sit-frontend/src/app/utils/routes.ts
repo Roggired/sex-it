@@ -1,20 +1,21 @@
 export const routes = {
-  toRoot: () => '/',
+  toRoot: () => '/sexit',
   toBack: () => -1,
+  toLogout: () => '/sso/logout',
 
-  toCreatePsychoPage: () => '/psycho/create-profile',
-  toPsychoCalendarPage: () => '/psycho/calendar',
-  toPsychoApplicationsPage: () => '/psycho/applications',
-  toPsychoCreateSlot: () => '/psycho/create-slot',
+  toCreatePsychoPage: () => '/sexit/psycho/create-profile',
+  toPsychoCalendarPage: () => '/sexit/psycho/calendar',
+  toPsychoApplicationsPage: () => '/sexit/psycho/applications',
+  toPsychoCreateSlot: () => '/sexit/psycho/create-slot',
   toPsychoDayViewer: (month: number, day: number) =>
-    `/psycho/day/${month}/${day}`,
-  toPsychoApplication: (appId: number) => `/psycho/applications/${appId}`,
+    `/sexit/psycho/day/${month}/${day}`,
+  toPsychoApplication: (appId: number) => `/sexit/psycho/applications/${appId}`,
 
-  toClientPsychoList: () => '/client/psycho-list',
-  toClientPsychoCard: (id: number) => `/client/psycho-card/${id}`,
-  toClientPsychoCalendar: (id: number) => `/client/psycho-calendar/${id}`,
+  toClientPsychoList: () => '/sexit/client/psycho-list',
+  toClientPsychoCard: (id: number) => `/sexit/client/psycho-card/${id}`,
+  toClientPsychoCalendar: (id: number) => `/sexit/client/psycho-calendar/${id}`,
   toClientPsychoSlot: (month: number, day: number) =>
-    `/client/psycho-slot/${month}/${day}`,
-  toClientApplications: () => `/client/applications`,
-  toClientApplication: (id: number) => `/client/application/${id}`,
+    `/sexit/client/psycho-slot/${month}/${day}`,
+  toClientApplications: () => `/sexit/client/applications`,
+  toClientApplication: (id: number) => `/sexit/client/application/${id}`,
 };

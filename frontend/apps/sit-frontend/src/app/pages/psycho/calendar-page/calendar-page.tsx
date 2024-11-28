@@ -1,4 +1,3 @@
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
@@ -8,17 +7,20 @@ import './calendar-page.scss';
 import { SlotPageChooser } from '../../shared/slot-page-chooser/slot-page-chooser';
 import {useState} from "react";
 import {SuiModal} from "../../../sui/modal/sui-modal";
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
 
 export const CalendarPage = () => {
   const navigate = useNavigate();
   const [isOpened, setIsOpened] = useState(false)
+  const { id } = useAtomValue(userDataAtom)
 
   return (
     <Page>
       <div className="calendar-page">
         <SlotPageChooser />
         <CalendarContainer
-          psychoId={psycho.id}
+          psychoId={id}
           slotMode="PSYCHO"
           onDayClick={(day, month) =>
             navigate(routes.toPsychoDayViewer(month, day))

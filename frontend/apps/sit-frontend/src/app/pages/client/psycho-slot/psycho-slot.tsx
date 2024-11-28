@@ -3,12 +3,14 @@ import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/appl
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export const PsychoSlotPage = () => {
   const navigate = useNavigate();
@@ -20,15 +22,16 @@ export const PsychoSlotPage = () => {
   const [desc, setDesc] = useState('');
 
   const [createApp] = applicationsApi.useCreateApplicationMutation();
+  const { id } = useAtomValue(userDataAtom)
 
-  const { data: p } = psychoProfileApi.useGetPsychoQuery({
-    id: psycho.id,
+  const { data: p } = psychoProfileApi.useGetPsychoQuery(id ? {
+    id: id,
     mode: 'CLIENT',
-  });
+  } : skipToken);
 
   const { data } = slotApi.useGetSlotsByDayQuery(
     {
-      psychoId: psycho.id,
+      psychoId: id,
       dayId: (day as number) - 1,
       mode: 'CLIENT',
       yearId: 2024,
@@ -63,7 +66,7 @@ export const PsychoSlotPage = () => {
       anonType: isAnon ? 'ANON' : 'NE_ANON',
     })
       .unwrap()
-      .then(() => navigate(routes.toClientPsychoCalendar(psycho.id)));
+      .then(() => navigate(routes.toClientPsychoCalendar(id)));
   };
 
   return (

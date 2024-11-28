@@ -3,23 +3,25 @@ import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/appl
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import app from 'apps/sit-frontend/src/app/app';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
 
 export const ApplicationViewPage = () => {
   const navigate = useNavigate();
   const appId = useGetNumberPathParam('appId');
+  const { id } = useAtomValue(userDataAtom)
 
   //Нет ендпоинта для получения appпо id, костылю
-  const { data } = applicationsApi.useGetApplicationsQuery(psycho.id);
+  const { data } = applicationsApi.useGetApplicationsQuery(id);
 
   const [approve] = applicationsApi.useAcceptApplicationMutation();
   const [reject] = applicationsApi.useRejectApplicationMutation();
 
   const { data: p } = psychoProfileApi.useGetPsychoQuery({
-    id: psycho.id,
+    id: id,
     mode: 'CLIENT',
   });
 

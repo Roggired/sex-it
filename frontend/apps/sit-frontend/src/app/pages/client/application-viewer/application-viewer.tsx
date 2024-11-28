@@ -2,23 +2,26 @@ import './application-viewer.scss';
 import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export const ClientApplicationViewerPage = () => {
   const navigate = useNavigate();
   const appId = useGetNumberPathParam('id');
+  const { id } = useAtomValue(userDataAtom)
 
   //Нет ендпоинта для получения appпо id, костылю
   const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
 
-  const { data: p } = psychoProfileApi.useGetPsychoQuery({
-    id: psycho.id,
+  const { data: p } = psychoProfileApi.useGetPsychoQuery(id ? {
+    id: id,
     mode: 'CLIENT',
-  });
+  } : skipToken);
 
   if (!appId || !data) {
     return <></>;

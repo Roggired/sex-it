@@ -1,5 +1,4 @@
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { useEffect, useState } from 'react';
 import { Page } from '../../shared/page/page';
 import './psycho-create-profile.scss';
@@ -8,6 +7,8 @@ import { SuiInput } from '../../../sui/sui-input/sui-input';
 import { SuiButton } from '../../../sui/sui-button/sui-button';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../utils/routes';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
 
 export const PsychoCreateProfile = () => {
   const navigate = useNavigate();
@@ -16,15 +17,17 @@ export const PsychoCreateProfile = () => {
   const [price, setPrice] = useState(2000);
   const [isFree, setIsFree] = useState(false);
   const [desc, setDesc] = useState('Я крутая');
+  const { id } = useAtomValue(userDataAtom)
 
   const [updateProfile] = psychoProfileApi.useCreateOrUpdatePsychoMutation();
 
   const { data } = psychoProfileApi.useGetPsychoQuery(
     {
-      id: psycho.id,
+      id: id,
       mode: 'CLIENT',
     },
     {
+      skip: !id,
       refetchOnMountOrArgChange: true,
     }
   );
@@ -92,7 +95,7 @@ export const PsychoCreateProfile = () => {
                 price,
                 email,
                 name,
-                id: psycho.id,
+                id,
                 bio: desc,
                 isFirstFree: isFree,
               })

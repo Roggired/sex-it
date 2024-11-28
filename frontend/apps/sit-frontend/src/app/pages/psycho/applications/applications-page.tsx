@@ -1,13 +1,16 @@
 import './applications-page.scss';
 import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
 import { SlotPageChooser } from 'apps/sit-frontend/src/app/pages/shared/slot-page-chooser/slot-page-chooser';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export const ApplicationsPage = () => {
   const navigate = useNavigate();
-  const { data } = applicationsApi.useGetApplicationsQuery(psycho.id);
+  const { id } = useAtomValue(userDataAtom)
+  const { data } = applicationsApi.useGetApplicationsQuery(id ?? skipToken);
 
   if (!data) {
     return <></>;

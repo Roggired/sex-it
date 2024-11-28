@@ -1,16 +1,21 @@
 import './psycho-list.scss';
 import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
+import {useAtomValue} from "jotai/index";
+import {userDataAtom} from "../../../auth/auth-cache";
 
 export const PsychoListPage = () => {
+  const { id } = useAtomValue(userDataAtom)
+
   const { data } = psychoProfileApi.useGetPsychoQuery({
-    id: psycho.id,
+    id: id,
     mode: 'CLIENT',
+  }, {
+    skip: !id
   });
 
   if (!data) {

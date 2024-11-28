@@ -2,27 +2,29 @@ import './psycho-day-viewer.scss';
 import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
 import { DayViewerEntry } from 'apps/sit-frontend/src/app/pages/psycho/psycho-slot-viewer/day-viewer-entry';
-import { psycho } from 'apps/sit-frontend/src/app/state/user-atom';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
+import {useAtomValue} from "jotai";
+import {userDataAtom} from "../../../auth/auth-cache";
 
 export const PsychoDayViewer = () => {
   const month = useGetNumberPathParam('month');
   const day = useGetNumberPathParam('day');
   const navigate = useNavigate();
+  const { id } = useAtomValue(userDataAtom)
 
   const { data } = slotApi.useGetSlotsByDayQuery(
     {
-      psychoId: psycho.id,
+      psychoId: id,
       dayId: (day as number) - 1,
       mode: 'PSYCHO',
       yearId: 2024,
       monthId: month as number,
     },
     {
-      skip: !day || !month,
+      skip: !day || !month || !id,
     }
   );
 
