@@ -8,7 +8,7 @@ export const gatewayApi = createApi({
   // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:31505/' }),
   baseQuery: baseQueryWithTokenRefresh,
   endpoints: () => ({}),
-  tagTypes: ['DaySlots', 'CalSlots', 'PsychoApps'],
+  tagTypes: ['DaySlots', 'CalSlots', 'PsychoApps', 'subscriptions'],
 });
 
 export const store = configureStore({

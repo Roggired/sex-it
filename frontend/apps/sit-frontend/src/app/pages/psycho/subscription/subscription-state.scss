@@ -1,0 +1,16 @@
+.current-subscription {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+
+  &__text {
+    font-size: 16px;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}

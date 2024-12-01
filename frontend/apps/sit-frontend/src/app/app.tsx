@@ -18,6 +18,7 @@ import {PsychoCalendar} from "./pages/client/psycho-calendar/psycho-calendar";
 import {PsychoSlotPage} from "./pages/client/psycho-slot/psycho-slot";
 import {ClientApplicationsPage} from "./pages/client/client-applications/client-applications";
 import {ClientApplicationViewerPage} from "./pages/client/application-viewer/application-viewer";
+import {SubscriptionPage} from "./pages/psycho/subscription/subscription-page";
 
 const psychoRoutes: RouteObject[] = [
   {
@@ -65,6 +66,14 @@ const psychoRoutes: RouteObject[] = [
     element: (
       <>
         <ApplicationViewPage/>
+      </>
+    ),
+  },
+  {
+    path: 'psycho/subscription',
+    element: (
+      <>
+        <SubscriptionPage/>
       </>
     ),
   },

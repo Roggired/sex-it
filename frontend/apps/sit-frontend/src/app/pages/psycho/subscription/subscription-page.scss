@@ -1,0 +1,15 @@
+.subscription-page__content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+
+  width: 100%;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+  }
+}
