@@ -9,7 +9,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
   endpoints: (builder) => ({
     createApplication: builder.mutation<object, CreateApplicationRequest>({
       query: (body) => ({
-        url: 'v1/applications',
+        url: 'applications',
         method: 'POST',
         body,
       }),
@@ -18,7 +18,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
 
     getApplications: builder.query<Array<Application>, number>({
       query: (psychoId) => ({
-        url: 'v1/applications',
+        url: 'applications',
         params: {
           psychoId,
         },
@@ -28,7 +28,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
 
     getAcceptedApplications: builder.query<Array<AcceptedApplication>, string>({
       query: (psychoName) => ({
-        url: 'v1/applications/accepted',
+        url: 'applications/accepted',
         params: {
           psychoName,
         },
@@ -37,7 +37,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
 
     acceptApplication: builder.mutation<void, number>({
       query: (appId) => ({
-        url: `v1/applications/${appId}/accept`,
+        url: `applications/${appId}/accept`,
         method: 'POST',
       }),
       invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
@@ -45,7 +45,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
 
     rejectApplication: builder.mutation<void, number>({
       query: (appId) => ({
-        url: `v1/applications/${appId}/reject`,
+        url: `applications/${appId}/reject`,
         method: 'POST',
       }),
       invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],

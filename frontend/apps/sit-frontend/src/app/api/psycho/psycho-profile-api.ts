@@ -14,7 +14,7 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
       }
     >({
       query: ({ id, ...body }) => ({
-        url: `/v1/profiles/${id}`,
+        url: `profiles/${id}`,
         method: 'PATCH',
         body,
       }),
@@ -22,7 +22,7 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
 
     getMyProfile: build.query<Psycho, void>({
       query: () => ({
-        url: `/v1/profiles/my`,
+        url: `profiles/my`,
       }),
     }),
 
@@ -34,7 +34,7 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
       }
     >({
       query: ({ id, mode }) => ({
-        url: `/v1/profiles/${id}?mode=${mode}`,
+        url: `profiles/${id}?mode=${mode}`,
       }),
     }),
   }),
