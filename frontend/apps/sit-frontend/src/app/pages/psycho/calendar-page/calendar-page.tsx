@@ -9,11 +9,16 @@ import {useState} from "react";
 import {SuiModal} from "../../../sui/modal/sui-modal";
 import {useAtomValue} from "jotai/index";
 import {userDataAtom} from "../../../auth/auth-cache";
+import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
 
 export const CalendarPage = () => {
   const navigate = useNavigate();
   const [isOpened, setIsOpened] = useState(false)
-  const { id } = useAtomValue(userDataAtom)
+  const { id } = useGetPsychoProfile()
+
+  if (!id) {
+    return
+  }
 
   return (
     <Page>

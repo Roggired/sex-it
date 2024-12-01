@@ -122,14 +122,15 @@ const clientRoutes: RouteObject[] = [
 ]
 
 const Routing = () => {
-  const {isPsycho, isClient} = useUserRoles()
-
   return useRoutes(
     baseRoutes({
       homeRoute: routes.toRoot(),
       header: <Header/>,
       footer: <></>,
-      appRoutes: isPsycho ? psychoRoutes : clientRoutes,
+      appRoutes: [
+        ...psychoRoutes,
+        ...clientRoutes,
+      ],
     })
   )
 }

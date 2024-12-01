@@ -20,6 +20,12 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
       }),
     }),
 
+    getMyProfile: build.query<Psycho, void>({
+      query: () => ({
+        url: `/v1/profiles/my`,
+      }),
+    }),
+
     getPsycho: build.query<
       Psycho,
       {
