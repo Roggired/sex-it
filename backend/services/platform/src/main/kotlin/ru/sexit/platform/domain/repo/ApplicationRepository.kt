@@ -28,10 +28,11 @@ interface ApplicationRepository: JpaRepository<Application, Long> {
             select distinct new ru.sexit.platform.domain.model.AcceptedApplication(ap.id, ps.id, ps.name, ps.price, sl.id, sl.time, sl.monthId, sl.dayId, sl.yearId, ap.status, ap.anonType, ap.visitType, ap.link, ap.address, ap.results) from Application ap  
             left join ap.slot sl 
             left join sl.psychoProfile ps 
-            where (coalesce(:psychoName, null) is null or lower(ps.name) like lower(concat('%', cast(:psychoName as string), '%'))) and (ap.status = 'DONE' or ap.status = 'PLANNED')
+            where (coalesce(:psychoName, null) is null or lower(ps.name) like lower(concat('%', cast(:psychoName as string), '%'))) 
+                and (ap.status = :appStatus)
         """
     )
-    fun findAcceptedApplicationsByPsychoName(psychoName: String?): List<AcceptedApplication>
+    fun findAcceptedApplicationsByPsychoNameAndAppStatus(psychoName: String?, appStatus: SlotStatus): List<AcceptedApplication>
 
     fun countBySlotPsychoProfileIdAndStatusAndVisitTypeAndSlotYearIdAndSlotMonthId(
         psychoId: Long,

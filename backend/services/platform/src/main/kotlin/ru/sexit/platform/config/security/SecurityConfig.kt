@@ -37,6 +37,7 @@ class SecurityConfig(
                 authorize("/api/v1/applications/*/give-feedback", hasAuthority(SexItPermissions.CLIENT.name))
                 authorize("/api/v1/applications/*/note", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize("/api/v1/applications/*/finish", hasAuthority(SexItPermissions.PSYCHO.name))
+                authorize(HttpMethod.GET, "/api/v1/applications/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize("/api/dev-only/meetings", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize(HttpMethod.PATCH, "/api/v1/profiles/*", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize(HttpMethod.GET, "/api/v1/profiles/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))

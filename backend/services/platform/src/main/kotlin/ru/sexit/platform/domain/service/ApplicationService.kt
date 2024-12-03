@@ -10,6 +10,7 @@ import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.api.http.slot.SlotWithDate
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
+import ru.sexit.platform.infrastructure.exception.InvalidDataException
 import ru.sexit.platform.infrastructure.exception.InvalidOperationException
 import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.infrastructure.integration.DownstreamServices
@@ -116,8 +117,12 @@ class ApplicationService(
 
     fun getById(id: Long): Application = applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
 
-    fun getAcceptedApplications(psychoName: String?): List<AcceptedApplicationView> {
-        return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map {
+    fun getAcceptedApplications(psychoName: String?, appStatus: SlotStatus?): List<AcceptedApplicationView> {
+        if (appStatus != null && appStatus != SlotStatus.NEED_REVIEW && appStatus != SlotStatus.PLANNED && appStatus != SlotStatus.REJECTED) {
+            throw InvalidDataException("appStatus param should have one following values: NEED_REVIEW, PLANNED, REJECTED")
+        }
+
+        return applicationRepository.findAcceptedApplicationsByPsychoNameAndAppStatus(psychoName, appStatus ?: SlotStatus.PLANNED).map {
             val joinUrl = bbbMeetingService.joinMeeting(
                 applicationId = it.id,
                 mode = RequestMode.CLIENT,
