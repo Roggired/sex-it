@@ -22,8 +22,14 @@ export interface Subscription {
   readonly isExpired: boolean,
 }
 
+export interface UsageStats {
+  readonly used: number
+  readonly max: number
+}
+
 export interface CurrentSubscriptionResponse {
-  readonly current: Subscription
+  readonly current?: Subscription
+  readonly usageStats?: UsageStats
 }
 
 export interface CreateSubscriptionRequest {

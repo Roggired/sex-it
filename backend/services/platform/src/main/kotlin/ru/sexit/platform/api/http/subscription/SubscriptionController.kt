@@ -23,7 +23,5 @@ class SubscriptionController(
     fun getAvailableSubscriptions(): List<AvailableSubscription> = subscriptionService.getAvailableSubscriptions()
 
     @GetMapping("/current")
-    fun getCurrentSubscription(): CurrentSubscriptionResponse = CurrentSubscriptionResponse(
-        current = subscriptionService.getCurrentSubscription()
-    )
+    fun getCurrentSubscription(): CurrentSubscriptionResponse = subscriptionService.getCurrentSubscription()
 }

@@ -40,7 +40,7 @@ export const SubscriptionPage = () => {
       <div className="subscription-page__content">
         <div className="subscription-page__content__container">
           <h2>Активная подписка</h2>
-          <SubscriptionState currentSubscription={currentSubscriptionResponse.current}/>
+          <SubscriptionState currentSubscription={currentSubscriptionResponse.current} usageStats={currentSubscriptionResponse.usageStats}/>
         </div>
         <div className="subscription-page__content__container">
           <h2>Подписки</h2>

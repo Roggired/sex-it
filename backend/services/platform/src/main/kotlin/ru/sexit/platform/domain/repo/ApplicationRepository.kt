@@ -3,8 +3,10 @@ package ru.sexit.platform.domain.repo
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import ru.sexit.platform.api.http.applications.VisitType
 import ru.sexit.platform.domain.model.AcceptedApplication
 import ru.sexit.platform.domain.model.Application
+import ru.sexit.platform.domain.model.SlotStatus
 
 @Repository
 interface ApplicationRepository: JpaRepository<Application, Long> {
@@ -32,4 +34,11 @@ interface ApplicationRepository: JpaRepository<Application, Long> {
     )
     fun findAcceptedApplicationsByPsychoName(psychoName: String): List<AcceptedApplication>
 
+    fun countBySlotPsychoProfileIdAndStatusAndVisitTypeAndSlotYearIdAndSlotMonthId(
+        psychoId: Long,
+        status: SlotStatus,
+        visitType: VisitType,
+        yearId: Int,
+        monthId: Int,
+    ): Int
 }

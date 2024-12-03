@@ -1,13 +1,14 @@
-import {getLocalizedSubscriptionName, Subscription} from "../../../api/subscription/model";
+import {getLocalizedSubscriptionName, Subscription, UsageStats} from "../../../api/subscription/model";
 import './subscription-state.scss'
 import {getRuStringFromDate} from "../../../utils/dates";
 
 export interface SubscriptionStateProps {
   readonly currentSubscription?: Subscription
+  readonly usageStats?: UsageStats
 }
 
-export const SubscriptionState = ({ currentSubscription }: SubscriptionStateProps) => {
-  if (!currentSubscription) {
+export const SubscriptionState = ({ currentSubscription, usageStats }: SubscriptionStateProps) => {
+  if (!currentSubscription || !usageStats) {
     return (
       <div className="current-subscription">
         <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,6 +35,9 @@ export const SubscriptionState = ({ currentSubscription }: SubscriptionStateProp
       <div className="current-subscription__container">
         <span className="current-subscription__text">Подписка: {getLocalizedSubscriptionName(currentSubscription.type)}</span>
         <span className="current-subscription__text">Оплачено до {getRuStringFromDate(new Date(currentSubscription.validUntil))}</span>
+        { usageStats.max > 0 && (
+          <span className="current-subscription__text">Использовано онлайн консультаций: {usageStats.used} / {usageStats.max}</span>
+        )}
       </div>
     </div>
   )

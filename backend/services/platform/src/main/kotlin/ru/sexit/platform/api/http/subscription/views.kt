@@ -9,5 +9,11 @@ data class AvailableSubscription(
 )
 
 data class CurrentSubscriptionResponse(
-    val current: Subscription?
+    val current: Subscription?,
+    val usageStats: UsageStatsResponse?
+)
+
+data class UsageStatsResponse(
+    val used: Int,
+    val max: Int,
 )

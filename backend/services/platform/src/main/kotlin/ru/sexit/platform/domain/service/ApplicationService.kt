@@ -1,6 +1,8 @@
 package ru.sexit.platform.domain.service
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.applications.*
@@ -8,6 +10,7 @@ import ru.sexit.platform.api.http.slot.SlotWithDate
 import ru.sexit.platform.api.http.slot.toShortView
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
+import ru.sexit.platform.infrastructure.exception.InvalidOperationException
 import ru.sexit.platform.infrastructure.exception.NotFoundException
 import ru.sexit.platform.infrastructure.integration.DownstreamServices
 import ru.sexit.platform.infrastructure.integration.IntegrationRetrofitClient
@@ -27,6 +30,10 @@ class ApplicationService(
     @Qualifier("keycloakAdminIntegrationRetrofitClient")
     private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
 ) {
+    @Autowired
+    @Lazy
+    lateinit var subscriptionService: SubscriptionService
+
     @Transactional
     fun createApplication(applicationRequest: NewApplicationRequest): Application {
         val slot = slotService.getById(applicationRequest.slotId)
@@ -52,6 +59,15 @@ class ApplicationService(
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
         application.status = SlotStatus.PLANNED
         if(application.visitType == VisitType.ONLINE) {
+            val currentSubscription = subscriptionService.getCurrentSubscription()
+            if (currentSubscription.current == null || currentSubscription.usageStats == null) {
+                throw InvalidOperationException("NO_ACTIVE_SUBSCRIPTION")
+            }
+
+            if (currentSubscription.usageStats.used >= currentSubscription.usageStats.max) {
+                throw InvalidOperationException("LIMIT_REACHED")
+            }
+
             bbbMeetingService.createMeeting(application.id)
             application.link = null
         }
@@ -109,4 +125,28 @@ class ApplicationService(
             it.toAcceptedApplicationView(joinUrl)
         }
     }
+
+    fun countOnlineFinishedApplicationsForMonth(
+        yearId: Int,
+        monthId: Int,
+        psychoId: Long
+    ): Int = applicationRepository.countBySlotPsychoProfileIdAndStatusAndVisitTypeAndSlotYearIdAndSlotMonthId(
+        psychoId = psychoId,
+        status = SlotStatus.DONE,
+        visitType = VisitType.ONLINE,
+        yearId = yearId,
+        monthId = monthId,
+    )
+
+    fun countOnlinePlannedApplicationsForMonth(
+        yearId: Int,
+        monthId: Int,
+        psychoId: Long
+    ): Int = applicationRepository.countBySlotPsychoProfileIdAndStatusAndVisitTypeAndSlotYearIdAndSlotMonthId(
+        psychoId = psychoId,
+        status = SlotStatus.PLANNED,
+        visitType = VisitType.ONLINE,
+        yearId = yearId,
+        monthId = monthId,
+    )
 }

@@ -5,6 +5,8 @@ import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.subscription.AvailableSubscription
 import ru.sexit.platform.api.http.subscription.CreateSubscriptionRequest
+import ru.sexit.platform.api.http.subscription.CurrentSubscriptionResponse
+import ru.sexit.platform.api.http.subscription.UsageStatsResponse
 import ru.sexit.platform.domain.model.Subscription
 import ru.sexit.platform.domain.model.SubscriptionType
 import ru.sexit.platform.domain.repo.SubscriptionRepository
@@ -16,6 +18,8 @@ import ru.sexit.platform.utils.log
 @Service
 class SubscriptionService(
     private val subscriptionRepository: SubscriptionRepository,
+    private val applicationService: ApplicationService,
+    private val psychoProfileService: PsychoProfileService,
 ) {
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun create(request: CreateSubscriptionRequest): Subscription {
@@ -101,8 +105,9 @@ class SubscriptionService(
         return availableSubscriptions
     }
 
-    fun getCurrentSubscription(): Subscription? {
+    fun getCurrentSubscription(): CurrentSubscriptionResponse {
         val psychoId = getRequestAuthorUserInfo().id
+        val psychoProfile = psychoProfileService.getMyProfile()
         val currentTime = currentUTCTime()
 
         val validSubscriptions = subscriptionRepository.findAllValidByPsychoId(
@@ -110,8 +115,28 @@ class SubscriptionService(
             validUntil = currentTime,
         )
 
-        if (validSubscriptions.isEmpty()) return null
+        if (validSubscriptions.isEmpty()) return CurrentSubscriptionResponse(current = null, usageStats = null)
 
-        return validSubscriptions.maxByOrNull { it.type }
+        val subscription = validSubscriptions.maxByOrNull { it.type }
+        val usageStats = if (subscription != null) UsageStatsResponse(
+            used = applicationService.countOnlineFinishedApplicationsForMonth(
+                yearId = currentTime.year,
+                monthId = currentTime.monthValue,
+                psychoId = psychoProfile.id,
+            ) + applicationService.countOnlinePlannedApplicationsForMonth(
+                yearId = currentTime.year,
+                monthId = currentTime.monthValue,
+                psychoId = psychoProfile.id,
+            ),
+            max = when(subscription.type) {
+                SubscriptionType.FREE -> 10
+                SubscriptionType.BASIC -> 20
+                SubscriptionType.PRO -> 0
+            }
+        ) else null
+        return CurrentSubscriptionResponse(
+            current = subscription,
+            usageStats = usageStats,
+        )
     }
 }
