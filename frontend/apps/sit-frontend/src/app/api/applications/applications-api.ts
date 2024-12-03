@@ -26,11 +26,14 @@ export const applicationsApi = gatewayApi.injectEndpoints({
       providesTags: ['PsychoApps'],
     }),
 
-    getAcceptedApplications: builder.query<Array<AcceptedApplication>, string>({
+    getAcceptedApplications: builder.query<Array<AcceptedApplication>, {
+      psychoName: string
+      appStatus: string
+    }>({
       query: (psychoName) => ({
         url: 'applications/accepted',
         params: {
-          psychoName,
+          ...psychoName,
         },
       }),
     }),
@@ -50,5 +53,43 @@ export const applicationsApi = gatewayApi.injectEndpoints({
       }),
       invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
     }),
+
+
+    getAppById: builder.query<Application, number>({
+      query: (id) => ({
+        url: `applications/${id}`,
+      }),
+      providesTags: ['PsychoApps']
+    }),
+
+
+    patchNote: builder.mutation<void, {
+      note: string
+      appId: number
+    }>({
+      query: ({appId, note}) => ({
+        url: `applications/${appId}/note`,
+        method: 'PATCH',
+        body: {
+          note
+        }
+      }),
+      invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
+    }),
+
+    finishApplication: builder.mutation<void, {
+      note: string
+      appId: number
+    }>({
+      query: ({appId, note}) => ({
+        url: `applications/${appId}/finish`,
+        method: 'POST',
+        body: {
+          note
+        }
+      }),
+      invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
+    }),
+
   }),
 });

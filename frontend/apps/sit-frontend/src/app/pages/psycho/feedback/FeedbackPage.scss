@@ -1,0 +1,13 @@
+.feed-page {
+  display: flex;
+  flex-direction: column;
+  margin: 36px 48px auto;
+  align-items: start;
+  gap: 24px;
+
+  &__r {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

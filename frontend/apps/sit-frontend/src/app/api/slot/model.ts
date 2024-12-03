@@ -1,6 +1,6 @@
 import { ApiMode } from 'apps/sit-frontend/src/app/api/psycho/model';
 
-export type SlotStatus = 'EMPTY' | 'DONE' | 'PLANNED' | 'NEED_REVIEW';
+export type SlotStatus = 'EMPTY' | 'DONE' | 'PLANNED' | 'NEED_REVIEW' | 'REJECTED';
 
 export type VisitType = 'ONLINE' | 'OFFLINE';
 export type AnonType = 'ANON' | 'NE_ANON';
@@ -19,6 +19,7 @@ export type Slot = SlotView & {
   description?: string;
   link?: string;
   address?: string;
+  applicationId: number
 };
 
 export type CreateSlotRequest = {

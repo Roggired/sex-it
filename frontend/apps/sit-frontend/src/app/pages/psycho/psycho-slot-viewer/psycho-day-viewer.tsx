@@ -43,10 +43,11 @@ export const PsychoDayViewer = ({day, month}: {
       {(data ?? []).map((d) => (
         <DayViewerEntry
           key={d.id}
+          appId={d.applicationId}
           time={d.time}
           isAnon={d.anonType === 'ANON'}
           isOffline={d.visitType === 'OFFLINE'}
-          status={"DONE"}
+          status={d.status}
           desc={d.description}
           link={d.link}
           address={d.address}

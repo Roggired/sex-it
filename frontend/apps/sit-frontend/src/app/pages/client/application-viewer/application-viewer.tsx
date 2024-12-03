@@ -15,15 +15,15 @@ export const ClientApplicationViewerPage = () => {
   const appId = useGetNumberPathParam('id');
   const { id } = useAtomValue(userDataAtom)
 
-  //Нет ендпоинта для получения appпо id, костылю
-  const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
+  // //Нет ендпоинта для получения appпо id, костылю
+  // const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
 
   const { data: p } = psychoProfileApi.useGetPsychoQuery(id ? {
     id: id,
     mode: 'CLIENT',
   } : skipToken);
 
-  if (!appId || !data) {
+  /*if (!appId || !data) {
     return <></>;
   }
   const application = data.filter((d) => d.id === appId)[0];
@@ -40,7 +40,7 @@ export const ClientApplicationViewerPage = () => {
         Первая консультация бесплатна: {p?.isFirstFree ? 'Da' : 'Net'}
       </span>
       <span>Анонимно: {application.anonType === 'ANON'}</span>
-      {/*<span>Дистанционная консультация</span>*/}
+      {/!*<span>Дистанционная консультация</span>*!/}
       <div>
         <SuiButton onClick={() => window.open(application?.link, '_blank')}>
           Подключиться
@@ -53,5 +53,5 @@ export const ClientApplicationViewerPage = () => {
         </SuiButton>
       </div>
     </div>
-  );
+  );*/
 };

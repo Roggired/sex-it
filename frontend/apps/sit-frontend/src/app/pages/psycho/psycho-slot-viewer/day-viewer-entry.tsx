@@ -8,6 +8,7 @@ import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import {SuiButton} from "../../../sui/sui-button/sui-button";
 import {Modal} from "../../../sui/modal/sui-modal";
 import {FeedbackPage} from "../feedback/feedback-page";
+import app from "../../../app";
 
 type DayViewerEntryProps = {
   readonly time: string;
@@ -18,6 +19,7 @@ type DayViewerEntryProps = {
   readonly link?: string;
   readonly address?: string;
   readonly onDelete?: () => void;
+  readonly appId?: number
 };
 export const DayViewerEntry = ({
                                  status,
@@ -27,6 +29,7 @@ export const DayViewerEntry = ({
                                  isAnon,
                                  isOffline,
                                  time,
+  appId,
                                  onDelete,
                                }: DayViewerEntryProps) => {
   const navigate = useNavigate();
@@ -44,13 +47,14 @@ export const DayViewerEntry = ({
           })}
         >
           {status === 'EMPTY' && (
-            <span>
+            <div style={{display: 'flex', gap: '6px', alignItems: 'center'}}><span>
               Свободно
+            </span>
               <IoCloseSharp
                 className="psycho-day-viewer__entry__icon"
                 style={{marginLeft: '16px', padding: '6px'}}
-                onClick={onDelete}/>
-            </span>
+                onClick={onDelete}/></div>
+
           )}
           {status === 'NEED_REVIEW' && (
             <span
@@ -90,13 +94,13 @@ export const DayViewerEntry = ({
             <span>{desc}</span>
           </div>}
           {
-            status === 'DONE' && <div className="psycho-day-viewer__entry__main">
+            status === 'PLANNED' && <div className="psycho-day-viewer__entry__main">
               <SuiButton buttonType='secondary' onClick={() => setIsModal(true)}>Открыть консультацию</SuiButton>
             </div>
           }
-          <Modal isOpen={isModal} onClose={() => setIsModal(false)}>
-            <FeedbackPage />
-          </Modal>
+          {appId && <Modal isOpen={isModal} onClose={() => setIsModal(false)}>
+            <FeedbackPage appId={appId} close={() => setIsModal(false)}/>
+          </Modal>}
         </>
       )}
     </div>

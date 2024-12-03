@@ -8,43 +8,59 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const ClientApplicationsPage = () => {
+
+  const [search, setSearch] = useState('')
   const [currFilter, setCurrFilter] = useState<
-    'WAIT' | 'APPROVED' | 'REJECTED'
-  >('WAIT');
+    'NEED_REVIEW' | 'PLANNED' | 'REJECTED'
+  >('NEED_REVIEW');
 
-  const { data } = applicationsApi.useGetAcceptedApplicationsQuery('');
-
-  if (!data) {
-    return <></>;
-  }
+  const { data, refetch } = applicationsApi.useGetAcceptedApplicationsQuery({
+    psychoName: search,
+    appStatus: currFilter,
+  });
 
   return (
     <div className="client-applications">
-      {/*<div className="client-applications__breadcrumbs">
-        <span onClick={() => setCurrFilter('WAIT')}>Ожидают ответа</span>
-        <span onClick={() => setCurrFilter('APPROVED')}>/ Принятые</span>
-        <span onClick={() => setCurrFilter('REJECTED')}>/ Отклоненные</span>
-      </div>*/}
+      <div className="client-applications__breadcrumbs">
+        <span className={currFilter === 'NEED_REVIEW' ? 'chosen' : ''} onClick={() => setCurrFilter('NEED_REVIEW')}>Ожидают ответа</span>
+        <span className={currFilter === 'PLANNED' ? 'chosen' : ''} onClick={() => setCurrFilter('PLANNED')}>/ Принятые</span>
+        <span className={currFilter === 'REJECTED' ? 'chosen' : ''} onClick={() => setCurrFilter('REJECTED')}>/ Отклоненные</span>
+      </div>
       <div className="client-applications__filter">
-        <SuiInput placeholder="Поиск по психологу" />
-        <SuiButton>Поиск</SuiButton>
+        <SuiInput value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по психологу" />
+        <SuiButton onClick={() => refetch()}>Поиск</SuiButton>
       </div>
       <div className="client-applications__apps">
-        {data.map((d) => (
-          <ApplicationEntry
-            key={d.id}
-            id={d.id}
-            psycho={d.psycho.name}
-            date={d.slot.time}
-            price={d.psycho.price}
-            status="PLANNED"
-          />
-        ))}
+        {data?.length ?
+          data?.map((d) => (
+            <ApplicationEntry
+              key={d.id}
+              id={d.id}
+              psycho={d.psycho.name}
+              date={d.slot.time}
+              price={d.psycho.price}
+              status={d.status}
+            />
+          )) : <>Нет заявок</>}
       </div>
     </div>
   );
 };
 
+export const mapStatus = (status: SlotStatus): string => {
+  if (status === 'NEED_REVIEW') {
+    return 'Ожидает ответа'
+  } else if (status === 'REJECTED') {
+    return 'Отклонено'
+  } else if (status === 'EMPTY') {
+    return ''
+  } else if (status === 'DONE') {
+    return 'Проведено'
+  } else {
+    return 'Запланировано'
+  }
+
+}
 const ApplicationEntry = ({
   date,
   psycho,
@@ -56,7 +72,7 @@ const ApplicationEntry = ({
   readonly psycho: string;
   readonly date: string;
   readonly price?: number;
-  readonly status?: SlotStatus;
+  readonly status: SlotStatus;
 }) => {
   const navigate = useNavigate();
 
@@ -66,7 +82,7 @@ const ApplicationEntry = ({
         <b>{psycho}</b>
         <span>Дата: {date}</span>
         <span>Цена: {price ?? 'бесплатно'}</span>
-        {status && <span>Статус: {status}</span>}
+        {status && <span>Статус: {mapStatus(status)}</span>}
       </div>
       {status ? (
         <SuiButton onClick={() => navigate(routes.toClientApplication(id))}>

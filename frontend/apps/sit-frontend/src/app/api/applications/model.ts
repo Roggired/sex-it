@@ -21,6 +21,7 @@ export type Application = {
   link?: string;
   address?: string;
   clientName?: string;
+  notes?: string
 };
 
 export type CreateApplicationRequest = {

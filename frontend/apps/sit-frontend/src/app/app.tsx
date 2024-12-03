@@ -54,10 +54,6 @@ const psychoRoutes: RouteObject[] = [
       </>
     ),
   },
-  {
-    path: 'psycho/feedback',
-    element: <FeedbackPage />
-  }
 ]
 
 const clientRoutes: RouteObject[] = [
@@ -98,14 +94,6 @@ const clientRoutes: RouteObject[] = [
     element: (
       <>
         <ClientApplicationsPage/>
-      </>
-    ),
-  },
-  {
-    path: 'client/application/:id',
-    element: (
-      <>
-        <ClientApplicationViewerPage/>
       </>
     ),
   },
