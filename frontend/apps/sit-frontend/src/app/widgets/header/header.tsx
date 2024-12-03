@@ -9,7 +9,7 @@ export const Header = () => {
 
   if (!isPsycho) {
     return (
-      <div className="header">
+      <header className="header">
         <h3>SEX-IT</h3>
         <h4 onClick={() => navigate(routes.toClientPsychoList())}>
           Психологи
@@ -18,7 +18,7 @@ export const Header = () => {
           Мои заявки
         </h4>
         <h4 onClick={() => navigate(routes.toLogout())}>Выйти</h4>
-      </div>
+      </header>
     );
   }
 

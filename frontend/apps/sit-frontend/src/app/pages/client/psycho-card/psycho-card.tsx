@@ -5,17 +5,15 @@ import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useNavigate } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
-import {useAtomValue} from "jotai/index";
-import {userDataAtom} from "../../../auth/auth-cache";
 import {skipToken} from "@reduxjs/toolkit/query";
+import {RatingWidget} from "../../shared/rating-widget/rating-widget";
 
 export const PsychoCardPage = () => {
   const id = useGetNumberPathParam('id');
   const navigate = useNavigate();
-  const { id: pid } = useAtomValue(userDataAtom)
 
-  const { data } = psychoProfileApi.useGetPsychoQuery( pid ? {
-    id: pid,
+  const { data } = psychoProfileApi.useGetPsychoQuery( id ? {
+    id: id,
     mode: 'CLIENT',
   } : skipToken);
 
@@ -41,7 +39,7 @@ export const PsychoCardPage = () => {
             <span>{data.price}</span>
           </div>
           <span>
-            Бесплатная 1-ая консультация: {data.isFirstFree ? 'Da' : 'Net'}
+            Бесплатная 1-ая консультация: {data.isFirstFree ? 'да' : 'нет'}
           </span>
         </div>
         <div>
@@ -58,15 +56,15 @@ export const PsychoCardPage = () => {
           </SuiButton>
         </div>
       </div>
-      <div className="psycho-card__entry">
-        <b>Рейтинг</b>
-        <span>{data.rating ?? 0}</span>
+      <div className="psycho-card__entry psycho-card__entry-horizontal">
+        <b>Рейтинг:</b>
+        <RatingWidget rating={data.rating}/>
       </div>
       <div className="psycho-card__entry">
-        <b>О себе</b>
+        <b>О себе:</b>
         <span>{data.bio}</span>
       </div>
-      <b>Анонимные отзывы</b>
+      <b>Анонимные отзывы:</b>
       <div className="psycho-card__entry">
         <span>02.05.2024</span>
         <span>Алла Сергеевна, Вы просто класс! Спасибо Вам огромное! ))</span>

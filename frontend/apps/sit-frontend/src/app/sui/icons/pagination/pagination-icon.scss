@@ -1,0 +1,19 @@
+.pagination-icon path {
+  fill: #000000;
+}
+
+.pagination-icon:hover {
+  cursor: pointer;
+}
+
+.pagination-icon-disabled path {
+  fill: #808080;
+}
+
+.pagination-icon-disabled:hover {
+  cursor: initial;
+}
+
+.pagination-icon-rotated {
+  transform: rotate(180deg);
+}

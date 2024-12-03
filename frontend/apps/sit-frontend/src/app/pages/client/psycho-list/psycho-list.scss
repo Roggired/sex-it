@@ -1,13 +1,29 @@
 .psycho-list {
   display: flex;
+  justify-content: center;
   gap: 24px;
-  margin: 36px auto;
+  margin: 36px;
 
   &__sidebar {
     display: flex;
     flex-direction: column;
     align-items: start;
+    min-width: 300px;
     gap: 24px;
+  }
+
+  &__filters {
+    &__fio-input {
+      width: 100%;
+    }
+
+    &__price-input {
+      width: 138px;
+    }
+
+    &__rating-input {
+      width: 120px;
+    }
   }
 
   &__main {
@@ -19,7 +35,7 @@
 
   &__btns {
     display: flex;
-    gap: 16px;
+    gap: 4px;
   }
 
   &__list {
@@ -47,6 +63,10 @@
 
     & > h3 {
       margin: 0;
+    }
+
+    &:hover {
+      background-color: #F6F6F6;
     }
   }
 }

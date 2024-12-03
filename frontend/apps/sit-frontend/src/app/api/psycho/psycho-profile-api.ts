@@ -1,9 +1,10 @@
 import {
   ApiMode,
-  CreatePsychoProfileRequest,
-  Psycho,
+  CreatePsychoProfileRequest, GetPsychoListParams,
+  Psycho, PsychoCatalogueView,
 } from 'apps/sit-frontend/src/app/api/psycho/model';
 import { gatewayApi } from 'apps/sit-frontend/src/app/api/store';
+import {PageView} from "../common";
 
 export const psychoProfileApi = gatewayApi.injectEndpoints({
   endpoints: (build) => ({
@@ -23,6 +24,18 @@ export const psychoProfileApi = gatewayApi.injectEndpoints({
     getMyProfile: build.query<Psycho, void>({
       query: () => ({
         url: `profiles/my`,
+      }),
+    }),
+
+    getPsychoList: build.query<PageView<PsychoCatalogueView>, GetPsychoListParams>({
+      query: (params) => ({
+        url: 'profiles/filtered',
+        method: 'POST',
+        body: params.body,
+        params: {
+          pageNumber: params.pageNumber,
+          pageSize: params.pageSize,
+        }
       }),
     }),
 
