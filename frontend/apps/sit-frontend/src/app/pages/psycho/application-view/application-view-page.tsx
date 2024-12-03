@@ -8,6 +8,7 @@ import {useNavigate} from 'react-router-dom';
 import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
 import {skipToken} from "@reduxjs/toolkit/query";
 import app from "../../../app";
+import {useEffect, useState} from "react";
 
 export const ApplicationViewPage = ({appId, close} : {readonly appId: number, close: () => void}) => {
   const navigate = useNavigate();
@@ -16,8 +17,10 @@ export const ApplicationViewPage = ({appId, close} : {readonly appId: number, cl
   //Нет ендпоинта для получения appпо id, костылю
   const {data} = applicationsApi.useGetApplicationsQuery(id ?? skipToken);
 
-  const [approve] = applicationsApi.useAcceptApplicationMutation();
+  const [approve, { isError }] = applicationsApi.useAcceptApplicationMutation();
   const [reject] = applicationsApi.useRejectApplicationMutation();
+
+  const [place, setPlace] = useState('')
 
   const {data: p} = psychoProfileApi.useGetPsychoQuery({
     id: id as number,
@@ -26,6 +29,12 @@ export const ApplicationViewPage = ({appId, close} : {readonly appId: number, cl
     skip: !id,
     refetchOnMountOrArgChange: true
   });
+
+  useEffect(() => {
+    if (isError) {
+      alert("Подключите подписку для проведения онлайн консультаций")
+    }
+  }, [isError]);
 
   if (!appId || !id) {
     return <></>;
@@ -52,12 +61,23 @@ export const ApplicationViewPage = ({appId, close} : {readonly appId: number, cl
         Отправлена: {new Date(application.creationTime).toLocaleString()}
       </span>
       <span>{application.description}</span>
+
+      {application.visitType === 'OFFLINE' && <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
+        <span>Обязательно введите место встречи:</span>
+        <input value={place} onChange={(e) => setPlace(e.target.value)}/>
+      </div>}
+
       <div className="application-view__btns">
         <SuiButton
-          onClick={() =>
-            approve(appId).then(() =>
-              close()
-            )
+          onClick={() => {
+            if (application.visitType === 'OFFLINE' && !place) {
+              alert("Введите место встречи")
+            } else {
+              approve({appId, address: place}).then(() =>
+                close()
+              )
+            }
+          }
           }
         >
           Принять

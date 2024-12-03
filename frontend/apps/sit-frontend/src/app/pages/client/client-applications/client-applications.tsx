@@ -6,6 +6,10 @@ import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {Modal} from "../../../sui/modal/sui-modal";
+import {ApplicationViewPage} from "../../psycho/application-view/application-view-page";
+import {ClientAppView} from "../../psycho/application-view/client-app-view";
+import {AcceptedApplication} from "../../../api/applications/model";
 
 export const ClientApplicationsPage = () => {
 
@@ -40,6 +44,7 @@ export const ClientApplicationsPage = () => {
               date={d.slot.time}
               price={d.psycho.price}
               status={d.status}
+              aapp={d}
             />
           )) : <>Нет заявок</>}
       </div>
@@ -66,6 +71,7 @@ const ApplicationEntry = ({
   psycho,
   price,
   id,
+  aapp,
   status,
 }: {
   readonly id: number;
@@ -73,8 +79,10 @@ const ApplicationEntry = ({
   readonly date: string;
   readonly price?: number;
   readonly status: SlotStatus;
+  aapp: AcceptedApplication,
 }) => {
-  const navigate = useNavigate();
+
+  const [isOpened, setIsOpened] = useState(false)
 
   return (
     <div className="client-applications__apps__entry">
@@ -84,13 +92,19 @@ const ApplicationEntry = ({
         <span>Цена: {price ?? 'бесплатно'}</span>
         {status && <span>Статус: {mapStatus(status)}</span>}
       </div>
-      {status ? (
-        <SuiButton onClick={() => navigate(routes.toClientApplication(id))}>
-          Открыть
-        </SuiButton>
-      ) : (
-        <SuiButton>Отозвать</SuiButton>
-      )}
+      {
+        status === 'PLANNED' && <>
+          <SuiButton onClick={() => setIsOpened(true)}>
+            Открыть
+          </SuiButton>
+          <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
+            <ClientAppView appId={id} aapp={aapp} />
+          </Modal>
+        </>
+      }
+      {
+        status === 'DONE' && <SuiButton>Оценить</SuiButton>
+      }
     </div>
   );
 };

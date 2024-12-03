@@ -38,10 +38,13 @@ export const applicationsApi = gatewayApi.injectEndpoints({
       }),
     }),
 
-    acceptApplication: builder.mutation<void, number>({
-      query: (appId) => ({
+    acceptApplication: builder.mutation<void, { appId: number, address: string }>({
+      query: ({appId, address}) => ({
         url: `applications/${appId}/accept`,
         method: 'POST',
+        body: {
+          address
+        }
       }),
       invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
     }),

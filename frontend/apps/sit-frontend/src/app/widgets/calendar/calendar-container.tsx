@@ -44,6 +44,8 @@ export const CalendarContainer = ({
     yearId: currentDate.getFullYear(),
     psychoId: psychoId,
     mode: slotMode,
+  }, {
+    refetchOnMountOrArgChange: true
   });
 
   const dates: Array<MonthEntry> = useMemo(() => {
