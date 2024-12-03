@@ -22,7 +22,7 @@ export const PsychoSlotPage = ({
   const [isAnon, setIsAnon] = useState(false);
   const [slotId, setSlotId] = useState(0);
   const [desc, setDesc] = useState('');
-  const [isOnline, setIsOnline] = useState(false)
+  const [isOnline, setIsOnline] = useState(true)
 
   const [createApp] = applicationsApi.useCreateApplicationMutation();
 
@@ -88,7 +88,7 @@ export const PsychoSlotPage = ({
         />
       </div>
       <div>
-        Встреча онлайн?:{' '}
+        Дистанционно:{' '}
         <input
           type="checkbox"
           checked={isOnline}

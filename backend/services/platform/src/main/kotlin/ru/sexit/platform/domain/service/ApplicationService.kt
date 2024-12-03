@@ -55,7 +55,7 @@ class ApplicationService(
     }
 
     @Transactional
-    fun acceptApplication(id: Long) {
+    fun acceptApplication(id: Long, request: AcceptApplicationRequest) {
         val application =
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
         application.status = SlotStatus.PLANNED
@@ -71,6 +71,12 @@ class ApplicationService(
 
             bbbMeetingService.createMeeting(application.id)
             application.link = null
+        } else {
+            if (request.address.isNullOrBlank()) {
+                throw InvalidDataException("Address cannot be empty for OFFLINE consultation")
+            }
+
+            application.address = request.address
         }
     }
 

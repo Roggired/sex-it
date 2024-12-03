@@ -4,6 +4,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import ru.sexit.platform.api.http.applications.VisitType
 import ru.sexit.platform.api.http.slot.SlotDayView
 import ru.sexit.platform.api.http.slot.SlotMonthView
 import ru.sexit.platform.api.http.slot.SlotRequest
@@ -177,10 +178,12 @@ class SlotService(
                         anonType = targetApplication.anonType,
                         visitType = targetApplication.visitType,
                         description = targetApplication.description,
-                        link = bbbMeetingService.joinMeeting(
-                            applicationId = targetApplication.id,
-                            mode = RequestMode.PSYCHO,
-                        ),
+                        link = if (targetApplication.visitType == VisitType.ONLINE && targetApplication.status == SlotStatus.PLANNED) {
+                            bbbMeetingService.joinMeeting(
+                                applicationId = targetApplication.id,
+                                mode = RequestMode.PSYCHO,
+                            )
+                        } else null,
                         address = targetApplication.address,
                     )
                 }

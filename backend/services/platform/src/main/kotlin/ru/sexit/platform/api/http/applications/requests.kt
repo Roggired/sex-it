@@ -7,6 +7,10 @@ data class NewApplicationRequest(
     val description: String?
 )
 
+data class AcceptApplicationRequest(
+    val address: String?
+)
+
 data class NoteRequest(
     val note: String = ""
 )

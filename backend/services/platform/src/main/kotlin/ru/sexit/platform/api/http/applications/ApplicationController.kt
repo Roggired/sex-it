@@ -26,8 +26,9 @@ class ApplicationController(
 
     @PostMapping("/{id}/accept")
     fun acceptApplication(
-        @PathVariable("id") id: Long
-    ): Unit = applicationService.acceptApplication(id)
+        @PathVariable("id") id: Long,
+        @RequestBody @Validated request: AcceptApplicationRequest,
+    ): Unit = applicationService.acceptApplication(id, request)
 
     @PostMapping("/{id}/reject")
     fun rejectApplication(
