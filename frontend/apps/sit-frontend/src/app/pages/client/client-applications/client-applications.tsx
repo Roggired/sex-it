@@ -41,7 +41,10 @@ export const ClientApplicationsPage = () => {
               key={d.id}
               id={d.id}
               psycho={d.psycho.name}
-              date={d.slot.time}
+              time={d.slot.time}
+              year={d.slot.yearId}
+              month={d.slot.monthId}
+              day={d.slot.dayId}
               price={d.psycho.price}
               status={d.status}
               aapp={d}
@@ -67,7 +70,10 @@ export const mapStatus = (status: SlotStatus): string => {
 
 }
 const ApplicationEntry = ({
-  date,
+  time,
+  year,
+  month,
+  day,
   psycho,
   price,
   id,
@@ -76,7 +82,10 @@ const ApplicationEntry = ({
 }: {
   readonly id: number;
   readonly psycho: string;
-  readonly date: string;
+  readonly time: string;
+  readonly year: number;
+  readonly month: number;
+  readonly day: number;
   readonly price?: number;
   readonly status: SlotStatus;
   aapp: AcceptedApplication,
@@ -88,7 +97,7 @@ const ApplicationEntry = ({
     <div className="client-applications__apps__entry">
       <div>
         <b>{psycho}</b>
-        <span>Дата: {date}</span>
+        <span>Дата: {day < 10 ? '0' + day : day}.{month}.{year} {time}</span>
         <span>Цена: {price ?? 'бесплатно'}</span>
         {status && <span>Статус: {mapStatus(status)}</span>}
       </div>
