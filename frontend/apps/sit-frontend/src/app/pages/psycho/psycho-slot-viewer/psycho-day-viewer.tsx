@@ -1,29 +1,28 @@
 import './psycho-day-viewer.scss';
-import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
-import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { DayViewerEntry } from 'apps/sit-frontend/src/app/pages/psycho/psycho-slot-viewer/day-viewer-entry';
-import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
-import { useNavigate } from 'react-router-dom';
-import {useAtomValue} from "jotai";
-import {userDataAtom} from "../../../auth/auth-cache";
+import {slotApi} from 'apps/sit-frontend/src/app/api/slot/slot-api';
+import {DayViewerEntry} from 'apps/sit-frontend/src/app/pages/psycho/psycho-slot-viewer/day-viewer-entry';
+import {SuiButton} from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
+import {months} from 'apps/sit-frontend/src/app/utils/date-mapper';
+import {routes} from 'apps/sit-frontend/src/app/utils/routes';
+import {useNavigate} from 'react-router-dom';
+import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
 
-export const PsychoDayViewer = () => {
-  const month = useGetNumberPathParam('month');
-  const day = useGetNumberPathParam('day');
-  const navigate = useNavigate();
-  const { id } = useAtomValue(userDataAtom)
+export const PsychoDayViewer = ({day, month}: {
+  month: number
+  day: number
+}) => {
+  const {id} = useGetPsychoProfile()
 
-  const { data } = slotApi.useGetSlotsByDayQuery(
+  const {data} = slotApi.useGetSlotsByDayQuery(
     {
-      psychoId: id,
+      psychoId: id as number,
       dayId: (day as number) - 1,
       mode: 'PSYCHO',
       yearId: 2024,
       monthId: month as number,
     },
     {
+      refetchOnMountOrArgChange: true,
       skip: !day || !month || !id,
     }
   );
@@ -54,12 +53,12 @@ export const PsychoDayViewer = () => {
         />
       ))}
 
-      <SuiButton
+     {/* <SuiButton
         buttonType="secondary"
         onClick={() => navigate(routes.toBack())}
       >
         Закрыть
-      </SuiButton>
+      </SuiButton>*/}
     </div>
   );
 };

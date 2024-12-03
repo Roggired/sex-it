@@ -1,12 +1,12 @@
 import './create-slot.scss';
-import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
-import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {slotApi} from 'apps/sit-frontend/src/app/api/slot/slot-api';
+import {SuiButton} from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
+import {SuiInput} from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
+import {routes} from 'apps/sit-frontend/src/app/utils/routes';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
-export const CreateSlotPage = () => {
+export const CreateSlotPage = ({ onDone }: { readonly onDone: () => void }) => {
   const navigate = useNavigate();
 
   const [date, setDate] = useState(new Date().toLocaleDateString('en-CA'));
@@ -26,7 +26,7 @@ export const CreateSlotPage = () => {
       dayId: +d[2] - 1,
     })
       .unwrap()
-      .then(() => navigate(routes.toPsychoCalendarPage()))
+      .then(onDone)
       .catch(() => alert('Такой слот уже есть'));
   };
 

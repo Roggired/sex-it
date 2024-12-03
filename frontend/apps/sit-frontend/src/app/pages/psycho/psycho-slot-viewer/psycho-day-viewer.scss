@@ -1,8 +1,7 @@
 .psycho-day-viewer {
   display: flex;
   flex-direction: column;
-  width: 40%;
-  margin: 36px auto;
+  margin: 36px 48px auto;
   align-items: start;
   gap: 24px;
 
@@ -28,6 +27,12 @@
           background-color: rgba(255, 174, 79, 1);
         }
       }
+    }
+
+    &__icon {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
     }
 
     &__main {

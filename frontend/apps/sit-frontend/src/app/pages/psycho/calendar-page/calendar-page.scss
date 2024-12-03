@@ -6,8 +6,15 @@
   gap: 12px;
 
   &__fab {
-    position: absolute;
-    right: 36px;
+    position: sticky;
+    margin: 0 8px 0 auto;
     bottom: 48px;
+    cursor: pointer;
+    background-color: #C50000;
+    height: 30px;
+    width: 30px;
+    fill: white;
+    border-radius: 50%;
+    padding: 10px;
   }
 }

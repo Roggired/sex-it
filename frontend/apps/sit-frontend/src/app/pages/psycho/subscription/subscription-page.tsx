@@ -5,9 +5,9 @@ import {SubscriptionState} from "./subscription-state";
 import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
 import {AvailableSubscriptions} from "./available-subscriptions";
 import {AvailableSubscription, SubscriptionType} from "../../../api/subscription/model";
-import {SuiModal} from "../../../sui/modal/sui-modal";
 import {useState} from "react";
 import Magic from "../../../../assets/magic.png";
+import {Modal} from "../../../sui/modal/sui-modal";
 
 export const SubscriptionPage = () => {
   const {data: currentSubscriptionResponse} = subscriptionApi.useGetCurrentSubscriptionQuery();
@@ -47,14 +47,14 @@ export const SubscriptionPage = () => {
           <AvailableSubscriptions availableSubscriptions={availableSubscriptions} onSelectConfirmed={onSelect}/>
         </div>
       </div>
-      <SuiModal handleClose={onSelectConfirmed} isOpen={selectedSubscription !== null}>
+      <Modal onClose={onSelectConfirmed} isOpen={selectedSubscription !== null}>
         <h2>Уведомление</h2>
         <p>Так как это все-таки не реальная система, а курсовая
           работа - у нас нет интеграции с платежной
           системой. Поэтому давайте представим, что тут
           “произошла магия”.</p>
         <Magic/>
-      </SuiModal>
+      </Modal>
     </Page>
   );
 };

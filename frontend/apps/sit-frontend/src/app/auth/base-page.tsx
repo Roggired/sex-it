@@ -1,4 +1,4 @@
-import React, { type PropsWithChildren, ReactNode } from 'react'
+import React, {type PropsWithChildren, ReactNode} from 'react'
 import './base-page.scss'
 
 export type PageTemplateProps = {
@@ -15,6 +15,7 @@ export const BasePage = ({
     <div className="page-container">
       {header}
       {children}
+      <div id="modal-root"></div>
       {footer}
     </div>
   )

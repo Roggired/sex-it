@@ -1,7 +1,10 @@
-import { SlotView } from 'apps/sit-frontend/src/app/api/slot/model';
+import {SlotView} from 'apps/sit-frontend/src/app/api/slot/model';
 import classNames from 'classnames';
-import { MonthEntry } from '../calendar-container';
-import { CalendarSlot } from './calendar-slot';
+import {MonthEntry} from '../calendar-container';
+import {CalendarSlot} from './calendar-slot';
+import {Modal} from "../../../sui/modal/sui-modal";
+import {useState} from "react";
+import {PsychoDayViewer} from "../../../pages/psycho/psycho-slot-viewer/psycho-day-viewer";
 
 export type CalendarEntryProps = {
   readonly monthEntry: MonthEntry;
@@ -12,18 +15,19 @@ export type CalendarEntryProps = {
 };
 
 export const CalendarEntry = ({
-  monthEntry: { month, day, isCurrentMonth, isHoliday },
-  isCurrentDay,
-  onDayClick,
-  onSlotClick,
-  slots,
-}: CalendarEntryProps) => {
+                                monthEntry: {month, day, isCurrentMonth, isHoliday},
+                                isCurrentDay,
+                                onDayClick,
+                                onSlotClick,
+                                slots,
+                              }: CalendarEntryProps) => {
   const totalSlots = slots.length;
+  const [isOpened, setIsOpened] = useState(false)
   return (
     <div
       onClick={() => {
         if (slots.length) {
-          onDayClick?.(day, month);
+          setIsOpened(true)
         }
       }}
       className={classNames('calendar__entry', {
@@ -48,15 +52,18 @@ export const CalendarEntry = ({
       {/* Тут ярик закостылил верстку */}
       {totalSlots === 1 && (
         <>
-          <div style={{ height: 20 }}></div>
-          <div style={{ height: 20 }}></div>
+          <div style={{height: 20}}></div>
+          <div style={{height: 20}}></div>
         </>
       )}
       {totalSlots === 2 && (
         <>
-          <div style={{ height: 20 }}></div>
+          <div style={{height: 20}}></div>
         </>
       )}
+      <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
+        <PsychoDayViewer day={day} month={month}/>
+      </Modal>
     </div>
   );
 };

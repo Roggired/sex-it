@@ -1,14 +1,13 @@
-import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
-import { useEffect, useState } from 'react';
-import { Page } from '../../shared/page/page';
+import {psychoProfileApi} from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
+import {useEffect, useState} from 'react';
+import {Page} from '../../shared/page/page';
 import './psycho-create-profile.scss';
 import Alla from '../../../../assets/img.png';
-import { SuiInput } from '../../../sui/sui-input/sui-input';
-import { SuiButton } from '../../../sui/sui-button/sui-button';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../../utils/routes';
-import {useAtomValue} from "jotai/index";
-import {userDataAtom} from "../../../auth/auth-cache";
+import {SuiInput} from '../../../sui/sui-input/sui-input';
+import {SuiButton} from '../../../sui/sui-button/sui-button';
+import {useNavigate} from 'react-router-dom';
+import {routes} from '../../../utils/routes';
+import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
 
 export const PsychoCreateProfile = () => {
   const navigate = useNavigate();
@@ -17,13 +16,13 @@ export const PsychoCreateProfile = () => {
   const [price, setPrice] = useState(2000);
   const [isFree, setIsFree] = useState(false);
   const [desc, setDesc] = useState('Я крутая');
-  const { id } = useAtomValue(userDataAtom)
+  const {id} = useGetPsychoProfile()
 
   const [updateProfile] = psychoProfileApi.useCreateOrUpdatePsychoMutation();
 
-  const { data } = psychoProfileApi.useGetPsychoQuery(
+  const {data} = psychoProfileApi.useGetPsychoQuery(
     {
-      id: id,
+      id: id as number,
       mode: 'CLIENT',
     },
     {
@@ -50,7 +49,7 @@ export const PsychoCreateProfile = () => {
     <Page>
       <div className="psycho-create-profile">
         <div className="psycho-create-profile__header">
-          <img src={Alla} alt="" />
+          <img src={Alla} alt=""/>
           <div className="psycho-create-profile__main">
             <SuiInput
               label="Имя"
@@ -95,7 +94,7 @@ export const PsychoCreateProfile = () => {
                 price,
                 email,
                 name,
-                id,
+                id: id as number,
                 bio: desc,
                 isFirstFree: isFree,
               })

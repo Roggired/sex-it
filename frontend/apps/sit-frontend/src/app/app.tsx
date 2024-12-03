@@ -38,22 +38,6 @@ const psychoRoutes: RouteObject[] = [
     ),
   },
   {
-    path: 'psycho/create-slot',
-    element: (
-      <>
-        <CreateSlotPage/>
-      </>
-    ),
-  },
-  {
-    path: `psycho/day/:month/:day`,
-    element: (
-      <>
-        <PsychoDayViewer/>
-      </>
-    ),
-  },
-  {
     path: 'psycho/applications',
     element: (
       <>

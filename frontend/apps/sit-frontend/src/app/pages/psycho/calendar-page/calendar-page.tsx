@@ -1,20 +1,19 @@
-import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
-import { useNavigate } from 'react-router-dom';
-import { CalendarContainer } from '../../../widgets/calendar/calendar-container';
-import { Page } from '../../shared/page/page';
+import {routes} from 'apps/sit-frontend/src/app/utils/routes';
+import {useNavigate} from 'react-router-dom';
+import {CalendarContainer} from '../../../widgets/calendar/calendar-container';
+import {Page} from '../../shared/page/page';
 import './calendar-page.scss';
-import { SlotPageChooser } from '../../shared/slot-page-chooser/slot-page-chooser';
+import {SlotPageChooser} from '../../shared/slot-page-chooser/slot-page-chooser';
 import {useState} from "react";
-import {SuiModal} from "../../../sui/modal/sui-modal";
-import {useAtomValue} from "jotai/index";
-import {userDataAtom} from "../../../auth/auth-cache";
+import {Modal} from "../../../sui/modal/sui-modal";
 import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
+import {IoMdAdd} from "react-icons/io";
+import {CreateSlotPage} from "../create-slot/create-slot-page";
 
 export const CalendarPage = () => {
   const navigate = useNavigate();
   const [isOpened, setIsOpened] = useState(false)
-  const { id } = useGetPsychoProfile()
+  const {id} = useGetPsychoProfile()
 
   if (!id) {
     return
@@ -23,7 +22,7 @@ export const CalendarPage = () => {
   return (
     <Page>
       <div className="calendar-page">
-        <SlotPageChooser />
+        <SlotPageChooser/>
         <CalendarContainer
           psychoId={id}
           slotMode="PSYCHO"
@@ -31,16 +30,10 @@ export const CalendarPage = () => {
             navigate(routes.toPsychoDayViewer(month, day))
           }
         />
-        <SuiButton
-          // onClick={() => navigate(routes.toPsychoCreateSlot())}
-          onClick={() => setIsOpened(prev => !prev)}
-          className="calendar-page__fab"
-        >
-          Новый слот
-        </SuiButton>
-        <SuiModal isOpen={isOpened} handleClose={() => {}}>
-          <h1>HELLOOOOO</h1>
-        </SuiModal>
+        <IoMdAdd onClick={() => setIsOpened(prev => !prev)} className="calendar-page__fab"/>
+        <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
+          <CreateSlotPage onDone={() => setIsOpened(false)}/>
+        </Modal>
       </div>
     </Page>
   );

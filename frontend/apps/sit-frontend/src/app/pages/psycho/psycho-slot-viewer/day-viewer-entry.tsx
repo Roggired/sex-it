@@ -3,6 +3,7 @@ import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
 import classNames from 'classnames';
 import { useNavigate } from 'react-router-dom';
+import {IoCloseSharp} from "react-icons/io5";
 
 type DayViewerEntryProps = {
   readonly time: string;
@@ -37,13 +38,10 @@ export const DayViewerEntry = ({
           {status === 'EMPTY' && (
             <span>
               Свободно
-              <SuiButton
+              <IoCloseSharp
+                className="psycho-day-viewer__entry__icon"
                 style={{ marginLeft: '16px', padding: '6px' }}
-                onClick={onDelete}
-                buttonType="secondary"
-              >
-                Удалить
-              </SuiButton>
+                onClick={onDelete} />
             </span>
           )}
           {status === 'NEED_REVIEW' && (

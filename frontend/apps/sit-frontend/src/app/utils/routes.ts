@@ -7,7 +7,6 @@ export const routes = {
   toPsychoCalendarPage: () => '/sexit/psycho/calendar',
   toPsychoSubscriptionPage: () => '/sexit/psycho/subscription',
   toPsychoApplicationsPage: () => '/sexit/psycho/applications',
-  toPsychoCreateSlot: () => '/sexit/psycho/create-slot',
   toPsychoDayViewer: (month: number, day: number) =>
     `/sexit/psycho/day/${month}/${day}`,
   toPsychoApplication: (appId: number) => `/sexit/psycho/applications/${appId}`,

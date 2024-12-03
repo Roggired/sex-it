@@ -1,67 +1,36 @@
-import React, {PropsWithChildren, ReactNode, useEffect, useLayoutEffect, useRef, useState} from "react";
-import ReactDOM, {createPortal} from "react-dom";
+import React, {PropsWithChildren, useEffect} from "react";
+import ReactDOM from "react-dom";
 import './sui-modal.scss'
 
-function createWrapperAndAppendToBody(wrapperId: string) {
-  const wrapperElement = document.createElement('div');
-  wrapperElement.setAttribute("id", wrapperId);
-  document.body.appendChild(wrapperElement);
-  return wrapperElement;
-}
-
-
-function ReactPortal({children, wrapperId = "react-portal-wrapper"}: PropsWithChildren<{
-  readonly wrapperId: string
-}>) {
-  const [wrapperElement, setWrapperElement] = useState<HTMLElement | null>(null);
-
-  useLayoutEffect(() => {
-    let element = document.getElementById(wrapperId);
-    let systemCreated = false;
-    // if element is not found with wrapperId or wrapperId is not provided,
-    // create and append to body
-    if (!element) {
-      systemCreated = true;
-      element = createWrapperAndAppendToBody(wrapperId);
-    }
-    setWrapperElement(element);
-
-    return () => {
-      // delete the programatically created element
-      if (systemCreated && element.parentNode) {
-        element.parentNode.removeChild(element);
-      }
-    }
-  }, [wrapperId]);
-
-  // wrapperElement state will be null on very first render.
-  if (wrapperElement === null) return null;
-
-  return createPortal(children, wrapperElement);
-}
-
-export function SuiModal({children, isOpen, handleClose}: PropsWithChildren<{
+export const Modal = ({isOpen, onClose, children}: PropsWithChildren<{
   readonly isOpen: boolean
-  readonly handleClose: () => void
-}>) {
-  const nodeRef = useRef(null);
+  readonly onClose: () => void
+}>) => {
+  // Close the modal when the Escape key is pressed
   useEffect(() => {
-    const closeOnEscapeKey = (e: { key: string; }) => (e.key === "Escape" ? handleClose() : null);
-    document.body.addEventListener("keydown", closeOnEscapeKey);
-    return () => {
-      document.body.removeEventListener("keydown", closeOnEscapeKey);
+    const handleEscape = (event: { key: string; }) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
     };
-  }, [handleClose]);
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
 
-  return (
-    <ReactPortal wrapperId="react-portal-modal-container">
-      {isOpen && <div className="modal" ref={nodeRef}>
-        <button onClick={handleClose} className="close-btn">
-          Close
+  // Render nothing if modal is not open
+  if (!isOpen) return null;
+
+  // Create portal to render modal in a dedicated DOM node
+  return ReactDOM.createPortal(
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close" onClick={onClose}>
+          &times;
         </button>
-        <div className="modal-content">{children}</div>
-      </div>}
-    </ReactPortal>
+        {children}
+      </div>
+    </div>,
+    document.getElementById('modal-root') as HTMLElement // Make sure this exists in your HTML
   );
-}
+};
 
