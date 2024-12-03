@@ -1,9 +1,13 @@
-import { SlotStatus } from 'apps/sit-frontend/src/app/api/slot/model';
-import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
+import {SlotStatus} from 'apps/sit-frontend/src/app/api/slot/model';
+import {routes} from 'apps/sit-frontend/src/app/utils/routes';
 import classNames from 'classnames';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {IoCloseSharp} from "react-icons/io5";
+import {useState} from "react";
+import {FaChevronDown, FaChevronUp} from "react-icons/fa";
+import {SuiButton} from "../../../sui/sui-button/sui-button";
+import {Modal} from "../../../sui/modal/sui-modal";
+import {FeedbackPage} from "../feedback/feedback-page";
 
 type DayViewerEntryProps = {
   readonly time: string;
@@ -16,20 +20,24 @@ type DayViewerEntryProps = {
   readonly onDelete?: () => void;
 };
 export const DayViewerEntry = ({
-  status,
-  address,
-  link,
-  desc,
-  isAnon,
-  isOffline,
-  time,
-  onDelete,
-}: DayViewerEntryProps) => {
+                                 status,
+                                 address,
+                                 link,
+                                 desc,
+                                 isAnon,
+                                 isOffline,
+                                 time,
+                                 onDelete,
+                               }: DayViewerEntryProps) => {
   const navigate = useNavigate();
+  const [isOpened, setIsOpened] = useState(false)
+  const isExpandable = desc || status === 'DONE'
+  const [isModal, setIsModal] = useState(false)
+
   return (
     <div className="psycho-day-viewer__entry">
       <div className="psycho-day-viewer__entry__header">
-        <b>{time}</b>
+        <b>{time.substring(0, time.lastIndexOf(":"))}</b>
         <div
           className={classNames('psycho-day-viewer__entry__header__block', {
             planned: status !== 'EMPTY',
@@ -40,13 +48,13 @@ export const DayViewerEntry = ({
               Свободно
               <IoCloseSharp
                 className="psycho-day-viewer__entry__icon"
-                style={{ marginLeft: '16px', padding: '6px' }}
-                onClick={onDelete} />
+                style={{marginLeft: '16px', padding: '6px'}}
+                onClick={onDelete}/>
             </span>
           )}
           {status === 'NEED_REVIEW' && (
             <span
-              style={{ cursor: 'pointer' }}
+              style={{cursor: 'pointer'}}
               onClick={() => navigate(routes.toPsychoApplicationsPage())}
             >
               Просмотреть заявки
@@ -60,7 +68,7 @@ export const DayViewerEntry = ({
               ) : (
                 <span>
                   Онлайн:{' '}
-                  <a style={{ cursor: 'pointer' }} href={link}>
+                  <a style={{cursor: 'pointer'}} href={link}>
                     Подключиться
                   </a>
                 </span>
@@ -68,12 +76,28 @@ export const DayViewerEntry = ({
             </>
           )}
         </div>
+
+        {isExpandable &&
+          <div onClick={() => setIsOpened(prevState => !prevState)}>
+            {isOpened ? <FaChevronUp/> : <FaChevronDown/>}
+          </div>
+        }
       </div>
-      {desc && (
-        <div className="psycho-day-viewer__entry__main">
-          <b>Описание:</b>
-          <span>{desc}</span>
-        </div>
+      {isExpandable && isOpened && (
+        <>
+          {desc && <div className="psycho-day-viewer__entry__main">
+            <b>Описание:</b>
+            <span>{desc}</span>
+          </div>}
+          {
+            status === 'DONE' && <div className="psycho-day-viewer__entry__main">
+              <SuiButton buttonType='secondary' onClick={() => setIsModal(true)}>Открыть консультацию</SuiButton>
+            </div>
+          }
+          <Modal isOpen={isModal} onClose={() => setIsModal(false)}>
+            <FeedbackPage />
+          </Modal>
+        </>
       )}
     </div>
   );

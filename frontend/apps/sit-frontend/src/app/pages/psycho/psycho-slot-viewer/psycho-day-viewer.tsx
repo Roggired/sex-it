@@ -6,6 +6,7 @@ import {months} from 'apps/sit-frontend/src/app/utils/date-mapper';
 import {routes} from 'apps/sit-frontend/src/app/utils/routes';
 import {useNavigate} from 'react-router-dom';
 import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
+import {useGetNumberPathParam} from "../../../hooks/useGetNumberPathParam";
 
 export const PsychoDayViewer = ({day, month}: {
   month: number
@@ -45,7 +46,7 @@ export const PsychoDayViewer = ({day, month}: {
           time={d.time}
           isAnon={d.anonType === 'ANON'}
           isOffline={d.visitType === 'OFFLINE'}
-          status={d.status}
+          status={"DONE"}
           desc={d.description}
           link={d.link}
           address={d.address}

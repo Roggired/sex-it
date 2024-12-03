@@ -15,6 +15,10 @@
       display: flex;
       gap: 16px;
 
+      & > b {
+        width: 90px;
+      }
+
       &__block {
         display: flex;
         flex-direction: column;

@@ -30,11 +30,11 @@ export const CalendarPage = () => {
             navigate(routes.toPsychoDayViewer(month, day))
           }
         />
-        <IoMdAdd onClick={() => setIsOpened(prev => !prev)} className="calendar-page__fab"/>
-        <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
-          <CreateSlotPage onDone={() => setIsOpened(false)}/>
-        </Modal>
       </div>
+      <IoMdAdd onClick={() => setIsOpened(prev => !prev)} className="calendar-page__fab"/>
+      <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
+        <CreateSlotPage onDone={() => setIsOpened(false)}/>
+      </Modal>
     </Page>
   );
 };

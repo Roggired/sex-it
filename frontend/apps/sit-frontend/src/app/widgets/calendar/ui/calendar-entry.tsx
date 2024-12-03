@@ -5,6 +5,7 @@ import {CalendarSlot} from './calendar-slot';
 import {Modal} from "../../../sui/modal/sui-modal";
 import {useState} from "react";
 import {PsychoDayViewer} from "../../../pages/psycho/psycho-slot-viewer/psycho-day-viewer";
+import {useGetNumberPathParam} from "../../../hooks/useGetNumberPathParam";
 
 export type CalendarEntryProps = {
   readonly monthEntry: MonthEntry;
@@ -23,6 +24,7 @@ export const CalendarEntry = ({
                               }: CalendarEntryProps) => {
   const totalSlots = slots.length;
   const [isOpened, setIsOpened] = useState(false)
+  const psychoId = useGetNumberPathParam('psychoId')
   return (
     <div
       onClick={() => {
@@ -62,7 +64,9 @@ export const CalendarEntry = ({
         </>
       )}
       <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
-        <PsychoDayViewer day={day} month={month}/>
+        {
+          psychoId ? <></> : <PsychoDayViewer day={day} month={month}/>
+        }
       </Modal>
     </div>
   );

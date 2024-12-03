@@ -16,29 +16,29 @@ export const PsychoSlotPage = () => {
   const navigate = useNavigate();
   const month = useGetNumberPathParam('month');
   const day = useGetNumberPathParam('day');
+  const psychoId = useGetNumberPathParam('psychoId');
 
   const [isAnon, setIsAnon] = useState(false);
   const [slotId, setSlotId] = useState(0);
   const [desc, setDesc] = useState('');
 
   const [createApp] = applicationsApi.useCreateApplicationMutation();
-  const { id } = useAtomValue(userDataAtom)
 
-  const { data: p } = psychoProfileApi.useGetPsychoQuery(id ? {
-    id: id,
+  const { data: p } = psychoProfileApi.useGetPsychoQuery(psychoId ? {
+    id: psychoId,
     mode: 'CLIENT',
   } : skipToken);
 
   const { data } = slotApi.useGetSlotsByDayQuery(
     {
-      psychoId: id,
+      psychoId: psychoId as number,
       dayId: (day as number) - 1,
       mode: 'CLIENT',
       yearId: 2024,
       monthId: month as number,
     },
     {
-      skip: !day || !month,
+      skip: !day || !month || !psychoId,
     }
   );
 
@@ -66,7 +66,7 @@ export const PsychoSlotPage = () => {
       anonType: isAnon ? 'ANON' : 'NE_ANON',
     })
       .unwrap()
-      .then(() => navigate(routes.toClientPsychoCalendar(id)));
+      .then(() => psychoId && navigate(routes.toClientPsychoCalendar(psychoId)));
   };
 
   return (
