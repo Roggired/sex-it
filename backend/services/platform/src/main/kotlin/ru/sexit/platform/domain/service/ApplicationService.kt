@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.api.http.slot.SlotWithDate
@@ -48,6 +49,7 @@ class ApplicationService(
                 link = null,
                 address = null,
                 results = null,
+                note = null,
                 userId = getRequestAuthorUserInfo().id,
             ).also { it.slot = slot }
         )
@@ -149,4 +151,29 @@ class ApplicationService(
         yearId = yearId,
         monthId = monthId,
     )
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    fun patchApplicationNote(applicationId: Long, request: NoteRequest) {
+        val psychoId = getRequestAuthorUserInfo().id
+        val application = getById(applicationId)
+
+        if (psychoId != application.slot.psychoProfile.userId) {
+            throw InvalidOperationException("Psycho can create notes only for applications points to him")
+        }
+
+        application.note = request.note
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    fun finishApplication(applicationId: Long, request: NoteRequest) {
+        val psychoId = getRequestAuthorUserInfo().id
+        val application = getById(applicationId)
+
+        if (psychoId != application.slot.psychoProfile.userId) {
+            throw InvalidOperationException("Psycho can create notes only for applications points to him")
+        }
+
+        application.status = SlotStatus.DONE
+        application.results = request.note
+    }
 }

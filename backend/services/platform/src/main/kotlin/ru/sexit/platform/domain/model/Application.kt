@@ -25,6 +25,7 @@ class Application(
     var link: String?,
     var address: String?,
     var results: String?,
+    var note: String?,
     val userId: String
 ) {
     @ManyToOne
@@ -42,6 +43,7 @@ class Application(
             link = null,
             address = null,
             results = null,
+            note = null,
             userId = "",
         )
     }

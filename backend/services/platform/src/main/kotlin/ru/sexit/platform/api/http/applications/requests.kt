@@ -6,3 +6,7 @@ data class NewApplicationRequest(
     val visitType: VisitType,
     val description: String?
 )
+
+data class NoteRequest(
+    val note: String = ""
+)
