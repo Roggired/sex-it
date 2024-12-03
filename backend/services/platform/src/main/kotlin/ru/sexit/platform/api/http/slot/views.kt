@@ -29,6 +29,7 @@ data class SlotDayView(
     val anonType: AnonType?,
     val visitType: VisitType?,
     val status: SlotStatus,
+    val applicationId: Long?,
     val description: String?,
     val link: String?,
     val address: String?,
