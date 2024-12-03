@@ -8,6 +8,7 @@ import {AvailableSubscription, SubscriptionType} from "../../../api/subscription
 import {useState} from "react";
 import Magic from "../../../../assets/magic.png";
 import {Modal} from "../../../sui/modal/sui-modal";
+import {SuiButton} from "../../../sui/sui-button/sui-button";
 
 export const SubscriptionPage = () => {
   const {data: currentSubscriptionResponse} = subscriptionApi.useGetCurrentSubscriptionQuery();
@@ -27,12 +28,11 @@ export const SubscriptionPage = () => {
 
   const onSelect = (selectedCard: SubscriptionType) => {
     setSelectedSubscription(selectedCard);
+    mutate({ type: selectedCard });
   }
 
-  const onSelectConfirmed = () => {
-    if (selectedSubscription) {
-      mutate({ type: selectedSubscription });
-    }
+  const onModalClose = () => {
+    setSelectedSubscription(null);
   }
 
   return (
@@ -47,13 +47,18 @@ export const SubscriptionPage = () => {
           <AvailableSubscriptions availableSubscriptions={availableSubscriptions} onSelectConfirmed={onSelect}/>
         </div>
       </div>
-      <Modal onClose={onSelectConfirmed} isOpen={selectedSubscription !== null}>
-        <h2>Уведомление</h2>
-        <p>Так как это все-таки не реальная система, а курсовая
-          работа - у нас нет интеграции с платежной
-          системой. Поэтому давайте представим, что тут
-          “произошла магия”.</p>
-        <Magic/>
+      <Modal onClose={onModalClose} isOpen={selectedSubscription !== null} centered={true}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <h2 style={{ margin: 0 }}>Уведомление</h2>
+          <p style={{ marginTop: "20px" }}>Так как это все-таки не реальная система, а курсовая
+            работа - у нас нет интеграции с платежной
+            системой. Поэтому давайте представим, что тут
+            “произошла магия”.</p>
+          <img src={Magic}/>
+          <SuiButton style={{ marginTop: "20px" }} onClick={onModalClose}>
+            Понятно
+          </SuiButton>
+        </div>
       </Modal>
     </Page>
   );

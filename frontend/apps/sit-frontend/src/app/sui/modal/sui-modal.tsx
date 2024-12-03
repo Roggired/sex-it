@@ -1,10 +1,12 @@
 import React, {PropsWithChildren, useEffect} from "react";
 import ReactDOM from "react-dom";
 import './sui-modal.scss'
+import classNames from "classnames";
 
-export const Modal = ({isOpen, onClose, children}: PropsWithChildren<{
+export const Modal = ({isOpen, onClose, children, centered}: PropsWithChildren<{
   readonly isOpen: boolean
   readonly onClose: () => void
+  readonly centered?: boolean
 }>) => {
   // Close the modal when the Escape key is pressed
   useEffect(() => {
@@ -22,8 +24,8 @@ export const Modal = ({isOpen, onClose, children}: PropsWithChildren<{
 
   // Create portal to render modal in a dedicated DOM node
   return ReactDOM.createPortal(
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+    <div className={classNames("modal-backdrop", { "modal-backdrop-centered": centered })} onClick={onClose}>
+      <div className={classNames("modal-content", { "modal-content-centered": centered })} onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>
           &times;
         </button>
