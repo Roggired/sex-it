@@ -128,7 +128,7 @@ class ApplicationService(
             appStatus1 = appStatus1,
             appStatus2 = if (appStatus1 == SlotStatus.PLANNED) SlotStatus.DONE else null
         ).map {
-            val joinUrl = if (appStatus == SlotStatus.PLANNED) {
+            val joinUrl = if (it.status == SlotStatus.PLANNED && it.visitType == VisitType.ONLINE) {
                 bbbMeetingService.joinMeeting(
                     applicationId = it.id,
                     mode = RequestMode.CLIENT,

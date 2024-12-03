@@ -70,12 +70,21 @@ export const DayViewerEntry = ({
               {isOffline ? (
                 <span>{address}</span>
               ) : (
-                <span>
-                  Онлайн:{' '}
-                  <a style={{cursor: 'pointer'}} href={link}>
-                    Подключиться
-                  </a>
-                </span>
+                <>
+                  {status === 'DONE' && (
+                    <span>
+                      Проведено онлайн
+                    </span>
+                  )}
+                  {status === 'PLANNED' && (
+                    <span>
+                      Онлайн:{' '}
+                      <a style={{cursor: 'pointer'}} href={link}>
+                        Подключиться
+                      </a>
+                    </span>
+                  )}
+                </>
               )}
             </>
           )}
