@@ -122,11 +122,18 @@ class ApplicationService(
             throw InvalidDataException("appStatus param should have one following values: NEED_REVIEW, PLANNED, REJECTED")
         }
 
-        return applicationRepository.findAcceptedApplicationsByPsychoNameAndAppStatus(psychoName, appStatus ?: SlotStatus.PLANNED).map {
-            val joinUrl = bbbMeetingService.joinMeeting(
-                applicationId = it.id,
-                mode = RequestMode.CLIENT,
-            )
+        val appStatus1 = appStatus ?: SlotStatus.PLANNED
+        return applicationRepository.findAcceptedApplicationsByPsychoNameAndAppStatus1AndAppStatus2(
+            psychoName = psychoName,
+            appStatus1 = appStatus1,
+            appStatus2 = if (appStatus1 == SlotStatus.PLANNED) SlotStatus.DONE else null
+        ).map {
+            val joinUrl = if (appStatus == SlotStatus.PLANNED) {
+                bbbMeetingService.joinMeeting(
+                    applicationId = it.id,
+                    mode = RequestMode.CLIENT,
+                )
+            } else null
             it.toAcceptedApplicationView(joinUrl)
         }
     }

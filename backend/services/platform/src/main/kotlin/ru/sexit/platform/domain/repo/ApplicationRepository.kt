@@ -29,10 +29,17 @@ interface ApplicationRepository: JpaRepository<Application, Long> {
             left join ap.slot sl 
             left join sl.psychoProfile ps 
             where (coalesce(:psychoName, null) is null or lower(ps.name) like lower(concat('%', cast(:psychoName as string), '%'))) 
-                and (ap.status = :appStatus)
+                and (
+                    (coalesce(:appStatus2, null) is null and ap.status = :appStatus1)
+                    or (coalesce(:appStatus1, null) is not null and (ap.status = :appStatus1 or ap.status = :appStatus2))
+                )
         """
     )
-    fun findAcceptedApplicationsByPsychoNameAndAppStatus(psychoName: String?, appStatus: SlotStatus): List<AcceptedApplication>
+    fun findAcceptedApplicationsByPsychoNameAndAppStatus1AndAppStatus2(
+        psychoName: String?,
+        appStatus1: SlotStatus,
+        appStatus2: SlotStatus?,
+    ): List<AcceptedApplication>
 
     fun countBySlotPsychoProfileIdAndStatusAndVisitTypeAndSlotYearIdAndSlotMonthId(
         psychoId: Long,
