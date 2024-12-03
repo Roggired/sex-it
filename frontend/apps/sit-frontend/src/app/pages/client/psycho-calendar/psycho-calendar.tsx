@@ -17,8 +17,7 @@ export const PsychoCalendar = () => {
       <CalendarContainer
         psychoId={psychoId}
         slotMode="CLIENT"
-        onSlotClick={(day, month) =>
-          navigate(routes.toClientPsychoSlot(month, day, psychoId))
+        onSlotClick={(day, month) => {}
         }
       />
     </div>

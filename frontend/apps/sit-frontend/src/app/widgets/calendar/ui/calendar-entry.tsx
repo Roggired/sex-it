@@ -28,7 +28,7 @@ export const CalendarEntry = ({
   return (
     <div
       onClick={() => {
-        if (slots.length) {
+        if (slots.length && !psychoId) {
           setIsOpened(true)
         }
       }}
@@ -46,6 +46,8 @@ export const CalendarEntry = ({
           key={s.id}
           onSlotClick={() => onSlotClick?.(day, month)}
           slotView={s}
+          day={day}
+          month={month}
         />
       ))}
       {totalSlots > 2 && (

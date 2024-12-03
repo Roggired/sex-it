@@ -1,35 +1,37 @@
 import './psycho-slot.scss';
-import { applicationsApi } from 'apps/sit-frontend/src/app/api/applications/applications-api';
-import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
-import { slotApi } from 'apps/sit-frontend/src/app/api/slot/slot-api';
-import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
-import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import { months } from 'apps/sit-frontend/src/app/utils/date-mapper';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {useAtomValue} from "jotai/index";
-import {userDataAtom} from "../../../auth/auth-cache";
+import {applicationsApi} from 'apps/sit-frontend/src/app/api/applications/applications-api';
+import {psychoProfileApi} from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
+import {slotApi} from 'apps/sit-frontend/src/app/api/slot/slot-api';
+import {useGetNumberPathParam} from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
+import {SuiButton} from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
+import {months} from 'apps/sit-frontend/src/app/utils/date-mapper';
+import {routes} from 'apps/sit-frontend/src/app/utils/routes';
+import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {skipToken} from "@reduxjs/toolkit/query";
 
-export const PsychoSlotPage = () => {
+export const PsychoSlotPage = ({
+  month, day, psychoId
+                               }: {
+  month: number
+  day: number
+  psychoId: number
+}) => {
   const navigate = useNavigate();
-  const month = useGetNumberPathParam('month');
-  const day = useGetNumberPathParam('day');
-  const psychoId = useGetNumberPathParam('psychoId');
 
   const [isAnon, setIsAnon] = useState(false);
   const [slotId, setSlotId] = useState(0);
   const [desc, setDesc] = useState('');
+  const [isOnline, setIsOnline] = useState(false)
 
   const [createApp] = applicationsApi.useCreateApplicationMutation();
 
-  const { data: p } = psychoProfileApi.useGetPsychoQuery(psychoId ? {
+  const {data: p} = psychoProfileApi.useGetPsychoQuery(psychoId ? {
     id: psychoId,
     mode: 'CLIENT',
   } : skipToken);
 
-  const { data } = slotApi.useGetSlotsByDayQuery(
+  const {data} = slotApi.useGetSlotsByDayQuery(
     {
       psychoId: psychoId as number,
       dayId: (day as number) - 1,
@@ -62,7 +64,7 @@ export const PsychoSlotPage = () => {
     createApp({
       slotId,
       description: desc,
-      visitType: 'ONLINE',
+      visitType: isOnline ? 'ONLINE' : 'OFFLINE',
       anonType: isAnon ? 'ANON' : 'NE_ANON',
     })
       .unwrap()
@@ -83,6 +85,14 @@ export const PsychoSlotPage = () => {
           type="checkbox"
           checked={isAnon}
           onChange={(e) => setIsAnon(e.target.checked)}
+        />
+      </div>
+      <div>
+        Встреча онлайн?:{' '}
+        <input
+          type="checkbox"
+          checked={isOnline}
+          onChange={(e) => setIsOnline(e.target.checked)}
         />
       </div>
       <select onChange={(e) => setSlotId(+e.target.value)}>

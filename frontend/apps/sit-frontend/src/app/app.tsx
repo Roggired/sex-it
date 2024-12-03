@@ -82,14 +82,6 @@ const clientRoutes: RouteObject[] = [
     ),
   },
   {
-    path: 'client/psycho-slot/:month/:day/:psychoId',
-    element: (
-      <>
-        <PsychoSlotPage/>
-      </>
-    ),
-  },
-  {
     path: 'client/applications',
     element: (
       <>
