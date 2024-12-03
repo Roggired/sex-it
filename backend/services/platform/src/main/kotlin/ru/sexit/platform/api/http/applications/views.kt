@@ -25,7 +25,8 @@ data class ApplicationView(
     val status: SlotStatus,
     val description: String?,
     val link: String?,
-    val address: String?
+    val address: String?,
+    val notes: String?
 )
 
 data class ApplicationWithClientView(
