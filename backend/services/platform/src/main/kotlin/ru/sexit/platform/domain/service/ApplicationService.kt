@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.api.http.slot.SlotWithDate
-import ru.sexit.platform.api.http.slot.toShortView
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
 import ru.sexit.platform.infrastructure.exception.InvalidOperationException
@@ -17,7 +16,6 @@ import ru.sexit.platform.infrastructure.integration.DownstreamServices
 import ru.sexit.platform.infrastructure.integration.IntegrationRetrofitClient
 import ru.sexit.platform.infrastructure.integration.keycloak.admin.api.KeycloakAdminAPI
 import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.KeycloakError
-import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.toUserInfo
 import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 import ru.sexit.platform.utils.RequestMode
 import java.time.LocalDateTime
@@ -118,8 +116,8 @@ class ApplicationService(
 
     fun getById(id: Long): Application = applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
 
-    fun getAcceptedApplicationsByPsycho(psychoId: Long): List<AcceptedApplicationView> {
-        return applicationRepository.findAcceptedApplicationsByPsycho(psychoId).map {
+    fun getAcceptedApplications(psychoName: String?): List<AcceptedApplicationView> {
+        return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map {
             val joinUrl = bbbMeetingService.joinMeeting(
                 applicationId = it.id,
                 mode = RequestMode.CLIENT,

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import ru.sexit.platform.domain.model.Application
 import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.service.ApplicationService
 
@@ -41,8 +40,8 @@ class ApplicationController(
 
     @GetMapping("/accepted")
     fun getAcceptedApplication(
-        @RequestParam(required = true) psychoId: Long
-    ): List<AcceptedApplicationView> = applicationService.getAcceptedApplicationsByPsycho(psychoId)
+        @RequestParam(required = false) psychoName: String? = null
+    ): List<AcceptedApplicationView> = applicationService.getAcceptedApplications(psychoName)
 
     @PatchMapping("/{id}/note")
     fun patchApplicationNote(
