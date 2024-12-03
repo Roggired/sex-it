@@ -4,7 +4,6 @@ import ru.sexit.platform.api.http.feedback.FeedbackView
 import ru.sexit.platform.api.http.feedback.toView
 import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.PsychoRating
-import java.time.LocalDateTime
 
 data class ProfilePsychoView(
     val id: Long,
@@ -54,4 +53,11 @@ data class PsychoProfileReduced(
     val id: Long,
     val name: String,
     val price: Int
+)
+
+data class PsychoProfileForCatalogueView(
+    val id: Long,
+    val name: String,
+    val price: Int,
+    val rating: Double?,
 )

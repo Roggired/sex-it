@@ -13,3 +13,14 @@ data class PsychoProfileRequest(
     val isFirstFree: Boolean,
     val bio: String,
 )
+
+data class FilterPsychoRequest(
+    val filters: Filters = Filters(),
+) {
+    data class Filters(
+        val name: String? = null,
+        val priceFrom: Int? = null,
+        val priceTo: Int? = null,
+        val minRating: Double? = null,
+    )
+}

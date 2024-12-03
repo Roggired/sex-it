@@ -1,12 +1,18 @@
 package ru.sexit.platform.domain.service
 
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import ru.sexit.platform.api.http.profile.FilterPsychoRequest
+import ru.sexit.platform.api.http.profile.PsychoProfileForCatalogueView
 import ru.sexit.platform.api.http.profile.PsychoProfileRequest
 import ru.sexit.platform.domain.model.PsychoProfile
+import ru.sexit.platform.domain.model.PsychoProfileForCatalogueProjection
 import ru.sexit.platform.domain.model.PsychoRating
+import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
 import ru.sexit.platform.infrastructure.exception.AlreadyExistException
@@ -118,4 +124,13 @@ class PsychoProfileService(
             feedbacks = feedbacks,
         )
     }
+
+    fun filterPsychoProfiles(request: FilterPsychoRequest, pageNumber: Int, pageSize: Int): Page<PsychoProfileForCatalogueProjection> =
+        psychoProfileRepo.findPagedByFilters(
+            name = request.filters.name,
+            priceFrom = request.filters.priceFrom,
+            priceTo = request.filters.priceTo,
+            minRating = request.filters.minRating,
+            pageable = PageRequest.of(pageNumber, pageSize)
+        )
 }

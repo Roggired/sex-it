@@ -38,6 +38,7 @@ class SecurityConfig(
                 authorize("/api/dev-only/meetings", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize(HttpMethod.PATCH, "/api/v1/profiles/*", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize(HttpMethod.GET, "/api/v1/profiles/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
+                authorize(HttpMethod.POST, "/api/v1/profiles/filtered", hasAuthority(SexItPermissions.CLIENT.name))
                 authorize(HttpMethod.POST, "/api/v1/slots", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize(HttpMethod.DELETE, "/api/v1/slots/*", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize("/api/v1/slots/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
