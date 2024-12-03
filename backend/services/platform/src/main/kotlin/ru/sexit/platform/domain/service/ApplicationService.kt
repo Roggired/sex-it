@@ -116,8 +116,8 @@ class ApplicationService(
 
     fun getById(id: Long): Application = applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
 
-    fun getAcceptedApplicationsByPsychoName(psychoName: String): List<AcceptedApplicationView> {
-        return applicationRepository.findAcceptedApplicationsByPsychoName(psychoName).map {
+    fun getAcceptedApplicationsByPsycho(psychoId: Long): List<AcceptedApplicationView> {
+        return applicationRepository.findAcceptedApplicationsByPsycho(psychoId).map {
             val joinUrl = bbbMeetingService.joinMeeting(
                 applicationId = it.id,
                 mode = RequestMode.CLIENT,

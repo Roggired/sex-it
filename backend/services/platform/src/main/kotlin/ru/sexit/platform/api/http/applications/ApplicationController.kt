@@ -39,6 +39,6 @@ class ApplicationController(
 
     @GetMapping("/accepted")
     fun getAcceptedApplication(
-        @RequestParam("psychoName") psychoName: String
-    ): List<AcceptedApplicationView> = applicationService.getAcceptedApplicationsByPsychoName(psychoName)
+        @RequestParam(required = true) psychoId: Long
+    ): List<AcceptedApplicationView> = applicationService.getAcceptedApplicationsByPsycho(psychoId)
 }

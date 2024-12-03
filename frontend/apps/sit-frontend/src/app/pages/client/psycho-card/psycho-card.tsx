@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
 import {skipToken} from "@reduxjs/toolkit/query";
 import {RatingWidget} from "../../shared/rating-widget/rating-widget";
+import {feedbackApi} from "../../../api/feedback/feedback-api";
+import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
+import {getRuStringFromDate} from "../../../utils/dates";
+import {Page} from "../../shared/page/page";
 
 export const PsychoCardPage = () => {
   const id = useGetNumberPathParam('id');
@@ -17,58 +21,72 @@ export const PsychoCardPage = () => {
     mode: 'CLIENT',
   } : skipToken);
 
-  if (!id || !data) {
-    return <></>;
+  const { data: feedbacks } = feedbackApi.useGetLastTenFeedbacksByPsychoQuery(id ? {
+    psychoId: id
+  } : skipToken)
+
+  if (!id || !data || !feedbacks) {
+    return <Page center={true}><SuiLoader/></Page>;
   }
 
   return (
-    <div className="psycho-card">
-      <div className="psycho-card__header">
-        <img src={Alla} />
-        <div>
-          <div className="psycho-card__entry">
-            <b>ФИО</b>
-            <span>{data.name}</span>
-          </div>
-          <div className="psycho-card__entry">
-            <b>Email</b>
-            <span>{data.email}</span>
-          </div>
-          <div className="psycho-card__entry">
-            <b>Цена консультации (руб. в час):</b>
-            <span>{data.price}</span>
-          </div>
-          <span>
+    <Page>
+      <div className="psycho-card">
+        <div className="psycho-card__header">
+          <img src={Alla}/>
+          <div>
+            <div className="psycho-card__entry">
+              <b>ФИО</b>
+              <span>{data.name}</span>
+            </div>
+            <div className="psycho-card__entry">
+              <b>Email</b>
+              <span>{data.email}</span>
+            </div>
+            <div className="psycho-card__entry">
+              <b>Цена консультации (руб. в час):</b>
+              <span>{data.price}</span>
+            </div>
+            <span>
             Бесплатная 1-ая консультация: {data.isFirstFree ? 'да' : 'нет'}
           </span>
+          </div>
+          <div>
+            <SuiButton
+              onClick={() => navigate(routes.toClientPsychoCalendar(id))}
+            >
+              Открыть календарь
+            </SuiButton>
+            <SuiButton
+              onClick={() => navigate(routes.toBack())}
+              buttonType="secondary"
+            >
+              Назад
+            </SuiButton>
+          </div>
         </div>
-        <div>
-          <SuiButton
-            onClick={() => navigate(routes.toClientPsychoCalendar(id))}
-          >
-            Открыть календарь
-          </SuiButton>
-          <SuiButton
-            onClick={() => navigate(routes.toBack())}
-            buttonType="secondary"
-          >
-            Назад
-          </SuiButton>
+        <div className="psycho-card__entry psycho-card__entry-horizontal">
+          <b>Рейтинг:</b>
+          <RatingWidget rating={data.rating}/>
         </div>
+        <div className="psycho-card__entry">
+          <b>О себе:</b>
+          <span>{data.bio}</span>
+        </div>
+        <b>Анонимные отзывы:</b>
+        {feedbacks.map(feedback => (
+          <div className="psycho-card__entry" key={feedback.id}>
+            <div className="psycho-card__entry-horizontal">
+              <span>{getRuStringFromDate(new Date(feedback.creationTime))}</span>
+              <RatingWidget rating={feedback.rating}/>
+            </div>
+            <span>{feedback.text}</span>
+          </div>
+        ))}
+        {feedbacks.length <= 0 && (
+          <span>Пока отзывов нет</span>
+        )}
       </div>
-      <div className="psycho-card__entry psycho-card__entry-horizontal">
-        <b>Рейтинг:</b>
-        <RatingWidget rating={data.rating}/>
-      </div>
-      <div className="psycho-card__entry">
-        <b>О себе:</b>
-        <span>{data.bio}</span>
-      </div>
-      <b>Анонимные отзывы:</b>
-      <div className="psycho-card__entry">
-        <span>02.05.2024</span>
-        <span>Алла Сергеевна, Вы просто класс! Спасибо Вам огромное! ))</span>
-      </div>
-    </div>
+    </Page>
   );
 };

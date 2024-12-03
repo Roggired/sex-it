@@ -33,7 +33,7 @@ class SecurityConfig(
                 authorize(HttpMethod.GET, "/api/v1/applications", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize("/api/v1/applications/reject", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize("/api/v1/applications/accept", hasAuthority(SexItPermissions.PSYCHO.name))
-                authorize("/api/v1/applications/accepted", hasAuthority(SexItPermissions.PSYCHO.name))
+                authorize("/api/v1/applications/accepted", hasAuthority(SexItPermissions.CLIENT.name))
                 authorize("/api/v1/applications/*/give-feedback", hasAuthority(SexItPermissions.CLIENT.name))
                 authorize("/api/dev-only/meetings", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize(HttpMethod.PATCH, "/api/v1/profiles/*", hasAuthority(SexItPermissions.PSYCHO.name))
@@ -44,6 +44,7 @@ class SecurityConfig(
                 authorize("/api/v1/slots/*", hasAnyAuthority(SexItPermissions.PSYCHO.name, SexItPermissions.CLIENT.name))
                 authorize("/api/v1/subscriptions", hasAuthority(SexItPermissions.PSYCHO.name))
                 authorize("/api/v1/subscriptions/*", hasAuthority(SexItPermissions.PSYCHO.name))
+                authorize("/api/v1/feedbacks/last-ten-by-psycho", hasAuthority(SexItPermissions.CLIENT.name))
 
                 authorize("/swagger-ui/*", permitAll)
                 authorize("/v3/api-docs/**", permitAll)

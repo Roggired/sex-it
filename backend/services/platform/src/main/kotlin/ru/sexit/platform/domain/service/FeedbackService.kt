@@ -29,4 +29,8 @@ class FeedbackService(
     ).also {
         log.info("New feedback (id: ${it.id}) has been created")
     }
+
+    fun getLastTenFeedbackForPsycho(psychoId: Long): List<Feedback> = feedbackRepo.findLastTenFeedbacksByPsychoProfileId(
+        psychoProfileId = psychoId,
+    )
 }
