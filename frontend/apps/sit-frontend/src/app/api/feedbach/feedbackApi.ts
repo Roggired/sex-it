@@ -1,8 +1,17 @@
 import {gatewayApi} from "../store";
-import {CreatePsychoProfileRequest, Psycho} from "../psycho/model";
 
-export const feedbackApi = gatewayApi.injectEndpoints({
-  endpoints: build => ({
-
+export const feedA = gatewayApi.injectEndpoints({
+  endpoints: (build) => ({
+    giveFeedback: build.mutation<void, {
+      appId: number
+      rating: number
+      text: string
+    }>({
+      query: ({appId, ...body}) => ({
+        url: `applications/${appId}/give-feedback`,
+        method: 'POST',
+        body
+      }),
+    }),
   })
 })

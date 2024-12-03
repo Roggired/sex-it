@@ -10,6 +10,7 @@ import {Modal} from "../../../sui/modal/sui-modal";
 import {ApplicationViewPage} from "../../psycho/application-view/application-view-page";
 import {ClientAppView} from "../../psycho/application-view/client-app-view";
 import {AcceptedApplication} from "../../../api/applications/model";
+import {ClientFeed} from "../../psycho/feedback/client-feed";
 
 export const ClientApplicationsPage = () => {
 
@@ -92,6 +93,7 @@ const ApplicationEntry = ({
 }) => {
 
   const [isOpened, setIsOpened] = useState(false)
+  const [isOpened2, setIsOpened2] = useState(false)
 
   return (
     <div className="client-applications__apps__entry">
@@ -112,7 +114,12 @@ const ApplicationEntry = ({
         </>
       }
       {
-        status === 'DONE' && <SuiButton>Оценить</SuiButton>
+        status === 'DONE' && <>
+          <SuiButton onClick={()=> setIsOpened2(true)}>Оценить</SuiButton>
+          <Modal isOpen={isOpened2} onClose={() => setIsOpened2(false)}>
+            <ClientFeed appId={id} aapp={aapp} close={() => setIsOpened2(false)} />
+          </Modal>
+        </>
       }
     </div>
   );
