@@ -108,7 +108,7 @@ const Routing = () => {
 export function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.NX_REACT_ROUTER_BASE_URL}>
         <Routing/>
       </BrowserRouter>
     </Provider>

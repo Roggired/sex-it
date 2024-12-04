@@ -26,7 +26,8 @@ data class ApplicationView(
     val description: String?,
     val link: String?,
     val address: String?,
-    val notes: String?
+    val notes: String?,
+    val results: String?,
 )
 
 data class ApplicationWithClientView(

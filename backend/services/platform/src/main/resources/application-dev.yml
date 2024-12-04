@@ -12,11 +12,11 @@ spring:
 #        format_sql: true
 
 bbb:
-  client-mode: stub
+  client-mode: real
   url: https://roggired.ru/bigbluebutton
   secret: ${BBB_SECRET:secret}
-  logout-url: http://localhost:8081
-  error-redirect-url: http://localhost:8081
+  logout-url: http://localhost:3000
+  error-redirect-url: http://localhost:3000
   duration-in-minutes: 70
 
 springdoc:

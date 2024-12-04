@@ -35,7 +35,7 @@ export const ClientFeed = ({appId, close, aapp} : {
     <span>Дистанционно: {aapp.visitType === 'ONLINE' ? 'Да' : 'Нет'}</span>
     <div style={{display: "flex", flexDirection: 'column'}}>
       <b>Итоги:</b>
-      <span>{data.notes}</span>
+      <span>{data.results}</span>
     </div>
     <div style={{display: 'flex', gap: '8px'}}>
       <span>Оцените:    </span>

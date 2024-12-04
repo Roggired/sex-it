@@ -61,6 +61,7 @@ fun Application.toView(): ApplicationView = ApplicationView(
     link = link,
     address = address,
     notes = note,
+    results = results,
 )
 
 data class AcceptedApplication(

@@ -54,7 +54,7 @@ class BbbMeetingService(
         try {
             bbbClient.createMeeting(
                 request = BbbCreateMeetingRequest(
-                    name = "Consultation for PsychoProfile: ${bbbMeeting.psychoProfileId} and Application: ${bbbMeeting.applicationId}",
+                    name = "Consultation",
                     meetingId = bbbMeeting.uuid,
                 )
             )
