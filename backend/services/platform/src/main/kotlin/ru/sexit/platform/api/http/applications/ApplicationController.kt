@@ -35,6 +35,11 @@ class ApplicationController(
         @PathVariable("id") id: Long
     ): Unit = applicationService.rejectApplication(id)
 
+    @PostMapping("/{id}/revoke")
+    fun revokeApplication(
+        @PathVariable("id") id: Long,
+    ): Unit = applicationService.revokeApplication(id)
+
     @GetMapping("/{id}")
     fun getApplicationById(
         @PathVariable("id") id: Long

@@ -7,6 +7,7 @@ import ru.sexit.platform.api.http.applications.VisitType
 import ru.sexit.platform.domain.model.AcceptedApplication
 import ru.sexit.platform.domain.model.Application
 import ru.sexit.platform.domain.model.SlotStatus
+import java.time.LocalDateTime
 
 @Repository
 interface ApplicationRepository: JpaRepository<Application, Long> {
@@ -47,5 +48,19 @@ interface ApplicationRepository: JpaRepository<Application, Long> {
         visitType: VisitType,
         yearId: Int,
         monthId: Int,
+    ): Int
+
+    @Query(
+        """
+            SELECT COUNT(*)
+            FROM Application a
+            WHERE a.creationTime BETWEEN :from AND :to AND a.status = :status AND a.visitType = :visitType
+        """
+    )
+    fun countPerformedAtPeriod(
+        from: LocalDateTime,
+        to: LocalDateTime,
+        visitType: VisitType = VisitType.ONLINE,
+        status: SlotStatus = SlotStatus.DONE,
     ): Int
 }

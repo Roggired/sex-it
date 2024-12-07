@@ -82,9 +82,22 @@ class ApplicationService(
 
     @Transactional
     fun rejectApplication(id: Long) {
-        val application =
-            applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
+        val application = getById(id)
         application.status = SlotStatus.REJECTED
+    }
+
+    @Transactional
+    fun revokeApplication(id: Long) {
+        val application = getById(id)
+        if (application.userId != getRequestAuthorUserInfo().id) {
+            throw InvalidOperationException("Client do not own this application")
+        }
+
+        if (application.status != SlotStatus.NEED_REVIEW) {
+            throw InvalidOperationException("Revoke can be performed only for applications which status is NEED_REVIEW")
+        }
+
+        applicationRepository.delete(application)
     }
 
     fun getByPsychoId(psychoId: Long): List<ApplicationWithClientView> {

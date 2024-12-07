@@ -23,4 +23,16 @@ interface SubscriptionRepository: JpaRepository<Subscription, Long> {
     ): List<Subscription>
 
     fun findAllByPsychoIdAndType(psychoId: String, type: SubscriptionType): List<Subscription>
+
+    @Query(
+        """
+            SELECT COUNT(*)
+            FROM Subscription s
+            WHERE s.suspended = FALSE AND s.type = :type AND s.validUntil >= :currentTime
+        """
+    )
+    fun countAliveSubscriptions(
+        type: SubscriptionType,
+        currentTime: LocalDateTime,
+    ): Int
 }

@@ -121,11 +121,11 @@ class SubscriptionService(
         val usageStats = if (subscription != null) UsageStatsResponse(
             used = applicationService.countOnlineFinishedApplicationsForMonth(
                 yearId = currentTime.year,
-                monthId = currentTime.monthValue,
+                monthId = currentTime.monthValue - 1,
                 psychoId = psychoProfile.id,
             ) + applicationService.countOnlinePlannedApplicationsForMonth(
                 yearId = currentTime.year,
-                monthId = currentTime.monthValue,
+                monthId = currentTime.monthValue - 1,
                 psychoId = psychoProfile.id,
             ),
             max = when(subscription.type) {
