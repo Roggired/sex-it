@@ -44,8 +44,8 @@ export const ClientApplicationsPage = () => {
               psycho={d.psycho.name}
               time={d.slot.time}
               year={d.slot.yearId}
-              month={d.slot.monthId}
-              day={d.slot.dayId}
+              month={d.slot.monthId + 1}
+              day={d.slot.dayId + 1}
               price={d.psycho.price}
               status={d.status}
               aapp={d}
