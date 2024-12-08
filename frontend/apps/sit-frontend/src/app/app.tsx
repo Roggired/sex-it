@@ -20,6 +20,7 @@ import {ClientApplicationsPage} from "./pages/client/client-applications/client-
 import {ClientApplicationViewerPage} from "./pages/client/application-viewer/application-viewer";
 import {SubscriptionPage} from "./pages/psycho/subscription/subscription-page";
 import {FeedbackPage} from "./pages/psycho/feedback/feedback-page";
+import { AdminPage } from './pages/admin/AdminPage';
 
 const psychoRoutes: RouteObject[] = [
   {
@@ -91,6 +92,13 @@ const clientRoutes: RouteObject[] = [
   },
 ]
 
+const adminRoutes: Array<RouteObject> = [
+  {
+    path: 'admin',
+    element: <AdminPage />
+  }
+]
+
 const Routing = () => {
   return useRoutes(
     baseRoutes({
@@ -100,6 +108,7 @@ const Routing = () => {
       appRoutes: [
         ...psychoRoutes,
         ...clientRoutes,
+        ...adminRoutes,
       ],
     })
   )

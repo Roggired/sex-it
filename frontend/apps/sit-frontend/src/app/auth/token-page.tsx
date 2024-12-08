@@ -35,6 +35,8 @@ export const TokenPage = ({ redirectRoute }: { redirectRoute: string }) => {
             navigate(routes.toPsychoCalendarPage())
           } else if (role?.[0] === Role.CLIENT) {
             navigate(routes.toClientPsychoList())
+          } else if (role?.[0] === Role.ADMIN) {
+            navigate(routes.toAdmin())
           } else {
             navigate(routes.toRoot())
           }

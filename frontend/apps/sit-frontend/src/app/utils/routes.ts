@@ -18,4 +18,6 @@ export const routes = {
     `/sexit/client/psycho-slot/${month}/${day}/${psychoId}`,
   toClientApplications: () => `/sexit/client/applications`,
   toClientApplication: (id: number) => `/sexit/client/application/${id}`,
+
+  toAdmin: () => '/sexit/admin',
 };

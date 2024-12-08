@@ -18,6 +18,7 @@ export interface UserInfo {
 export enum Role {
   CLIENT = 'CLIENT',
   PSYCHO = 'PSYCHO',
+  ADMIN = 'ADMIN',
 }
 
 type JWTPayload = {
