@@ -1,23 +1,21 @@
 import './application-view-page.scss';
 import {applicationsApi} from 'apps/sit-frontend/src/app/api/applications/applications-api';
 import {psychoProfileApi} from 'apps/sit-frontend/src/app/api/psycho/psycho-profile-api';
-import {useGetNumberPathParam} from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
 import {SuiButton} from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
-import {routes} from 'apps/sit-frontend/src/app/utils/routes';
 import {useNavigate} from 'react-router-dom';
 import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
 import {skipToken} from "@reduxjs/toolkit/query";
-import app from "../../../app";
 import {useEffect, useState} from "react";
+import {Hearts} from "react-loader-spinner";
 
-export const ApplicationViewPage = ({appId, close} : {readonly appId: number, close: () => void}) => {
+export const ApplicationViewPage = ({appId, close}: { readonly appId: number, close: () => void }) => {
   const navigate = useNavigate();
   const {id} = useGetPsychoProfile()
 
   //Нет ендпоинта для получения appпо id, костылю
   const {data} = applicationsApi.useGetApplicationsQuery(id ?? skipToken);
 
-  const [approve, { isError }] = applicationsApi.useAcceptApplicationMutation();
+  const [approve, {isError, isLoading}] = applicationsApi.useAcceptApplicationMutation();
   const [reject] = applicationsApi.useRejectApplicationMutation();
 
   const [place, setPlace] = useState('')
@@ -69,6 +67,7 @@ export const ApplicationViewPage = ({appId, close} : {readonly appId: number, cl
 
       <div className="application-view__btns">
         <SuiButton
+          disabled={isLoading}
           onClick={() => {
             if (application.visitType === 'OFFLINE' && !place) {
               alert("Введите место встречи")
@@ -80,7 +79,11 @@ export const ApplicationViewPage = ({appId, close} : {readonly appId: number, cl
           }
           }
         >
-          Принять
+          {isLoading ? <Hearts
+            height="16"
+            width="32"
+            color="#FFFFFF"
+          /> : 'Принять'}
         </SuiButton>
         <SuiButton
           buttonType="secondary"
