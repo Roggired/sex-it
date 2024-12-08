@@ -36,6 +36,7 @@ export const applicationsApi = gatewayApi.injectEndpoints({
           ...psychoName,
         },
       }),
+      providesTags: ['ClientApps']
     }),
 
     acceptApplication: builder.mutation<void, { appId: number, address: string }>({
@@ -57,6 +58,13 @@ export const applicationsApi = gatewayApi.injectEndpoints({
       invalidatesTags: ['PsychoApps', 'CalSlots', 'DaySlots'],
     }),
 
+    revokeApp: builder.mutation<void, number>({
+      query: (appId) => ({
+        url: `applications/${appId}/revoke`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['ClientApps'],
+    }),
 
     getAppById: builder.query<Application, number>({
       query: (id) => ({

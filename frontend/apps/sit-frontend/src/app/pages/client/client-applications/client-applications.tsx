@@ -94,6 +94,7 @@ const ApplicationEntry = ({
 
   const [isOpened, setIsOpened] = useState(false)
   const [isOpened2, setIsOpened2] = useState(false)
+  const [revoke] = applicationsApi.useRevokeAppMutation()
 
   return (
     <div className="client-applications__apps__entry">
@@ -112,6 +113,11 @@ const ApplicationEntry = ({
             <ClientAppView appId={id} aapp={aapp} />
           </Modal>
         </>
+      }
+      {
+        status === 'NEED_REVIEW' && <SuiButton onClick={() => revoke(id)}>
+          Отозвать
+        </SuiButton>
       }
       {
         status === 'DONE' && <>
