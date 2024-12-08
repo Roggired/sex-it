@@ -17,6 +17,18 @@ export const CreateSlotPage = ({ onDone }: { readonly onDone: () => void }) => {
   const handleClick = () => {
     if (!date || !time) return;
 
+    const now = new Date()
+    const inputDate = new Date(date)
+    const split = time.split(':')
+
+    inputDate.setHours(+split[0])
+    inputDate.setMinutes(+split[1])
+
+    if (inputDate.getTime() < now.getTime()) {
+      alert("Нельзя создать слот в прошлом")
+      return;
+    }
+
     const d = date.split('-');
 
     createSlot({
@@ -47,12 +59,12 @@ export const CreateSlotPage = ({ onDone }: { readonly onDone: () => void }) => {
       />
       <div className="create-slot__btns">
         <SuiButton onClick={handleClick}>Создать</SuiButton>
-        <SuiButton
+        {/*<SuiButton
           buttonType="secondary"
           onClick={() => navigate(routes.toBack())}
         >
           Закрыть
-        </SuiButton>
+        </SuiButton>*/}
       </div>
     </div>
   );

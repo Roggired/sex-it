@@ -90,6 +90,26 @@ export const PsychoCreateProfile = () => {
         <div className="psycho-create-profile__buttons">
           <SuiButton
             onClick={() => {
+              if (price <= 0) {
+                alert("Цена должна быть больше 0");
+                return
+              }
+
+              if (!email) {
+                alert("Введите email")
+                return;
+              }
+
+              if (!name) {
+                alert("Введите имя");
+                return;
+              }
+
+              if (!desc) {
+                alert("введите описание");
+                return;
+              }
+
               updateProfile({
                 price,
                 email,
