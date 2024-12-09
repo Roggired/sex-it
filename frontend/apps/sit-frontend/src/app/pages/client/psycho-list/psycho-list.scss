@@ -1,72 +1,93 @@
-.psycho-list {
+.choose-psycho-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   gap: 24px;
-  margin: 36px;
+  padding: 36px;
 
-  &__sidebar {
+  &__search {
+    width: 100%;
+    max-width: 500px;
     display: flex;
-    flex-direction: column;
-    align-items: start;
-    min-width: 300px;
-    gap: 24px;
-  }
-
-  &__filters {
-    &__fio-input {
-      width: 100%;
-    }
-
-    &__price-input {
-      width: 138px;
-    }
-
-    &__rating-input {
-      width: 120px;
-    }
-  }
-
-  &__main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-  }
-
-  &__btns {
-    display: flex;
-    gap: 4px;
+    justify-content: center;
+    margin-bottom: 24px;
   }
 
   &__list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 24px;
-    grid-row-gap: 36px;
+    gap: 24px;
+    justify-items: center;
+    margin-bottom: 36px;
   }
 
-  &__card {
+  &__pagination {
     display: flex;
-    cursor: pointer;
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px;
-    border-radius: 4px;
-    border: 1px solid black;
-    max-width: 220px;
-
-    & > img {
-      width: 220px;
-      height: 220px;
-    }
-
-    & > h3 {
-      margin: 0;
-    }
-
-    &:hover {
-      background-color: #F6F6F6;
-    }
+    align-items: center;
+    gap: 8px;
   }
+
+  &__pagination span {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+.psycho-card {
+  display: flex;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  max-width: 250px;
+  text-align: center;
+
+  & > h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  & > p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+  }
+
+  &:hover {
+    background-color: #f6f6f6;
+    transform: translateY(-5px);
+  }
+
+  &.selected {
+    background-color: #e0f7fa;
+    border: 1px solid #26c6da;
+  }
+}
+
+.sui-button {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #00796b;
+  color: white;
+
+  &:hover {
+    background-color: #004d40;
+  }
+}
+
+.sui-input {
+  padding: 8px 12px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
 }

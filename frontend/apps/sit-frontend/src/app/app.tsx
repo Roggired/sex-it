@@ -21,6 +21,10 @@ import {ClientApplicationViewerPage} from "./pages/client/application-viewer/app
 import {SubscriptionPage} from "./pages/psycho/subscription/subscription-page";
 import {FeedbackPage} from "./pages/psycho/feedback/feedback-page";
 import { AdminPage } from './pages/admin/AdminPage';
+import {FriendCreateProfile} from './pages/friend/create-profile/friend-create-profile';
+import {FriendshipPage} from './pages/friend/create-friendship/create-friendship-page';
+//import {FriendshipPage} from './pages/friend/application-view/friendship-status-page';
+
 
 const psychoRoutes: RouteObject[] = [
   {
@@ -91,6 +95,32 @@ const clientRoutes: RouteObject[] = [
     ),
   },
 ]
+const friendRoutes: RouteObject[] = [
+  {
+        path: 'friend/create-profile',
+        element: (
+          <>
+            <FriendCreateProfile/>
+          </>
+        ),
+      },
+        {
+          path: 'friend/create-friendship',
+          element: (
+            <>
+              <FriendshipPage/>
+            </>
+          ),
+        },
+      {
+        path: 'friend/friendship',
+        element: (
+          <>
+            <FriendshipPage/>
+          </>
+          ),
+        },
+  ]
 
 const adminRoutes: Array<RouteObject> = [
   {
@@ -109,6 +139,7 @@ const Routing = () => {
         ...psychoRoutes,
         ...clientRoutes,
         ...adminRoutes,
+        ...friendRoutes
       ],
     })
   )

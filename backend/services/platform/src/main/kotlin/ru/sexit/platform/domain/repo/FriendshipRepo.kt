@@ -1,0 +1,36 @@
+package ru.sexit.platform.domain.repo
+
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.stereotype.Repository
+import ru.sexit.platform.domain.model.Friendship
+import ru.sexit.platform.domain.model.FriendshipProjectionByFriend
+import ru.sexit.platform.domain.model.FriendshipProjectionByPsycho
+
+@Repository
+interface FriendshipRepo: JpaRepository<Friendship, Long> {
+
+    @Query(
+        """
+            SELECT p.name as name, f.status as status
+                FROM friendship f
+                LEFT JOIN psycho_profiles p on p.id = f.psycho_id
+            WHERE f.friend_id = :friendId
+           
+        """, nativeQuery = true
+    )
+    fun getFriendshipProjectionForFriend(friendId: Long): FriendshipProjectionByFriend?
+
+    @Query(
+        """
+            SELECT fr.name, fr.percent 
+                FROM friendship 
+                LEFT JOIN friend fr on fr.id = friendship.friend_id 
+            WHERE fr.psycho_id = :psychoId
+        """, nativeQuery = true
+    )
+    fun getFriendshipProjectionForPsycho(psychoId: Long): FriendshipProjectionByPsycho
+
+    fun findFriendshipByFriendId(friendId: Long): Friendship?
+
+}

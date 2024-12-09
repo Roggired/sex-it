@@ -27,6 +27,7 @@ class ApplicationService(
     private val slotService: SlotService,
     private val bbbMeetingService: BbbMeetingService,
     private val keycloakAdminAPI: KeycloakAdminAPI,
+    private val referralService: ReferralService,
     @Qualifier("keycloakAdminIntegrationRetrofitClient")
     private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
 ) {
@@ -35,9 +36,9 @@ class ApplicationService(
     lateinit var subscriptionService: SubscriptionService
 
     @Transactional
-    fun createApplication(applicationRequest: NewApplicationRequest): Application {
+    fun createApplication(applicationRequest: NewApplicationRequest, referId: Long?): Application {
         val slot = slotService.getById(applicationRequest.slotId)
-        return applicationRepository.save(
+        val application = applicationRepository.save(
             Application(
                 id = 0L,
                 creationTime = LocalDateTime.now(),
@@ -52,6 +53,11 @@ class ApplicationService(
                 userId = getRequestAuthorUserInfo().id,
             ).also { it.slot = slot }
         )
+        if (referId != null) {
+            val referralProgram = referralService.getReferralProgramById(referId)
+            referralProgram.applicationId = application.id
+        }
+        return application
     }
 
     @Transactional

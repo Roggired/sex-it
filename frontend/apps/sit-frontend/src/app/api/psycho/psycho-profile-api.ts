@@ -4,7 +4,7 @@ import {
   Psycho, PsychoCatalogueView,
 } from 'apps/sit-frontend/src/app/api/psycho/model';
 import { gatewayApi } from 'apps/sit-frontend/src/app/api/store';
-import {PageView} from "../common";
+import { PageView } from "../common";
 
 export const psychoProfileApi = gatewayApi.injectEndpoints({
   endpoints: (build) => ({

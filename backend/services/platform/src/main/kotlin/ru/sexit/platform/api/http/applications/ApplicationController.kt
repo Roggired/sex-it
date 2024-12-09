@@ -21,8 +21,9 @@ class ApplicationController(
 
     @PostMapping
     fun createApplication(
+        @RequestParam("referId") referId: Long?,
         @RequestBody applicationRequest: NewApplicationRequest
-    ): ApplicationView = applicationService.createApplication(applicationRequest).toView()
+    ): ApplicationView = applicationService.createApplication(applicationRequest, referId).toView()
 
     @PostMapping("/{id}/accept")
     fun acceptApplication(

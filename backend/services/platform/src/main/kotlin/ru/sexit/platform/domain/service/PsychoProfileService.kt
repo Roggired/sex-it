@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.profile.FilterPsychoRequest
-import ru.sexit.platform.api.http.profile.PsychoProfileForCatalogueView
 import ru.sexit.platform.api.http.profile.PsychoProfileRequest
+import ru.sexit.platform.domain.model.FriendshipProjectionByPsycho
 import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.PsychoProfileForCatalogueProjection
 import ru.sexit.platform.domain.model.PsychoRating
-import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
 import ru.sexit.platform.infrastructure.exception.AlreadyExistException
@@ -102,7 +101,7 @@ class PsychoProfileService(
     }
 
     fun getProfileById(id: Long): PsychoProfile = psychoProfileRepo.findById(id)
-            .orElseThrow { NotFoundException("No such profile exists") }
+        .orElseThrow { NotFoundException("No such profile exists") }
 
     fun getMyProfile(): PsychoProfile = psychoProfileRepo.findByUserId(
         getRequestAuthorUserInfo().id
@@ -125,7 +124,11 @@ class PsychoProfileService(
         )
     }
 
-    fun filterPsychoProfiles(request: FilterPsychoRequest, pageNumber: Int, pageSize: Int): Page<PsychoProfileForCatalogueProjection> =
+    fun filterPsychoProfiles(
+        request: FilterPsychoRequest,
+        pageNumber: Int,
+        pageSize: Int
+    ): Page<PsychoProfileForCatalogueProjection> =
         psychoProfileRepo.findPagedByFilters(
             name = request.filters.name,
             priceFrom = request.filters.priceFrom,
