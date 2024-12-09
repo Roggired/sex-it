@@ -71,7 +71,7 @@ class ReferralProgramController(
     }
 
     @PostMapping("/create-refer")
-    fun createReferralProgram(): String {
+    fun createReferralProgram(): Long {
         return profileService.createReferralProgram()
     }
 

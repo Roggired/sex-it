@@ -37,6 +37,8 @@ export const TokenPage = ({ redirectRoute }: { redirectRoute: string }) => {
             navigate(routes.toClientPsychoList())
           } else if (role?.[0] === Role.ADMIN) {
             navigate(routes.toAdmin())
+          } else if (role?.[0] === Role.PSYCHO_FRIEND) {
+            navigate(routes.toCreateFriendPage())
           } else {
             navigate(routes.toRoot())
           }

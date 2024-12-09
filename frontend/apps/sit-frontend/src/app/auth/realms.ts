@@ -4,6 +4,7 @@ export enum Realm {
   CLIENT,
   PSYCHO,
   ADMIN,
+  PSYCHO_FRIEND
 }
 
 export const realmMap: {
@@ -12,4 +13,5 @@ export const realmMap: {
   [Role.CLIENT]: [Realm.CLIENT],
   [Role.PSYCHO]: [Realm.PSYCHO],
   [Role.ADMIN]: [Realm.ADMIN],
+  [Role.PSYCHO_FRIEND]: [Realm.PSYCHO_FRIEND]
 }

@@ -1,147 +1,135 @@
 import './friendship-status.scss';
 import './create-friendship.scss';
-import { referralProgramApi } from 'apps/sit-frontend/src/app/api/refer/refer-api';
-import { PsychoProfileForCatalogueView } from 'apps/sit-frontend/src/app/api/refer/model';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAtomValue } from 'jotai/index';
-import { userDataAtom } from '../../../auth/auth-cache';
-import { PaginationSingle } from '../../../sui/icons/pagination/pagination-single';
-import { SuiInput } from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
+import {referralProgramApi} from 'apps/sit-frontend/src/app/api/refer/refer-api';
+import {useState} from 'react';
+import {SuiInput} from 'apps/sit-frontend/src/app/sui/sui-input/sui-input';
+import {SuiButton} from "../../../sui/sui-button/sui-button";
+import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
 
 export const FriendshipPage = () => {
-  const [pageNumber, setPageNumber] = useState(0);
-  const [selectedPsychoId, setSelectedPsychoId] = useState<number | null>(null);
-  const [status, setStatus] = useState<{ psychoName: string; friendshipStatus: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [search, setSearch] = useState('')
+  const [currFilter, setCurrFilter] = useState<
+    'ADD_FRIEND' | 'CURRENT' | 'REJECTED'
+  >('ADD_FRIEND');
 
-  const { id } = useAtomValue(userDataAtom); // Получаем ID пользователя
-  const { data: friendshipStatusData, isError, isLoading } = referralProgramApi.useGetFriendFriendshipQuery();
+  // TODO: вернуть всех текущий друзей-психологов
+  // TODO: добавить идентификатор психолога в ответ
+  // TODO: добавить запрос на отмену заявки
+  const { data: friendshipStatusData } = referralProgramApi.useGetFriendFriendshipQuery();
 
-  const { data, isLoading: psychoLoading, error: psychoError } = referralProgramApi.useGetAvailablePsychoQuery({
-    pageNumber,
-    pageSize: 6,
+  // TODO: добавить параметр для поиска по имени психолога
+  const { data: availablePsychos } = referralProgramApi.useGetAvailablePsychoQuery({
+    pageNumber: 0,
+    pageSize: 10000,
   });
 
-  const [createFriendship] = referralProgramApi.useCreateFriendshipMutation();
-
-  const handleCreateFriendship = (psychoId: number) => {
-    createFriendship({ psychoId });
-  };
-
-  useEffect(() => {
-    if (isLoading) {
-      setLoading(true);
-    } else if (isError) {
-      setError("Ошибка при получении статуса дружбы");
-      setLoading(false);
-    } else {
-      setStatus(friendshipStatusData ?? null); // Если запрос успешен, сохраняем полученные данные в состояние
-      setLoading(false);
-    }
-  }, [isLoading, isError, friendshipStatusData]);
-
-  if (loading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (status) {
-    return (
-      <div className="friendship-status">
-        <h1>Статус дружбы с психологом</h1>
-        <div className="friendship-status__info">
-          <p><b>Психолог: </b>{status.psychoName}</p>
-          <p><b>Статус дружбы: </b>{status.friendshipStatus}</p>
-        </div>
-        <div className="friendship-status__btns">
-          <button className="primary" onClick={() => navigate(routes.toBack())}>
-            Назад
-          </button>
-          <button
-            className="secondary"
-          //  onClick={() => navigate(routes.toReferralProgram())}
-          >
-            Перейти к программе
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (psychoLoading) {
-    return <div>Загрузка...</div>;
-  }
-
-  if (psychoError) {
-    return <div>Произошла ошибка при загрузке психологов.</div>;
-  }
-
   return (
-    <div className="choose-psycho-page">
-      <h1>Выбор психолога для дружбы</h1>
-      <div className="choose-psycho-page__search">
-        <SuiInput placeholder="Поиск психолога" />
+    <div className="client-applications">
+      <div className="client-applications__breadcrumbs">
+        <span className={currFilter === 'ADD_FRIEND' ? 'chosen' : ''} onClick={() => setCurrFilter('ADD_FRIEND')}>Добавить друга</span>
+        <span className={currFilter === 'CURRENT' ? 'chosen' : ''}
+              onClick={() => setCurrFilter('CURRENT')}>/ Друзья</span>
+        <span className={currFilter === 'REJECTED' ? 'chosen' : ''} onClick={() => setCurrFilter('REJECTED')}>/ Отклоненные заявки</span>
       </div>
-
-      <div className="choose-psycho-page__list">
-        {data?.content.map((psycho) => (
-          <PsychoCard
-            key={psycho.id}
-            psycho={psycho}
-            onSelect={() => setSelectedPsychoId(psycho.id)}
-            onSendFriendshipRequest={handleCreateFriendship}
-            isSelected={selectedPsychoId === psycho.id}
+      <div className="client-applications__filter">
+        <SuiInput value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по психологу"/>
+        <SuiButton onClick={() => {}}>Поиск</SuiButton>
+      </div>
+      {
+        currFilter === 'ADD_FRIEND' && <div className="client-applications__apps">
+          { availablePsychos && availablePsychos.content.map((psycho) => (
+              <PsychoCard
+                key={psycho.id}
+                id={psycho.id}
+                psycho={psycho.name}
+                state={'ADD_FRIEND'}
+              />
+            ))
+          }
+          { availablePsychos && friendshipStatusData && availablePsychos.content.length > 0 && <div className="separator"></div> }
+          { friendshipStatusData && friendshipStatusData.friendshipStatus === 'CREATED' && <PsychoCard
+              key={friendshipStatusData.psychoName}
+              id={1}
+              psycho={friendshipStatusData.psychoName}
+              state={'PENDING'}
+            />
+          }
+          { !availablePsychos && !friendshipStatusData && <SuiLoader/> }
+        </div>
+      }
+      {
+        currFilter === 'CURRENT' && <div className="client-applications__apps">
+          {friendshipStatusData && friendshipStatusData.friendshipStatus === 'ACCEPTED' && <PsychoCard
+            key={friendshipStatusData.psychoName}
+            id={1}
+            psycho={friendshipStatusData.psychoName}
+            state={'CURRENT'}
           />
-        ))}
-      </div>
-
-      <div className="choose-psycho-page__pagination">
-        <PaginationSingle
-          enabled={pageNumber > 0}
-          onClick={() => setPageNumber(pageNumber - 1)}
-        />
-        <span>{pageNumber + 1}</span>
-        <PaginationSingle
-          enabled={pageNumber < (data?.totalPages ?? 0) - 1}
-          onClick={() => setPageNumber(pageNumber + 1)}
-          isRightRotated={true}
-        />
-      </div>
+          }
+          {!availablePsychos && !friendshipStatusData && <SuiLoader/>}
+        </div>
+      }
+      {
+        currFilter === 'REJECTED' && <div className="client-applications__apps">
+          {friendshipStatusData && friendshipStatusData.friendshipStatus === 'REJECTED' && <PsychoCard
+            key={friendshipStatusData.psychoName}
+            id={1}
+            psycho={friendshipStatusData.psychoName}
+            state={'REJECTED'}
+          />
+          }
+          {!availablePsychos && !friendshipStatusData && <SuiLoader/>}
+        </div>
+      }
     </div>
   );
 };
 
-interface PsychoCardProps {
-  psycho: PsychoProfileForCatalogueView;
-  onSelect: () => void;
-  onSendFriendshipRequest: (psychoId: number) => void;
-  isSelected: boolean;
-}
-
 const PsychoCard = ({
   psycho,
-  onSelect,
-  onSendFriendshipRequest,
-  isSelected,
-}: PsychoCardProps) => {
+  id,
+  state,
+}: {
+  readonly id: number;
+  readonly psycho: string;
+  readonly state: 'ADD_FRIEND' | 'CURRENT' | 'REJECTED' | 'PENDING';
+}) => {
+  const [createFriendship] = referralProgramApi.useCreateFriendshipMutation()
+  const [createReferralProgram] = referralProgramApi.useCreateReferralProgramMutation()
+  // TODO: add cancel invite request
+
+  const onGetReferralLink = () => {
+    createReferralProgram()
+      .then((result) => result.data)
+      .then((referralId) => alert(`http://localhost:3000/sexit/client/psycho-card/${id}?referralId=${referralId}`))
+  }
+
   return (
-    <div
-      className={`psycho-card ${isSelected ? 'selected' : ''}`}
-      onClick={onSelect}
-    >
-      <h3>{psycho.name}</h3>
-      <p>Цена за час: {psycho.price} руб.</p>
-      <p>Рейтинг: {psycho.rating ?? 'Не задан'}</p>
-      <button className="primary" onClick={() => onSendFriendshipRequest(psycho.id)}>
-        {isSelected ? 'Отправить запрос на дружбу' : 'Выбрать'}
-      </button>
+    <div className="client-applications__apps__entry">
+      <div>
+        <b>{psycho}</b>
+      </div>
+      {
+        state === 'ADD_FRIEND' && <SuiButton onClick={() => createFriendship({
+          psychoId: id
+        })}>
+          Добавить
+        </SuiButton>
+      }
+      {
+        state === 'PENDING' && <SuiButton onClick={() => {}} buttonType='secondary'>
+          Отменить запрос
+        </SuiButton>
+      }
+      {
+        state === 'CURRENT' && <SuiButton onClick={onGetReferralLink}>
+          Получить ссылку
+        </SuiButton>
+      }
+      {
+        state === 'REJECTED' && <>
+        </>
+      }
     </div>
   );
 };

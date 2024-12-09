@@ -19,5 +19,8 @@ export const routes = {
   toClientApplications: () => `/sexit/client/applications`,
   toClientApplication: (id: number) => `/sexit/client/application/${id}`,
 
+  toCreateFriendPage: () => '/sexit/friend/create-profile',
+  toCreateFriendShipPage: () => '/sexit/friend/create-friendship',
+
   toAdmin: () => '/sexit/admin',
 };

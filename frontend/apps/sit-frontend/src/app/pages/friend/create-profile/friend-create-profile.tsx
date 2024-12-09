@@ -1,24 +1,23 @@
 import './friend-create-profile.scss';
 import { useEffect, useState } from 'react';
 import { Page } from '../../shared/page/page';
-import './friend-create-profile.scss'; // Новый стиль для "Друга"
+import './friend-create-profile.scss';
 import { SuiInput } from '../../../sui/sui-input/sui-input';
 import { SuiButton } from '../../../sui/sui-button/sui-button';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../utils/routes';
-import { friendProfileApi } from 'apps/sit-frontend/src/app/api/friend/friend-profile-api'; // API для Друга
+import { friendProfileApi } from 'apps/sit-frontend/src/app/api/friend/friend-profile-api';
 
 export const FriendCreateProfile = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('Алексей Егошин');
   const [email, setEmail] = useState('friend@mail.ru');
-  const [percent, setPercent] = useState(100); // Поле для процента
+  const [percent, setPercent] = useState(100);
 
-  const [updateProfile] = friendProfileApi.useCreateFriendMutation(); // Мутация для обновления/создания профиля Друга
+  const [updateProfile] = friendProfileApi.useCreateFriendMutation();
 
   useEffect(() => {
-    // Здесь можно загрузить начальные данные, если такие есть, например, из локального хранилища
-    // Но т.к. id не используется, предположим, что профиль создается с нуля
+
   }, []);
 
   return (
@@ -40,7 +39,7 @@ export const FriendCreateProfile = () => {
               label="Процент"
               type="number"
               value={percent}
-              onChange={(e) => setPercent(+e.target.value)} // Изменение процента
+              onChange={(e) => setPercent(+e.target.value)}
             />
           </div>
         </div>
@@ -48,11 +47,11 @@ export const FriendCreateProfile = () => {
           <SuiButton
             onClick={() => {
               updateProfile({
-                body: { // Обернуть данные в поле `body`
-                                 name,
-                                 email,
-                                 percent, // Передача процента
-                               },
+                body: {
+                   name,
+                   email,
+                   percent,
+                },
               })
                 .unwrap()
                // .then(() => navigate(routes.toFriendProfilePage())); // Перенаправление на страницу профиля Друга

@@ -19,6 +19,7 @@ export enum Role {
   CLIENT = 'CLIENT',
   PSYCHO = 'PSYCHO',
   ADMIN = 'ADMIN',
+  PSYCHO_FRIEND = 'PSYCHO_FRIEND'
 }
 
 type JWTPayload = {
@@ -62,6 +63,7 @@ export const useUserRoles = (): {
   readonly roles: Array<Role>
   readonly isPsycho: boolean
   readonly isClient: boolean
+  readonly isFriend: boolean
 } => {
   const roles = useAtomValue(roleAtom)
 
@@ -69,5 +71,6 @@ export const useUserRoles = (): {
     roles,
     isPsycho: roles.includes(Role.PSYCHO),
     isClient: roles.includes(Role.CLIENT),
+    isFriend: roles.includes(Role.PSYCHO_FRIEND)
   }
 }

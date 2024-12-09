@@ -104,12 +104,12 @@ class FriendService(
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    fun createReferralProgram(): String {
+    fun createReferralProgram(): Long {
         val friendship = getFriendship()
         return referralService.createReferralProgram(
             friendId = friendship.friendId,
             psychoId = friendship.psychoId
-        ).toString() // todo возвращать путь до referralProgramController, где по психу будет урл на его слоты
+        )
     }
 
     @Transactional

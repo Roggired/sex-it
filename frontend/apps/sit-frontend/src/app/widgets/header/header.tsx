@@ -5,7 +5,7 @@ import {useUserRoles} from "../../auth/role";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const {isPsycho, isClient} = useUserRoles();
+  const {isPsycho, isClient, isFriend} = useUserRoles();
 
   if (isPsycho) {
     return (
@@ -21,6 +21,22 @@ export const Header = () => {
         <h4 onClick={() => navigate(routes.toLogout())}>Выйти</h4>
       </header>
     );
+  }
+
+  if (isFriend) {
+    return (
+      <header className="header">
+        <h3>SEX-IT</h3>
+        <h4 onClick={() => navigate(routes.toCreateFriendPage())}>Профиль</h4>
+        <h4 onClick={() => navigate(routes.toCreateFriendShipPage())}>
+          Друзья
+        </h4>
+        {/*<h4 onClick={() => navigate(routes.toPsychoSubscriptionPage())}>*/}
+        {/*  Подписка*/}
+        {/*</h4>*/}
+        <h4 onClick={() => navigate(routes.toLogout())}>Выйти</h4>
+      </header>
+    )
   }
 
 
