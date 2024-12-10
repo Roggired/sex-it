@@ -18,7 +18,9 @@ data class FriendRefersView(
 
 // FriendRefersView -- ответ, содержащий информацию дружбе другана и психолога (для психа)
 data class PsychoRefersView(
+    val id: Long,
     val friendName: String,
-    val percent: Int
+    val percent: Int,
+    val status: String
 )
 

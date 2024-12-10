@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import ru.sexit.platform.domain.model.PsychoProfile
 import ru.sexit.platform.domain.model.PsychoProfileForCatalogueProjection
+import ru.sexit.platform.domain.model.PsychoProfileForFriendshipProjection
 
 @Repository
 interface PsychoProfileRepo : JpaRepository<PsychoProfile, Long> {
@@ -49,31 +50,19 @@ interface PsychoProfileRepo : JpaRepository<PsychoProfile, Long> {
 
     @Query(
         """
-            SELECT
-                t.id as id,
-                t.name as name,
-                t.price as price,
-                t.rating as rating
-            FROM (
-                SELECT 
-                    p.id as id,
-                    p.name as name,
-                    p.price as price,
-                    AVG(f.rating) as rating
-                FROM psycho_profiles p
-                LEFT JOIN feedbacks f ON p.id = f.psycho_id
-                WHERE p.id NOT IN (
-                    SELECT psycho_id 
-                    FROM friendship fr 
-                )
-                GROUP BY p.id, p.name, p.price
-            ) AS t
-            ORDER BY t.rating DESC NULLS LAST
+            SELECT 
+                p.id as id, 
+                p.name as name 
+            FROM psycho_profiles p
+            LEFT JOIN friendship fr on p.id = fr.psycho_id 
+            WHERE (fr.friend_id != :friendId OR fr.friend_id is NULL) AND (COALESCE(:name, NULL) IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST(:name AS text), '%')))
         """, nativeQuery = true
     )
     fun findPagedAvailablePsycho(
+        name: String?,
+        friendId: Long,
         pageable: Pageable
-    ): Page<PsychoProfileForCatalogueProjection>
+    ): Page<PsychoProfileForFriendshipProjection>
 
 
     @Modifying
@@ -82,7 +71,8 @@ interface PsychoProfileRepo : JpaRepository<PsychoProfile, Long> {
         UPDATE friendships f
         SET f.status = :status
         WHERE f.psycho_id = :psychoId
-    """, nativeQuery = true)
+    """, nativeQuery = true
+    )
     fun updateFriendshipStatus(
         psychoId: Long,
         status: String

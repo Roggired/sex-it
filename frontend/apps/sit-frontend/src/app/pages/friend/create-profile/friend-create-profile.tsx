@@ -47,6 +47,7 @@ export const FriendCreateProfile = () => {
           <SuiButton
             onClick={() => {
               updateProfile({
+                id: 0,
                 body: {
                    name,
                    email,

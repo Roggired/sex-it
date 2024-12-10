@@ -1,0 +1,12 @@
+ SELECT
+                p.id as id,
+                p.name as name
+            FROM psycho_profiles p
+            LEFT JOIN friendship fr on p.id = fr.psycho_id
+            WHERE fr.friend_id != 1 AND (COALESCE('', NULL) IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', CAST('' AS text), '%')))
+
+
+            SEL*
+                        FROM psycho_profiles p
+                        LEFT JOIN friendship fr on p.id = fr.psycho_id;
+

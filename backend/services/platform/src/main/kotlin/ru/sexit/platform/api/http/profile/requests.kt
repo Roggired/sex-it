@@ -24,3 +24,8 @@ data class FilterPsychoRequest(
         val minRating: Double? = null,
     )
 }
+
+
+data class FilterAvailablePsycho(
+    val name: String? = null
+)

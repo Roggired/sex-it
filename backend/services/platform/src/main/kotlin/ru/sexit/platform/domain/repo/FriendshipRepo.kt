@@ -31,6 +31,17 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
     )
     fun getFriendshipProjectionForPsycho(psychoId: Long): FriendshipProjectionByPsycho
 
-    fun findFriendshipByFriendId(friendId: Long): Friendship?
+
+    @Query(
+        """
+            SELECT COUNT(*) 
+                FROM friendship fr
+            WHERE fr.friend_id = :friendId AND fr.psycho_id = :psychoId
+        """, nativeQuery = true
+    )
+    fun findFriendshipByFriendIdAndPsychoId(friendId: Long, psychoId: Long): Int
+
+
+    fun findAllByFriendId(friendId: Long): List<Friendship>?
 
 }

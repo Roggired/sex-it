@@ -2,6 +2,7 @@ package ru.sexit.platform.domain.model
 
 import jakarta.persistence.*
 import ru.sexit.platform.api.http.profile.PsychoProfileForCatalogueView
+import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 
 @Entity
 @Table(name = "psycho_profiles")
@@ -41,4 +42,15 @@ fun PsychoProfileForCatalogueProjection.toView(): PsychoProfileForCatalogueView 
     name = name,
     price = price,
     rating = rating
+)
+
+
+interface PsychoProfileForFriendshipProjection {
+    val id: Long
+    val name: String
+}
+
+fun PsychoProfileForFriendshipProjection.toView(): PsychoProfileForFriendshipView = PsychoProfileForFriendshipView(
+    id = id,
+    name = name
 )

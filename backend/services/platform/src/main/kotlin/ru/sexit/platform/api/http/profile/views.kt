@@ -61,3 +61,8 @@ data class PsychoProfileForCatalogueView(
     val price: Int,
     val rating: Double?,
 )
+
+data class PsychoProfileForFriendshipView(
+    val id: Long,
+    val name: String,
+)

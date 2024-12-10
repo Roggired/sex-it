@@ -6,10 +6,10 @@ import { Friend } from 'apps/sit-frontend/src/app/api/friend/model';
 export const friendProfileApi = gatewayApi.injectEndpoints({
   endpoints: (build) => ({
     // Эндпоинт для создания друга
-    createFriend: build.mutation<Friend, { body: CreateFriendProfileRequest }>({
-      query: ({ body }) => ({
-        url: `friend/profile`,
-        method: 'POST',
+    createFriend: build.mutation<Friend, {id: number, body: CreateFriendProfileRequest }>({
+      query: ({ id, body }) => ({
+        url: `friend/profile/${id}`,
+        method: 'PATCH',
         body,
       }),
     }),

@@ -31,3 +31,19 @@ export interface UpdateReferRequest {
   psychoId: number;
   status: string;
 }
+
+export interface FilterAvailablePsycho {
+  name?: string
+}
+
+export interface PsychoProfileForFriendshipView {
+    id: number
+    name: string
+}
+
+export interface PsychoRefersView {
+  id: number
+  name: string
+  percent: number
+  status: string
+  }

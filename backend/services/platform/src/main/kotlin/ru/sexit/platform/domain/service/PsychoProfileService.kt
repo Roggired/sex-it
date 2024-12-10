@@ -8,10 +8,8 @@ import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.profile.FilterPsychoRequest
 import ru.sexit.platform.api.http.profile.PsychoProfileRequest
-import ru.sexit.platform.domain.model.FriendshipProjectionByPsycho
-import ru.sexit.platform.domain.model.PsychoProfile
-import ru.sexit.platform.domain.model.PsychoProfileForCatalogueProjection
-import ru.sexit.platform.domain.model.PsychoRating
+import ru.sexit.platform.api.http.referralprogram.PsychoRefersView
+import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.FeedbackRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
 import ru.sexit.platform.infrastructure.exception.AlreadyExistException
@@ -27,6 +25,7 @@ import ru.sexit.platform.utils.log
 class PsychoProfileService(
     private val psychoProfileRepo: PsychoProfileRepo,
     private val feedbackRepo: FeedbackRepo,
+    private val friendService: FriendService,
 
     private val keycloakAdminAPI: KeycloakAdminAPI,
     @Qualifier("keycloakAdminIntegrationRetrofitClient")
@@ -136,4 +135,9 @@ class PsychoProfileService(
             minRating = request.filters.minRating,
             pageable = PageRequest.of(pageNumber, pageSize)
         )
+
+    fun getFriendshipProjectionForPsycho(pageNumber: Int, pageSize: Int): Page<PsychoRefersView>{
+        val psychoId = getMyProfile().id
+        return friendService.getFriendsByPsycho(psychoId, pageNumber,pageSize).map { it.toView() }
+    }
 }

@@ -22,5 +22,7 @@ export const routes = {
   toCreateFriendPage: () => '/sexit/friend/create-profile',
   toCreateFriendShipPage: () => '/sexit/friend/create-friendship',
 
+  toCreateFriendshipPsychoPage: () => '/sexit/psycho/my-friend',
+
   toAdmin: () => '/sexit/admin',
 };

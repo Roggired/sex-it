@@ -2,18 +2,15 @@ package ru.sexit.platform.api.http.referralprogram
 
 import org.springframework.web.bind.annotation.*
 import ru.sexit.platform.api.http.PageView
-import ru.sexit.platform.api.http.applications.ApplicationView
-import ru.sexit.platform.api.http.applications.NewApplicationRequest
-import ru.sexit.platform.api.http.profile.PsychoProfileForCatalogueView
+import ru.sexit.platform.api.http.profile.FilterAvailablePsycho
+import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 import ru.sexit.platform.api.http.profile.friend.model.FriendshipRequest
-import ru.sexit.platform.api.http.slot.SlotMonthView
 import ru.sexit.platform.api.http.toView
 import ru.sexit.platform.domain.model.FriendshipProjectionByPsycho
-import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.service.FriendService
 import ru.sexit.platform.domain.service.FriendshipService
+import ru.sexit.platform.domain.service.PsychoProfileService
 import ru.sexit.platform.domain.service.ReferralService
-import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 
 
 /**
@@ -33,17 +30,20 @@ uc:
 class ReferralProgramController(
     private val referralService: ReferralService,
     private val profileService: FriendService,
+    private val psychoService: PsychoProfileService,
     private val friendshipService: FriendshipService
 ) {
 
-    @GetMapping("/available-psycho")
+    @PostMapping("/available-psycho")
     fun getAllAvailablePsycho(
+        @RequestBody request: FilterAvailablePsycho,
         @RequestParam(required = false) pageNumber: Int? = 0,
         @RequestParam(required = false) pageSize: Int? = 6,
-    ): PageView<PsychoProfileForCatalogueView> = profileService.getAvailablePsycho(
+    ): PageView<PsychoProfileForFriendshipView> = profileService.getAvailablePsycho(
+        request.name,
         pageNumber = pageNumber ?: 0,
         pageSize = pageSize ?: 6,
-    ).toView { it.toView() }
+    ).toView()
 
     @PostMapping("/create-friend")
     fun createFriendship(
@@ -59,8 +59,13 @@ class ReferralProgramController(
 
     @GetMapping("/my-friend")
     fun getFriendFriendshipForPsycho(
-    ): FriendshipProjectionByPsycho {
-        return friendshipService.getFriendshipProjectionForPsycho()
+        @RequestParam(required = false) pageNumber: Int? = 0,
+        @RequestParam(required = false) pageSize: Int? = 6,
+    ): PageView<PsychoRefersView> {
+        return psychoService.getFriendshipProjectionForPsycho(
+            pageNumber = pageNumber ?: 0,
+            pageSize = pageSize ?: 6,
+        ).toView()
     }
 
     @PostMapping("/my-friend")
@@ -71,9 +76,19 @@ class ReferralProgramController(
     }
 
     @PostMapping("/create-refer")
-    fun createReferralProgram(): Long {
-        return profileService.createReferralProgram()
+    fun createReferralProgram(
+        @RequestParam(required = true) psychoId: Long
+    ): Long {
+        return profileService.createReferralProgram(psychoId)
     }
+
+    @PostMapping("/cancel-refer")
+    fun cancelReferralProgram(
+        @RequestParam(required = true) referId: Long
+    ) {
+        referralService.cancelReferralProgram(referId)
+    }
+
 
 //    @GetMapping("/{referId}") // вот сюда вот ссылка при рефералочке
 //    fun getReferralProgram(

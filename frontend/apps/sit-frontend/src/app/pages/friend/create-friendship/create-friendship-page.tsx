@@ -19,6 +19,9 @@ export const FriendshipPage = () => {
 
   // TODO: добавить параметр для поиска по имени психолога
   const { data: availablePsychos } = referralProgramApi.useGetAvailablePsychoQuery({
+    request: {
+      name: undefined
+      },
     pageNumber: 0,
     pageSize: 10000,
   });
@@ -99,7 +102,7 @@ const PsychoCard = ({
   // TODO: add cancel invite request
 
   const onGetReferralLink = () => {
-    createReferralProgram()
+    createReferralProgram(id)
       .then((result) => result.data)
       .then((referralId) => alert(`http://localhost:3000/sexit/client/psycho-card/${id}?referralId=${referralId}`))
   }

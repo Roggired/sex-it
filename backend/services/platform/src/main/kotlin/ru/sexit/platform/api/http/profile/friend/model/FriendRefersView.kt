@@ -6,6 +6,7 @@ import ru.sexit.platform.domain.model.FriendProfile
 
 
 data class FriendProfileView(
+    val id: Long,
     @field:NotBlank
     val name: String,
     @field:NotBlank
@@ -16,6 +17,7 @@ data class FriendProfileView(
 
 
 fun FriendProfile.toView(): FriendProfileView = FriendProfileView(
+    id = id,
     name = name,
     email = email,
     percent = percent,

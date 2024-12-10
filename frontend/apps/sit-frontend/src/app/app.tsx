@@ -23,6 +23,7 @@ import {FeedbackPage} from "./pages/psycho/feedback/feedback-page";
 import { AdminPage } from './pages/admin/AdminPage';
 import {FriendCreateProfile} from './pages/friend/create-profile/friend-create-profile';
 import {FriendshipPage} from './pages/friend/create-friendship/create-friendship-page';
+import {FriendshipStatusForPsychoPage} from './pages/psycho/friendship/friendship';
 //import {FriendshipPage} from './pages/friend/application-view/friendship-status-page';
 
 
@@ -56,6 +57,14 @@ const psychoRoutes: RouteObject[] = [
     element: (
       <>
         <SubscriptionPage/>
+      </>
+    ),
+  },
+{
+    path: 'psycho/my-friend',
+    element: (
+      <>
+        <FriendshipStatusForPsychoPage/>
       </>
     ),
   },

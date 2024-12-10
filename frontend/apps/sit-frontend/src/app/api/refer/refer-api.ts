@@ -1,15 +1,17 @@
 import { gatewayApi } from 'apps/sit-frontend/src/app/api/store';
-import { PsychoProfileForCatalogueView, FriendshipRequest, UpdateReferRequest, NewApplicationRequest, SlotMonthView, ApplicationView } from 'apps/sit-frontend/src/app/api/refer/model';
+import { FilterAvailablePsycho, PsychoProfileForFriendshipView, FriendshipRequest, UpdateReferRequest, NewApplicationRequest, SlotMonthView, ApplicationView, PsychoRefersView} from 'apps/sit-frontend/src/app/api/refer/model';
 import { PageView } from '../common';
 
 export const referralProgramApi = gatewayApi.injectEndpoints({
   endpoints: (build) => ({
     // Получение доступных психологов (для друга) с пагинацией
-    getAvailablePsycho: build.query<PageView<PsychoProfileForCatalogueView>, { pageNumber: number; pageSize: number }>({
-      query: ({ pageNumber, pageSize }) => ({
+    getAvailablePsycho: build.query<PageView<PsychoProfileForFriendshipView>, {request: FilterAvailablePsycho;  pageNumber: number; pageSize: number }>({
+      query: ({ request, pageNumber, pageSize }) => ({
         url: 'referral/available-psycho',
+        method: 'POST',
+        body: request,
         params: { pageNumber, pageSize }, // передаем параметры пагинации
-        provideTags: ['FriendshipRequests']
+        providesTags: ['FriendshipRequests']
       }),
     }),
 
@@ -19,7 +21,7 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         url: 'referral/create-friend',
         method: 'POST',
         body: friendshipRequest,
-        invalidateTags: ['FriendshipRequests']
+        invalidatesTags: ['FriendshipRequests']
       }),
     }),
 
@@ -31,10 +33,11 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
       }),
     }),
 
-    // Получение статуса дружбы для психа по ID
-    getFriendFriendshipForPsycho: build.query<{ friendName: string; percent: number }, void>({
-      query: () => ({
+    // Получение дружбы для психа
+    getFriendFriendshipForPsycho: build.query<PageView<PsychoRefersView>, { pageNumber: number, pageSize: number }>({
+      query: ({ pageNumber, pageSize) => ({
         url: `referral/my-friend/`,
+        params: { pageNumber, pageSize }, // передаем параметры пагинации
         method: 'GET',
       }),
     }),
@@ -49,9 +52,9 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
     }),
 
     // Создание реферальной программы
-    createReferralProgram: build.mutation<number, void>({
-      query: () => ({
-        url: 'referral/create-refer',
+    createReferralProgram: build.mutation<number, number>({
+      query: (psychoId) => ({
+        url: `referral/create-refer?psychoId=${psychoId}`,
         method: 'POST',
       }),
     }),

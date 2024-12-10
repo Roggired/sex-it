@@ -3,6 +3,7 @@ package ru.sexit.platform.domain.service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 import ru.sexit.platform.api.http.referralprogram.UpdateReferRequest
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.FriendshipRepo
@@ -22,9 +23,9 @@ class FriendshipService(
         psychoId: Long,
         friendId: Long
     ) {
-        val friend = friendshipRepo.findFriendshipByFriendId(friendId)
-        if (friend != null) {
-            throw AlreadyExistException("friendship of friend: $friendId already exists")
+        val count = friendshipRepo.findFriendshipByFriendIdAndPsychoId(friendId, psychoId)
+        if (count > 0) {
+            throw AlreadyExistException("friendship of friend: $friendId and psycho: $psychoId already exists")
         }
         friendshipRepo.save(
             Friendship(
@@ -49,12 +50,16 @@ class FriendshipService(
 
     // getAllAvailablePsycho -- получаем всех доступных психологов (без дружбы)
     fun getAllAvailablePsycho(
+        name: String?,
+        friendId: Long,
         pageNumber: Int,
         pageSize: Int
-    ): Page<PsychoProfileForCatalogueProjection> {
+    ): Page<PsychoProfileForFriendshipView> {
         return psychoRepo.findPagedAvailablePsycho(
+            name = name,
+            friendId = friendId,
             pageable = PageRequest.of(pageNumber, pageSize)
-        )
+        ).map { it.toView() }
     }
 
     // getFriendship -- получаем дружбу с психологом (смотрим статус по факту)
@@ -66,8 +71,8 @@ class FriendshipService(
 
     fun getFriendship(
         friendId: Long
-    ): Friendship {
-        return friendshipRepo.findFriendshipByFriendId(friendId)
+    ): List<Friendship> {
+        return friendshipRepo.findAllByFriendId(friendId)
             ?: throw NotFoundException("there is no friendship by this id: $friendId")
     }
 
