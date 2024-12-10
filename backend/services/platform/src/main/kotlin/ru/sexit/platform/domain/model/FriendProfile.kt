@@ -37,11 +37,13 @@ class Friendship(
 )
 
 interface FriendshipProjectionByFriend {
+    val id: Long
     val name: String
     val status: String
 }
 
 fun FriendshipProjectionByFriend.toView(): FriendRefersView = FriendRefersView(
+    id = id,
     psychoName = name,
     friendshipStatus = status
 )

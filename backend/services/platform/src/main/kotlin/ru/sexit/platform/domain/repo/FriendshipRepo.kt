@@ -14,7 +14,7 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
 
     @Query(
         """
-            SELECT p.name as name, f.status as status
+            SELECT p.id as id, p.name as name, f.status as status
                 FROM friendship f
                 LEFT JOIN psycho_profiles p on p.id = f.psycho_id
             WHERE f.friend_id = :friendId

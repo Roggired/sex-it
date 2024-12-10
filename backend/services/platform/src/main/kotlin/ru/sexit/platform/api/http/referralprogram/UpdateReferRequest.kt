@@ -12,6 +12,7 @@ data class UpdateReferRequest(
 
 // FriendRefersView -- ответ, содержащий информацию дружбе другана и психолога (для другана)
 data class FriendRefersView(
+    val id: Long,
     val psychoName: String,
     val friendshipStatus: String
 )
