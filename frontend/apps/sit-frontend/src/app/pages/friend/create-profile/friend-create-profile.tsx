@@ -21,7 +21,6 @@ export const FriendCreateProfile = () => {
   const [updateProfile] = friendProfileApi.useCreateFriendMutation();
 
   useEffect(() => {
-    console.log("her")
     if (currentProfile) {
       setId(currentProfile.id)
       setName(currentProfile.name)
