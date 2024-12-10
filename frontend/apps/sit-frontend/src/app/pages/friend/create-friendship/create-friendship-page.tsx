@@ -13,8 +13,6 @@ export const FriendshipPage = () => {
     'ADD_FRIEND' | 'CURRENT' | 'REJECTED'
   >('ADD_FRIEND');
 
-  // TODO: вернуть всех текущий друзей-психологов
-  // TODO: добавить идентификатор психолога в ответ
   // TODO: добавить запрос на отмену заявки
   const { data: friendshipStatusData } = referralProgramApi.useGetFriendFriendshipQuery();
 
@@ -49,37 +47,43 @@ export const FriendshipPage = () => {
               />
             ))
           }
-          { availablePsychos && friendshipStatusData && availablePsychos.content.length > 0 && <div className="separator"></div> }
-          { friendshipStatusData && friendshipStatusData.friendshipStatus === 'CREATED' && <PsychoCard
-              key={friendshipStatusData.psychoName}
-              id={1}
-              psycho={friendshipStatusData.psychoName}
+          { availablePsychos && friendshipStatusData && availablePsychos.content.length > 0 && friendshipStatusData.content.length > 0 && <div className="separator"></div> }
+          { friendshipStatusData && friendshipStatusData.content.filter((el) => el.friendshipStatus === 'CREATED').map((el) => (
+            <PsychoCard
+              key={el.id}
+              id={el.id}
+              psycho={el.psychoName}
               state={'PENDING'}
             />
+          ))
           }
           { !availablePsychos && !friendshipStatusData && <SuiLoader/> }
         </div>
       }
       {
         currFilter === 'CURRENT' && <div className="client-applications__apps">
-          {friendshipStatusData && friendshipStatusData.friendshipStatus === 'ACCEPTED' && <PsychoCard
-            key={friendshipStatusData.psychoName}
-            id={1}
-            psycho={friendshipStatusData.psychoName}
-            state={'CURRENT'}
-          />
+          {friendshipStatusData && friendshipStatusData.content.filter((el) => el.friendshipStatus === 'ACCEPTED').map((el) => (
+            <PsychoCard
+              key={el.id}
+              id={el.id}
+              psycho={el.psychoName}
+              state={'CURRENT'}
+            />
+          ))
           }
           {!availablePsychos && !friendshipStatusData && <SuiLoader/>}
         </div>
       }
       {
         currFilter === 'REJECTED' && <div className="client-applications__apps">
-          {friendshipStatusData && friendshipStatusData.friendshipStatus === 'REJECTED' && <PsychoCard
-            key={friendshipStatusData.psychoName}
-            id={1}
-            psycho={friendshipStatusData.psychoName}
-            state={'REJECTED'}
-          />
+          {friendshipStatusData && friendshipStatusData.content.filter((el) => el.friendshipStatus === 'REJECTED').map((el) => (
+            <PsychoCard
+              key={el.id}
+              id={el.id}
+              psycho={el.psychoName}
+              state={'REJECTED'}
+            />
+          ))
           }
           {!availablePsychos && !friendshipStatusData && <SuiLoader/>}
         </div>

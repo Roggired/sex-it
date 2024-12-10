@@ -12,6 +12,15 @@ export const friendProfileApi = gatewayApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
+      invalidatesTags: ['FriendProfile']
     }),
+
+    geyMyProfile: build.query<Friend, void>({
+      query: () => ({
+        url: 'friend/profile/my',
+        method: 'GET'
+      }),
+      providesTags: ['FriendProfile']
+    })
   }),
 });

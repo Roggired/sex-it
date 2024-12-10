@@ -26,10 +26,11 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
     }),
 
     // Получение статуса дружбы для другана
-    getFriendFriendship: build.query<{ psychoName: string; friendshipStatus: string }, void>({
+    getFriendFriendship: build.query<PageView<{ id: number; psychoName: string; friendshipStatus: string }>, void>({
       query: () => ({
         url: 'referral/my-psycho',
         method: 'GET',
+        params: { pageNumber: 0, pageSize: 10000 }
       }),
       providesTags: ['Friendships']
     }),
