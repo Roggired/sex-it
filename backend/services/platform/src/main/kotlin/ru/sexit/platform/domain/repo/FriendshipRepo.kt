@@ -1,5 +1,7 @@
 package ru.sexit.platform.domain.repo
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
@@ -19,7 +21,7 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
            
         """, nativeQuery = true
     )
-    fun getFriendshipProjectionForFriend(friendId: Long): FriendshipProjectionByFriend?
+    fun getFriendshipProjectionForFriend(friendId: Long, pageable: Pageable): Page<FriendshipProjectionByFriend>
 
     @Query(
         """

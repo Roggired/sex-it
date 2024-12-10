@@ -125,9 +125,9 @@ class FriendService(
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    fun getFriendshipProjection(): FriendRefersView? {
+    fun getFriendshipProjection(pageNumber: Int, pageSize: Int): Page<FriendRefersView> {
         val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
-        return friendshipService.getFriendshipProjectionForFriend(friendId)?.toView()
+        return friendshipService.getFriendshipProjectionForFriend(friendId, pageable = PageRequest.of(pageNumber, pageSize)).map { it.toView() }
     }
 
     fun getFriendship(): List<Friendship> {

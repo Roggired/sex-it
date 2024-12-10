@@ -2,6 +2,7 @@ package ru.sexit.platform.domain.service
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
@@ -67,8 +68,9 @@ class FriendshipService(
     // getFriendship -- получаем дружбу с психологом (смотрим статус по факту)
     fun getFriendshipProjectionForFriend(
         friendId: Long,
-    ): FriendshipProjectionByFriend? {
-        return friendshipRepo.getFriendshipProjectionForFriend(friendId)
+        pageable: Pageable,
+    ): Page<FriendshipProjectionByFriend> {
+        return friendshipRepo.getFriendshipProjectionForFriend(friendId, pageable)
     }
 
     fun getFriendship(

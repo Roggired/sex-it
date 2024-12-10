@@ -53,8 +53,14 @@ class ReferralProgramController(
     )
 
     @GetMapping("/my-psycho")
-    fun getFriendFriendship(): FriendRefersView? {
-        return profileService.getFriendshipProjection()
+    fun getFriendFriendship(
+        @RequestParam(required = false) pageNumber: Int? = 0,
+        @RequestParam(required = false) pageSize: Int? = 6,
+    ): PageView<FriendRefersView> {
+        return profileService.getFriendshipProjection(
+            pageNumber = pageNumber ?: 0,
+            pageSize = pageSize ?: 6,
+        ).toView()
     }
 
     @GetMapping("/my-friend")
