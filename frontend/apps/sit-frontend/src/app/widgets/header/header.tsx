@@ -18,6 +18,9 @@ export const Header = () => {
         <h4 onClick={() => navigate(routes.toPsychoSubscriptionPage())}>
           Подписка
         </h4>
+        <h4 onClick={() => navigate(routes.toCreateFriendshipPsychoPage())}>
+          Друганы
+        </h4>
         <h4 onClick={() => navigate(routes.toLogout())}>Выйти</h4>
       </header>
     );

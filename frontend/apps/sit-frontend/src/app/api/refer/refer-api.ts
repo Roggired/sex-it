@@ -11,8 +11,8 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         method: 'POST',
         body: request,
         params: { pageNumber, pageSize }, // передаем параметры пагинации
-        providesTags: ['FriendshipRequests']
       }),
+      providesTags: ['FriendshipRequests']
     }),
 
     // Создание запроса на дружбу (друган)
@@ -21,8 +21,8 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         url: 'referral/create-friend',
         method: 'POST',
         body: friendshipRequest,
-        invalidatesTags: ['FriendshipRequests']
       }),
+      invalidatesTags: ['FriendshipRequests', 'Friendships']
     }),
 
     // Получение статуса дружбы для другана
@@ -31,15 +31,17 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         url: 'referral/my-psycho',
         method: 'GET',
       }),
+      providesTags: ['Friendships']
     }),
 
     // Получение дружбы для психа
     getFriendFriendshipForPsycho: build.query<PageView<PsychoRefersView>, { pageNumber: number, pageSize: number }>({
-      query: ({ pageNumber, pageSize) => ({
-        url: `referral/my-friend/`,
+      query: ({ pageNumber, pageSize }) => ({
+        url: `referral/my-friend`,
         params: { pageNumber, pageSize }, // передаем параметры пагинации
         method: 'GET',
       }),
+      providesTags: ['FriendsOfPsycho']
     }),
 
     // Обновление статуса дружбы (псих)
@@ -49,6 +51,7 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         method: 'POST',
         body: request,
       }),
+      invalidatesTags: ['FriendsOfPsycho']
     }),
 
     // Создание реферальной программы

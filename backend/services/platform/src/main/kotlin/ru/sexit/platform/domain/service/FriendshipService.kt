@@ -3,6 +3,7 @@ package ru.sexit.platform.domain.service
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 import ru.sexit.platform.api.http.referralprogram.UpdateReferRequest
 import ru.sexit.platform.domain.model.*
@@ -38,6 +39,7 @@ class FriendshipService(
     }
 
     // updateFriendship -- дружба между друганом и психологом подтверждается/отрицается, инициатор: психолог
+    @Transactional
     fun updateFriendship(
         request: UpdateReferRequest
     ) {

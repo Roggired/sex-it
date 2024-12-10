@@ -16,7 +16,14 @@ interface FriendRepo : JpaRepository<FriendProfile, Long> {
 
     @Query(
         """
-            select f.id as id, f.name as name, f.percent as percent, fr.status as status from friend f right join friendship fr on f.id = fr.friend_id where fr.psycho_id = :psychoId
+            select 
+                f.id as id, 
+                f.name as name, 
+                f.percent as percent, 
+                fr.status as status 
+            from friend_profiles f 
+            right join friendship fr on f.id = fr.friend_id 
+            where fr.psycho_id = :psychoId
         """, nativeQuery = true
     )
     fun getFriendsByPsychoId(

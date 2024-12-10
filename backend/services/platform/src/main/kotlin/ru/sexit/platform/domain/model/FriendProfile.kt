@@ -49,13 +49,13 @@ fun FriendshipProjectionByFriend.toView(): FriendRefersView = FriendRefersView(
 interface FriendshipProjectionByPsycho {
     val id: Long
     val name: String
-    val friendPercent: Int
+    val percent: Int
     val status: String
 }
 
 fun FriendshipProjectionByPsycho.toView(): PsychoRefersView = PsychoRefersView(
     id = id,
     friendName = name,
-    percent = friendPercent,
+    percent = percent,
     status = status
 )

@@ -43,7 +43,7 @@ export interface PsychoProfileForFriendshipView {
 
 export interface PsychoRefersView {
   id: number
-  name: string
+  friendName: string
   percent: number
   status: string
-  }
+}

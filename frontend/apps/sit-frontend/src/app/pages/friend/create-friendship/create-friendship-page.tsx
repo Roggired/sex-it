@@ -8,6 +8,7 @@ import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
 
 export const FriendshipPage = () => {
   const [search, setSearch] = useState('')
+  const [finalSearch, setFinalSearch] = useState<string | undefined>(undefined)
   const [currFilter, setCurrFilter] = useState<
     'ADD_FRIEND' | 'CURRENT' | 'REJECTED'
   >('ADD_FRIEND');
@@ -17,11 +18,10 @@ export const FriendshipPage = () => {
   // TODO: добавить запрос на отмену заявки
   const { data: friendshipStatusData } = referralProgramApi.useGetFriendFriendshipQuery();
 
-  // TODO: добавить параметр для поиска по имени психолога
   const { data: availablePsychos } = referralProgramApi.useGetAvailablePsychoQuery({
     request: {
-      name: undefined
-      },
+      name: finalSearch
+    },
     pageNumber: 0,
     pageSize: 10000,
   });
@@ -36,7 +36,7 @@ export const FriendshipPage = () => {
       </div>
       <div className="client-applications__filter">
         <SuiInput value={search} onChange={e => setSearch(e.target.value)} placeholder="Поиск по психологу"/>
-        <SuiButton onClick={() => {}}>Поиск</SuiButton>
+        <SuiButton onClick={() => setFinalSearch(search)}>Поиск</SuiButton>
       </div>
       {
         currFilter === 'ADD_FRIEND' && <div className="client-applications__apps">

@@ -1,97 +1,101 @@
 import { referralProgramApi } from 'apps/sit-frontend/src/app/api/refer/refer-api';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAtomValue } from 'jotai/index';
-import { userDataAtom } from '../../../auth/auth-cache';
-import { routes } from 'apps/sit-frontend/src/app/utils/routes';
+import { useState } from 'react';
+import { SuiButton } from '../../../sui/sui-button/sui-button';
+import { SuiLoader } from '../../../sui/sui-loader/sui-loder';
 
 export const FriendshipStatusForPsychoPage = () => {
-  const navigate = useNavigate();
-  const { id } = useAtomValue(userDataAtom); // Получаем ID пользователя (если нужно)
-
-//   const [status, setStatus] = useState<{ psychoName: string; friendshipStatus: string } | null>(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
+  const [currFilter, setCurrFilter] = useState<
+    'PENDING' | 'ACCEPTED' | 'REJECTED'
+  >('PENDING');
 
   // Используем query для получения данных о статусе дружбы с психологом
-    const { data: friend } = referralProgramApi.useGetFriendFriendshipForPsychoQuery({
-      pageNumber: 0,
-      pageSize: 10000,
-    });
-
-//   useEffect(() => {
-//     if (loading) {
-//       setLoading(true);
-//     } else if (error) {
-//       setError("Ошибка при получении статуса дружбы");
-//       setLoading(false);
-//     } else {
-//       setStatus(data ?? null); // Если запрос успешен, сохраняем полученные данные в состояние
-//       setLoading(false);
-//     }
-//   }, [isLoading, isError, data]);
-//
-//   if (loading) {
-//     return <div className="loading">Загрузка...</div>;
-//   }
-//
-//   if (error) {
-//     return <div className="error-message">{error}</div>;
-//   }
-//
-//   if (!status) {
-//     return <div>Статус дружбы не найден.</div>;
-//   }
+  const { data: friends } = referralProgramApi.useGetFriendFriendshipForPsychoQuery({
+    pageNumber: 0,
+    pageSize: 10000,
+  });
 
   return (
-    <div className="friendship-status">
-      <h1>Статус дружбы с психологом</h1>
-      <div className="friendship-status__info">
-      { availablePsychos && availablePsychos.content.map((friend) => (
-                    <FriendCard
-                      key={friend.id}
-                      id={friend.id}
-                      friend={friend.name}
-                      status={friend.status}
-                    />
-                  ))
-                }
+    <div className="client-applications">
+      <div className="client-applications__breadcrumbs">
+        <span className={currFilter === 'PENDING' ? 'chosen' : ''} onClick={() => setCurrFilter('PENDING')}>Ожидающие заявки</span>
+        <span className={currFilter === 'ACCEPTED' ? 'chosen' : ''}
+              onClick={() => setCurrFilter('ACCEPTED')}>/ Друзья</span>
+        <span className={currFilter === 'REJECTED' ? 'chosen' : ''} onClick={() => setCurrFilter('REJECTED')}>/ Отклоненные заявки</span>
       </div>
-      <div className="friendship-status__btns">
-        <button
-          className="primary"
-         // onClick={() => navigate(routes.toBack())}
-        >
-          Назад
-        </button>
-        <button
-          className="secondary"
-         // onClick={() => navigate(routes.toReferralProgram())}
-        >
-          Перейти к программе
-        </button>
-      </div>
+      {
+        currFilter === 'PENDING' && <div className="client-applications__apps">
+          { friends && friends.content.filter((friend) => friend.status === 'CREATED').map((friend) => (
+            <FriendCard
+              key={friend.id}
+              id={friend.id}
+              friendName={friend.friendName}
+              status={'PENDING'}
+            />
+          ))
+          }
+          { !friends && <SuiLoader/> }
+        </div>
+      }
+      {
+        currFilter === 'ACCEPTED' && <div className="client-applications__apps">
+          {friends && friends.content.filter((friend) => friend.status === 'ACCEPTED').map((friend) => (
+            <FriendCard
+              key={friend.id}
+              id={friend.id}
+              friendName={friend.friendName}
+              status={'ACCEPTED'}
+            />
+          ))
+          }
+          { !friends && <SuiLoader/> }
+        </div>
+      }
+      {
+        currFilter === 'REJECTED' && <div className="client-applications__apps">
+          { friends && friends.content.filter((friend) => friend.status === 'REJECTED').map((friend) => (
+            <FriendCard
+              key={friend.id}
+              id={friend.id}
+              friendName={friend.friendName}
+              status={'REJECTED'}
+            />
+          ))
+          }
+          { !friends && <SuiLoader/> }
+        </div>
+      }
     </div>
   );
 };
 
 const FriendCard = ({
-  friend,
+  friendName,
   id,
-  percent,
   status,
 }: {
   readonly id: number;
-  readonly friend: string;
-  readonly percent: number
-  readonly status: string
+  readonly friendName: string;
+  readonly status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
 }) => {
+  const [changeStatus] = referralProgramApi.useUpdateFriendshipMutation()
 
   return (
     <div className="client-applications__apps__entry">
       <div>
-        <b>{friend}</b>
+        <b>{friendName}</b>
       </div>
+      {
+        status === 'PENDING' && (
+          <div style={{display: 'flex', flexDirection: 'row', gap: '16px'}}>
+            <SuiButton onClick={() => changeStatus({ psychoId: id, status: 'ACCEPTED' })}>
+              Принять
+            </SuiButton>
+            <SuiButton onClick={() => changeStatus({ psychoId: id, status: 'REJECTED' })} buttonType='secondary'>
+              Отклонить
+            </SuiButton>
+          </div>
+        )
+      }
     </div>
   );
 };
