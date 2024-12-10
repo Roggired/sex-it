@@ -52,6 +52,7 @@ class ReferralProgramController(
         psychoId = request.psychoId.toLong()
     )
 
+    //FIXME добавить фильтр по имени
     @GetMapping("/my-psycho")
     fun getFriendFriendship(
         @RequestParam(required = false) pageNumber: Int? = 0,
@@ -88,12 +89,37 @@ class ReferralProgramController(
         return profileService.createReferralProgram(psychoId)
     }
 
-    @PostMapping("/cancel-refer")
-    fun cancelReferralProgram(
-        @RequestParam(required = true) referId: Long
-    ) {
-        referralService.cancelReferralProgram(referId)
+    @GetMapping("/my-refer")
+    fun getMyReferralPrograms(
+        @RequestParam(required = false) pageNumber: Int? = 0,
+        @RequestParam(required = false) pageSize: Int? = 6,
+    ): PageView<ReferralProgramView> {
+        return profileService.getReferralProgramByFriend(
+            pageNumber = pageNumber ?: 0,
+            pageSize = pageSize ?: 6
+        ).toView()
     }
+
+    @PostMapping("/my-refer/{id}")
+    fun paidReferralProgram(
+        @PathVariable("id") referId: Long
+    ) {
+        referralService.updateReferralPaidStatus(referId)
+    }
+
+    @DeleteMapping("/my-friend")
+    fun deleteFriendshipByFriend(
+        @PathVariable(required = true) friendshipId: Long
+    ) {
+        friendshipService.deleteFriendshipByFriend(friendshipId)
+    }
+
+//    @PostMapping("/cancel-refer")
+//    fun cancelReferralProgram(
+//        @RequestParam(required = true) referId: Long
+//    ) {
+//        referralService.cancelReferralProgram(referId)
+//    }
 
 
 //    @GetMapping("/{referId}") // вот сюда вот ссылка при рефералочке

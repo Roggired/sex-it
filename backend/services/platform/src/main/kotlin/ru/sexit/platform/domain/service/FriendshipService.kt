@@ -87,4 +87,9 @@ class FriendshipService(
             psychoRepo.findByUserId(getRequestAuthorUserInfo().id) ?: throw NotFoundException("psycho not found")
         return friendshipRepo.getFriendshipProjectionForPsycho(psycho.id)
     }
+
+    @Transactional
+    fun deleteFriendshipByFriend(friendshipId: Long) {
+        friendshipRepo.deleteById(friendshipId)
+    }
 }

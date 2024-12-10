@@ -1,11 +1,16 @@
 package ru.sexit.platform.domain.service
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import ru.sexit.platform.api.http.referralprogram.ReferralProgramView
+import ru.sexit.platform.domain.model.PaidStatus
 import ru.sexit.platform.domain.model.ReferralProgram
 import ru.sexit.platform.domain.model.ReferralProgramStatus
+import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.repo.ReferralProgramRepo
 import ru.sexit.platform.infrastructure.exception.NotFoundException
 
@@ -26,6 +31,7 @@ class ReferralService(
                 friendId = friendId,
                 applicationId = 0L,
                 status = ReferralProgramStatus.CREATED.toString(),
+                paidStatus = PaidStatus.NOT_PAID.toString(),
             )
         )
         return referralProgram.id
@@ -35,8 +41,18 @@ class ReferralService(
         return referralProgramRepo.findById(referId).orElseThrow { NotFoundException("referId not found") }
     }
 
+    fun getReferralProgramByFriendId(friendId: Long, pageNumber: Int, pageSize: Int): Page<ReferralProgramView> {
+        return referralProgramRepo.findReferralProgramByFriendId(friendId, pageable = PageRequest.of(pageNumber, pageSize))
+            .map { it.toView() }
+    }
+
     @Modifying
     fun cancelReferralProgram(referId: Long) {
         referralProgramRepo.deleteById(referId)
+    }
+
+    @Transactional
+    fun updateReferralPaidStatus(referId: Long) {
+        referralProgramRepo.updateReferralProgramPaidStatus(referId)
     }
 }

@@ -22,5 +22,6 @@ CREATE TABLE referral_program
     psycho_id              BIGINT REFERENCES psycho_profiles (id) ON DELETE CASCADE NOT NULL,
     friend_id              BIGINT REFERENCES friend_profiles (id) ON DELETE CASCADE NOT NULL,
     application_id         BIGINT,
-    status                 VARCHAR(255)
+    status                 VARCHAR(255),
+    paid_status            VARCHAR(255)
 );

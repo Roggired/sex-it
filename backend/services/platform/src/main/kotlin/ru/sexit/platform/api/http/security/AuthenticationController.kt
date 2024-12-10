@@ -37,4 +37,5 @@ class AuthenticationController(
     fun refreshAccess(
         @RequestBody request: RefreshAccessRequest,
     ): KeycloakAccessView = keycloakOAuth2AuthenticationService.refreshAccess(request).toView()
+
 }

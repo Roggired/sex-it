@@ -11,6 +11,7 @@ import ru.sexit.platform.api.http.profile.friend.model.FriendProfileView
 import ru.sexit.platform.api.http.profile.friend.model.FriendRequest
 import ru.sexit.platform.api.http.profile.friend.model.toView
 import ru.sexit.platform.api.http.referralprogram.FriendRefersView
+import ru.sexit.platform.api.http.referralprogram.ReferralProgramView
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.FriendRepo
 import ru.sexit.platform.domain.repo.PsychoProfileRepo
@@ -127,12 +128,10 @@ class FriendService(
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun getFriendshipProjection(pageNumber: Int, pageSize: Int): Page<FriendRefersView> {
         val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
-        return friendshipService.getFriendshipProjectionForFriend(friendId, pageable = PageRequest.of(pageNumber, pageSize)).map { it.toView() }
-    }
-
-    fun getFriendship(): List<Friendship> {
-        val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
-        return friendshipService.getFriendship(friendId)
+        return friendshipService.getFriendshipProjectionForFriend(
+            friendId,
+            pageable = PageRequest.of(pageNumber, pageSize)
+        ).map { it.toView() }
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -147,4 +146,10 @@ class FriendService(
     fun getFriendsByPsycho(psychoId: Long, pageNumber: Int, pageSize: Int): Page<FriendshipProjectionByPsycho> {
         return friendRepo.getFriendsByPsychoId(psychoId, pageable = PageRequest.of(pageNumber, pageSize))
     }
+
+    fun getReferralProgramByFriend(pageNumber: Int, pageSize: Int): Page<ReferralProgramView> {
+        val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
+        return referralService.getReferralProgramByFriendId(friendId, pageNumber, pageSize)
+    }
+
 }
