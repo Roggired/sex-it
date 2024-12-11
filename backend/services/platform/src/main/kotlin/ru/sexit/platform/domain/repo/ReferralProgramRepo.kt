@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
+import ru.sexit.platform.domain.model.PaidStatus
 import ru.sexit.platform.domain.model.ReferralProgram
 import ru.sexit.platform.domain.model.ReferralProgramForApplicationProjection
 import ru.sexit.platform.domain.model.ReferralProgramProjection
@@ -38,12 +39,13 @@ interface ReferralProgramRepo : JpaRepository<ReferralProgram, Long> {
             SELECT r.id as id, p.name as name
                 FROM referral_program r 
                 LEFT JOIN psycho_profiles p on r.psycho_id = p.id 
-            WHERE r.friend_id = :friendId AND r.status = :status 
+            WHERE r.friend_id = :friendId AND r.status = :status AND r.paid_status = :paidStatus
         """, nativeQuery = true
     )
     fun findReferralProgramByFriendIdAndStatus(
         friendId: Long,
         status: String,
+        paidStatus: String = PaidStatus.NOT_PAID.name,
         pageable: Pageable
     ): Page<ReferralProgramProjection>
 

@@ -30,14 +30,12 @@ class ApplicationController(
     fun acceptApplication(
         @PathVariable("id") id: Long,
         @RequestBody @Validated request: AcceptApplicationRequest,
-        @RequestParam(required = false) referId: Long?
-    ): Unit = applicationService.acceptApplication(id, request, referId)
+    ): Unit = applicationService.acceptApplication(id, request)
 
     @PostMapping("/{id}/reject")
     fun rejectApplication(
         @PathVariable("id") id: Long,
-        @RequestParam(required = false) referId: Long?
-    ): Unit = applicationService.rejectApplication(id, referId)
+    ): Unit = applicationService.rejectApplication(id)
 
     @PostMapping("/{id}/revoke")
     fun revokeApplication(

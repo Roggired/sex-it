@@ -12,6 +12,7 @@ import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.api.http.slot.SlotWithDate
 import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ApplicationRepository
+import ru.sexit.platform.domain.repo.ReferralProgramRepo
 import ru.sexit.platform.infrastructure.exception.InvalidDataException
 import ru.sexit.platform.infrastructure.exception.InvalidOperationException
 import ru.sexit.platform.infrastructure.exception.NotFoundException
@@ -21,6 +22,7 @@ import ru.sexit.platform.infrastructure.integration.keycloak.admin.api.KeycloakA
 import ru.sexit.platform.infrastructure.integration.keycloak.admin.dto.KeycloakError
 import ru.sexit.platform.infrastructure.security.getRequestAuthorUserInfo
 import ru.sexit.platform.utils.RequestMode
+import ru.sexit.platform.utils.log
 import java.time.LocalDateTime
 
 @Service
@@ -34,6 +36,7 @@ class ApplicationService(
     private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
     private val friendService: FriendService,
     private val platformTransactionManager: PlatformTransactionManager,
+    private val referralProgramRepo: ReferralProgramRepo,
 ) {
     @Autowired
     @Lazy
@@ -69,19 +72,21 @@ class ApplicationService(
             application
         }!!
 
-        transactionTemplate.executeWithoutResult {
-            val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
-            application.friendName = referProjection.name
-            application.referId = referProjection.referId
-            application.friendId = referProjection.friendId
-            applicationRepository.save(application)
+        if (referId != null) {
+            transactionTemplate.executeWithoutResult {
+                val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
+                application.friendName = referProjection.name
+                application.referId = referProjection.referId
+                application.friendId = referProjection.friendId
+                applicationRepository.save(application)
+            }
         }
 
         return application
     }
 
     @Transactional
-    fun acceptApplication(id: Long, request: AcceptApplicationRequest, referId: Long?) {
+    fun acceptApplication(id: Long, request: AcceptApplicationRequest) {
         val application =
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
         application.status = SlotStatus.PLANNED
@@ -91,7 +96,7 @@ class ApplicationService(
                 throw InvalidOperationException("NO_ACTIVE_SUBSCRIPTION")
             }
 
-            if (currentSubscription.usageStats.used >= currentSubscription.usageStats.max) {
+            if (currentSubscription.usageStats.max != 0 && currentSubscription.usageStats.used >= currentSubscription.usageStats.max) {
                 throw InvalidOperationException("LIMIT_REACHED")
             }
 
@@ -104,19 +109,19 @@ class ApplicationService(
 
             application.address = request.address
         }
-        if (referId != null) {
-            val referralProgram = referralService.getReferralProgramById(referId)
+        if (application.referId != null) {
+            val referralProgram = referralService.getReferralProgramById(application.referId!!)
             referralProgram.status = ReferralProgramStatus.ACCEPTED_APPLICATION.toString()
+            referralProgramRepo.save(referralProgram)
         }
-
     }
 
     @Transactional
-    fun rejectApplication(id: Long, referId: Long?) {
+    fun rejectApplication(id: Long) {
         val application = getById(id)
         application.status = SlotStatus.REJECTED
-        if (referId != null) {
-            referralService.cancelReferralProgram(referId)
+        if (application.referId != null) {
+            referralService.cancelReferralProgram(application.referId!!)
         }
     }
 

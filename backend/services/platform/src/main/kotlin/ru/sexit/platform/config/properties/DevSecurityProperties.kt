@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Profile
 
 @ConfigurationProperties(prefix = "security.dev-only")
-@Profile("dev")
 data class DevSecurityProperties(
     val apiKeyHeader: String,
     val psycho: DevUserProperties,
