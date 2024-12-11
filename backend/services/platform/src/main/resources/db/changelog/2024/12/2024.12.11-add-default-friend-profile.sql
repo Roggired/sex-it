@@ -1,0 +1,1 @@
+INSERT INTO friend_profiles(user_id, name, email, percent) values('1fd6d68c-38a2-439a-a22f-1737a65c149e', 'Вася Пупкин', 'psycho_friend@example.com', 1);

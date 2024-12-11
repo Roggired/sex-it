@@ -8,6 +8,7 @@ import {SuiButton} from '../../../sui/sui-button/sui-button';
 import {useNavigate} from 'react-router-dom';
 import {routes} from '../../../utils/routes';
 import {useGetPsychoProfile} from "../../../hooks/useGetPsychoProfile";
+import * as EmailValidator from "email-validator";
 
 export const PsychoCreateProfile = () => {
   const navigate = useNavigate();
@@ -97,6 +98,11 @@ export const PsychoCreateProfile = () => {
 
               if (!email) {
                 alert("Введите email")
+                return;
+              }
+
+              if (!EmailValidator.validate(email)) {
+                alert("Некорректный email")
                 return;
               }
 

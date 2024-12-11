@@ -17,4 +17,5 @@
     <include file="/db/changelog/2024/11/2024.11.24-change-default-psycho-profile-email.sql"/>
     <include file="/db/changelog/2024/12/2024.12.03-add-note-to-application.sql"/>
     <include file="/db/changelog/2024/12/2024.12.24-add-friend-profile.sql"/>
+    <include file="/db/changelog/2024/12/2024.12.11-add-default-friend-profile.sql"/>
 </databaseChangeLog>

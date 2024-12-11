@@ -7,6 +7,7 @@ import {friendProfileApi} from 'apps/sit-frontend/src/app/api/friend/friend-prof
 import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
 import {useNavigate} from "react-router-dom";
 import {routes} from "../../../utils/routes";
+import * as EmailValidator from "email-validator";
 
 export const FriendCreateProfile = () => {
   const navigate = useNavigate();
@@ -30,6 +31,15 @@ export const FriendCreateProfile = () => {
   }, [isLoading, currentProfile]);
 
   const onUpdateProfile = () => {
+    if (email) {
+      if (!EmailValidator.validate(email)) {
+        setError("Некорректный email");
+        return
+      } else {
+        setError(undefined)
+      }
+    }
+
     if (name && email) {
       updateProfile({
         id: id ?? 0,
