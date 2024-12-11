@@ -34,7 +34,13 @@ export const TokenPage = ({ redirectRoute }: { redirectRoute: string }) => {
           if (role?.[0] === Role.PSYCHO) {
             navigate(routes.toPsychoCalendarPage())
           } else if (role?.[0] === Role.CLIENT) {
-            navigate(routes.toClientPsychoList())
+            const lc = localStorage.getItem("LINK")
+            if (lc) {
+              localStorage.removeItem("LINK")
+              window.location.href = lc
+            } else {
+              navigate(routes.toClientPsychoList())
+            }
           } else if (role?.[0] === Role.ADMIN) {
             navigate(routes.toAdmin())
           } else if (role?.[0] === Role.PSYCHO_FRIEND) {

@@ -3,7 +3,10 @@ import {getSSOLoginUrl} from "./routes";
 
 export const RouteGuard = () => {
   useEffect(() => {
-    window.location.replace(getSSOLoginUrl())
+    if (window.location.href.includes("referralId")) {
+      window.localStorage.setItem("LINK", window.location.href)
+    }
+    window.location.replace(getSSOLoginUrl());
   }, [])
   return <></>
 }
