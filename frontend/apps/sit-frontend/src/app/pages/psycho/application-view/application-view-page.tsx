@@ -55,6 +55,7 @@ export const ApplicationViewPage = ({appId, close}: { readonly appId: number, cl
           ? 'Заявка от анонимного пользователя'
           : `Заявка от ${application.clientName}`}
       </span>
+      {application.friendName && <span>Заявка от другана: {application.friendName}</span>}
       <span>
         Отправлена: {new Date(application.creationTime).toLocaleString()}
       </span>

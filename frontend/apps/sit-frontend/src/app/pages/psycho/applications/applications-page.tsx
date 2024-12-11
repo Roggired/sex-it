@@ -29,6 +29,7 @@ export const ApplicationsPage = () => {
               creationDate={date.toLocaleString()}
               desc={d.description ?? ''}
               onClick={() => setIsOpened(true)}
+              frName={d.friendName}
             />
             <Modal isOpen={isOpened} onClose={() => setIsOpened(false)}>
               <ApplicationViewPage appId={d.id} close={() => setIsOpened(false)}/>
@@ -46,17 +47,20 @@ const ApplicationEntry = ({
                             desc,
                             creationDate,
                             onClick,
+  frName
                           }: {
   readonly name?: string;
   readonly creationDate: string;
   readonly desc: string;
   readonly onClick: () => void;
+  frName?: string
 }) => {
   return (
     <div className="applications-page__entry" onClick={onClick}>
       <b>
         Заявка от {name ? `пользователя ${name}` : 'анонимного пользователя'}
       </b>
+      {frName && <span>От другана: {frName}</span>}
       <span>Отправлена: {creationDate}</span>
       <span>{desc}</span>
     </div>

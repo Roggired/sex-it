@@ -23,6 +23,7 @@ export type Application = {
   clientName?: string;
   notes?: string;
   results?: string;
+  friendName?: string;
 };
 
 export type CreateApplicationRequest = {
