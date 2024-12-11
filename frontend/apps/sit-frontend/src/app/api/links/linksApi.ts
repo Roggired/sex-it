@@ -18,6 +18,7 @@ export const linksApi = gatewayApi.injectEndpoints({
           pageSize: 10000
         },
       }),
+      providesTags: ['Links']
     }),
 
     getMyLinksPaid: builder.query<PageView<LinkView>, void>({
@@ -28,6 +29,7 @@ export const linksApi = gatewayApi.injectEndpoints({
           pageSize: 10000
         },
       }),
+      providesTags: ['Links']
     }),
 
     getMyLinksAccepted: builder.query<PageView<LinkView>, void>({
@@ -38,8 +40,16 @@ export const linksApi = gatewayApi.injectEndpoints({
           pageSize: 10000
         },
       }),
+      providesTags: ['Links']
     }),
 
+    payByLink: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `referral/my-refer/${id}`,
+        method: 'POST'
+      }),
+      invalidatesTags: ['Links']
+    }),
 
   }),
 });
