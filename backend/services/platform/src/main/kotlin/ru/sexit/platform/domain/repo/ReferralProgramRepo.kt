@@ -75,7 +75,7 @@ interface ReferralProgramRepo : JpaRepository<ReferralProgram, Long> {
             select 
                 r.id as referId, f.id as friendId, f.name as name 
                 from referral_program r 
-                left join friend f on r.friend_id = f.id
+                left join friend_profiles f on r.friend_id = f.id
              where r.application_id = :applicationId;
         """, nativeQuery = true
     )

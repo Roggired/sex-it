@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
+import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.support.TransactionTemplate
 import ru.sexit.platform.api.http.applications.*
 import ru.sexit.platform.api.http.slot.SlotWithDate
 import ru.sexit.platform.domain.model.*
@@ -31,40 +33,46 @@ class ApplicationService(
     @Qualifier("keycloakAdminIntegrationRetrofitClient")
     private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
     private val friendService: FriendService,
+    private val platformTransactionManager: PlatformTransactionManager,
 ) {
     @Autowired
     @Lazy
     lateinit var subscriptionService: SubscriptionService
 
-    @Transactional
     fun createApplication(applicationRequest: NewApplicationRequest, referId: Long?): Application {
-        val slot = slotService.getById(applicationRequest.slotId)
-        val application = applicationRepository.save(
-            Application(
-                id = 0L,
-                creationTime = LocalDateTime.now(),
-                anonType = applicationRequest.anonType,
-                visitType = applicationRequest.visitType,
-                description = applicationRequest.description,
-                status = SlotStatus.NEED_REVIEW,
-                link = null,
-                address = null,
-                results = null,
-                note = null,
-                userId = getRequestAuthorUserInfo().id,
-                friendId = null,
-                friendName = null,
-                referId = null
-            ).also { it.slot = slot }
-        )
-        if (referId != null) {
-            val referralProgram = referralService.getReferralProgramById(referId)
-            val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
-            referralProgram.applicationId = application.id
-            application.friendName = referProjection.name
-            application.referId = referProjection.referId
-            application.friendId = referProjection.friendId
-        }
+        val transactionTemplate = TransactionTemplate(platformTransactionManager)
+        val application = transactionTemplate.execute {
+            val slot = slotService.getById(applicationRequest.slotId)
+            val application = applicationRepository.save(
+                Application(
+                    id = 0L,
+                    creationTime = LocalDateTime.now(),
+                    anonType = applicationRequest.anonType,
+                    visitType = applicationRequest.visitType,
+                    description = applicationRequest.description,
+                    status = SlotStatus.NEED_REVIEW,
+                    link = null,
+                    address = null,
+                    results = null,
+                    note = null,
+                    userId = getRequestAuthorUserInfo().id,
+                    friendId = null,
+                    friendName = null,
+                    referId = referId
+                ).also { it.slot = slot }
+            )
+            if (referId != null) {
+                val referralProgram = referralService.getReferralProgramById(referId)
+                referralProgram.applicationId = application.id
+            }
+
+            application
+        }!!
+
+        val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
+        application.friendName = referProjection.name
+        application.referId = referProjection.referId
+        application.friendId = referProjection.friendId
         return application
     }
 

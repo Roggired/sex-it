@@ -9,6 +9,8 @@ import {routes} from 'apps/sit-frontend/src/app/utils/routes';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {skipToken} from "@reduxjs/toolkit/query";
+import { useAtomValue } from 'jotai';
+import { referralIdAtom } from '../../../features/referral/referral-application';
 
 export const PsychoSlotPage = ({
   month, day, psychoId
@@ -25,6 +27,7 @@ export const PsychoSlotPage = ({
   const [isOnline, setIsOnline] = useState(true)
 
   const [createApp] = applicationsApi.useCreateApplicationMutation();
+  const referralId = useAtomValue(referralIdAtom)
 
   const {data: p} = psychoProfileApi.useGetPsychoQuery(psychoId ? {
     id: psychoId,
@@ -62,10 +65,13 @@ export const PsychoSlotPage = ({
     }
 
     createApp({
-      slotId,
-      description: desc,
-      visitType: isOnline ? 'ONLINE' : 'OFFLINE',
-      anonType: isAnon ? 'ANON' : 'NE_ANON',
+      body: {
+        slotId,
+        description: desc,
+        visitType: isOnline ? 'ONLINE' : 'OFFLINE',
+        anonType: isAnon ? 'ANON' : 'NE_ANON',
+      },
+      referralId: referralId
     })
       .unwrap()
       .then(() => psychoId && navigate(routes.toClientPsychoCalendar(psychoId)));

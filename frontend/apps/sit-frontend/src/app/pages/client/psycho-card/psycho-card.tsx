@@ -3,7 +3,7 @@ import { psychoProfileApi } from 'apps/sit-frontend/src/app/api/psycho/psycho-pr
 import { useGetNumberPathParam } from 'apps/sit-frontend/src/app/hooks/useGetNumberPathParam';
 import { SuiButton } from 'apps/sit-frontend/src/app/sui/sui-button/sui-button';
 import { routes } from 'apps/sit-frontend/src/app/utils/routes';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Alla from '../../../../assets/img.png';
 import {skipToken} from "@reduxjs/toolkit/query";
 import {RatingWidget} from "../../shared/rating-widget/rating-widget";
@@ -11,8 +11,14 @@ import {feedbackApi} from "../../../api/feedback/feedback-api";
 import {SuiLoader} from "../../../sui/sui-loader/sui-loder";
 import {getRuStringFromDate} from "../../../utils/dates";
 import {Page} from "../../shared/page/page";
+import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
+import { referralIdAtom } from '../../../features/referral/referral-application';
 
 export const PsychoCardPage = () => {
+  const [params, _] = useSearchParams();
+  const setReferralId = useSetAtom(referralIdAtom)
+
   const id = useGetNumberPathParam('id');
   const navigate = useNavigate();
 
@@ -24,6 +30,13 @@ export const PsychoCardPage = () => {
   const { data: feedbacks } = feedbackApi.useGetLastTenFeedbacksByPsychoQuery(id ? {
     psychoId: id
   } : skipToken)
+
+  useEffect(() => {
+    const referralId = params.get('referralId');
+    if (referralId) {
+      setReferralId(Number(referralId))
+    }
+  }, []);
 
   if (!id || !data || !feedbacks) {
     return <Page center={true}><SuiLoader/></Page>;

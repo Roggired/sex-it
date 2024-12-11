@@ -7,11 +7,12 @@ import { gatewayApi } from 'apps/sit-frontend/src/app/api/store';
 
 export const applicationsApi = gatewayApi.injectEndpoints({
   endpoints: (builder) => ({
-    createApplication: builder.mutation<object, CreateApplicationRequest>({
-      query: (body) => ({
+    createApplication: builder.mutation<object, {body: CreateApplicationRequest, referralId: number | undefined}>({
+      query: ({body, referralId}) => ({
         url: 'applications',
         method: 'POST',
-        body,
+        body: body,
+        params: { referId: referralId }
       }),
       invalidatesTags: ['CalSlots'],
     }),
