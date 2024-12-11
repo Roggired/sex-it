@@ -14,7 +14,7 @@ export const FriendshipPage = () => {
   >('ADD_FRIEND');
 
   // TODO: добавить запрос на отмену заявки
-  const { data: friendshipStatusData } = referralProgramApi.useGetFriendFriendshipQuery();
+  const { data: friendshipStatusData } = referralProgramApi.useGetFriendFriendshipQuery(finalSearch);
 
   const { data: availablePsychos } = referralProgramApi.useGetAvailablePsychoQuery({
     request: {
@@ -103,7 +103,9 @@ const PsychoCard = ({
 }) => {
   const [createFriendship] = referralProgramApi.useCreateFriendshipMutation()
   const [createReferralProgram] = referralProgramApi.useCreateReferralProgramMutation()
-  // TODO: add cancel invite request
+  const [cancelFriendship] = referralProgramApi.useCancelFriendshipRequestMutation()
+
+  const [isCopied, setIsCopied] = useState(false)
 
   const onGetReferralLink = () => {
     createReferralProgram(id)
@@ -111,8 +113,12 @@ const PsychoCard = ({
       .then((referralId) => {
         const link = `http://localhost:3000/sexit/client/psycho-card/${id}?referralId=${referralId}`
         copyTextToClipboard(link)
-        alert("Реферальная ссылка скопирована")
+        setIsCopied(true)
       })
+  }
+
+  const onCancelFriendship = () => {
+    cancelFriendship(id)
   }
 
   return (
@@ -128,13 +134,18 @@ const PsychoCard = ({
         </SuiButton>
       }
       {
-        state === 'PENDING' && <SuiButton onClick={() => {}} buttonType='secondary'>
+        state === 'PENDING' && <SuiButton onClick={onCancelFriendship} buttonType='secondary'>
           Отменить запрос
         </SuiButton>
       }
       {
-        state === 'CURRENT' && <SuiButton onClick={onGetReferralLink}>
+        state === 'CURRENT' && !isCopied && <SuiButton onClick={onGetReferralLink}>
           Получить ссылку
+        </SuiButton>
+      }
+      {
+        state === 'CURRENT' && isCopied && <SuiButton onClick={() => {}} buttonType='secondary'>
+          Ссылка скопирована
         </SuiButton>
       }
       {

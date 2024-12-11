@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Positive
 
 data class UpdateReferRequest(
     @field:Positive
-    val psychoId: Long,
+    val friendId: Long,
     @field:NotNull
     val status: String
 )

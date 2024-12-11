@@ -26,10 +26,13 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
     }),
 
     // Получение статуса дружбы для другана
-    getFriendFriendship: build.query<PageView<{ id: number; psychoName: string; friendshipStatus: string }>, void>({
-      query: () => ({
+    getFriendFriendship: build.query<PageView<{ id: number; psychoName: string; friendshipStatus: string }>, string | undefined>({
+      query: (param) => ({
         url: 'referral/my-psycho',
-        method: 'GET',
+        method: 'POST',
+        body: {
+          name: param,
+        },
         params: { pageNumber: 0, pageSize: 10000 }
       }),
       providesTags: ['Friendships']
@@ -80,5 +83,13 @@ export const referralProgramApi = gatewayApi.injectEndpoints({
         body: applicationRequest, // передаем тело запроса для создания заявки
       }),
     }),
+
+    cancelFriendshipRequest: build.mutation<void, number>({
+      query: (param) => ({
+        url: `referral/my-friend/${param}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['FriendshipRequests', 'Friendships']
+    })
   }),
 });

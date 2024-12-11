@@ -18,7 +18,7 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
             SELECT p.id as id, p.name as name, f.status as status
                 FROM friendship f
                 LEFT JOIN psycho_profiles p on p.id = f.psycho_id
-            WHERE f.friend_id = :friendId AND (coalesce(:psychoName, null) is null or lower(p.name) like lower(concat('%', cast(:psychoName as string), '%'))) 
+            WHERE f.friend_id = :friendId AND (coalesce(:psychoName, null) is null or lower(p.name) like lower(concat('%', cast(:psychoName as varchar), '%'))) 
            
         """, nativeQuery = true
     )
@@ -47,4 +47,8 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
 
     fun findAllByFriendId(friendId: Long): List<Friendship>?
 
+    fun deleteByFriendIdAndPsychoId(
+        friendId: Long,
+        psychoId: Long,
+    )
 }

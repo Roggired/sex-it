@@ -108,11 +108,11 @@ class ReferralProgramController(
         referralService.updateReferralPaidStatus(referId)
     }
 
-    @DeleteMapping("/my-friend/{friendshipId}")
+    @DeleteMapping("/my-friend/{psychoId}")
     fun deleteFriendshipByFriend(
-        @PathVariable("friendshipId") friendshipId: Long
+        @PathVariable("psychoId") psychoId: Long
     ) {
-        friendshipService.deleteFriendship(friendshipId)
+        friendshipService.deleteFriendship(psychoId)
     }
 
     @GetMapping("/my-refer/accepted")

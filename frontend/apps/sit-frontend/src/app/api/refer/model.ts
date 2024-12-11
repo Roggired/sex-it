@@ -28,7 +28,7 @@ export interface ApplicationView {
 }
 
 export interface UpdateReferRequest {
-  psychoId: number;
+  friendId: number;
   status: string;
 }
 

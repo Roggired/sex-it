@@ -70,11 +70,12 @@ interface PsychoProfileRepo : JpaRepository<PsychoProfile, Long> {
         """
         UPDATE friendship
         SET status = :status
-        WHERE psycho_id = :psychoId
+        WHERE friend_id = :friendId AND psycho_id = :psychoId
     """, nativeQuery = true
     )
     fun updateFriendshipStatus(
         psychoId: Long,
+        friendId: Long,
         status: String
     )
 }

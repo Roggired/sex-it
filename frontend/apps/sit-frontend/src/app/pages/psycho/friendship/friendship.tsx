@@ -87,10 +87,10 @@ const FriendCard = ({
       {
         status === 'PENDING' && (
           <div style={{display: 'flex', flexDirection: 'row', gap: '16px'}}>
-            <SuiButton onClick={() => changeStatus({ psychoId: id, status: 'ACCEPTED' })}>
+            <SuiButton onClick={() => changeStatus({ friendId: id, status: 'ACCEPTED' })}>
               Принять
             </SuiButton>
-            <SuiButton onClick={() => changeStatus({ psychoId: id, status: 'REJECTED' })} buttonType='secondary'>
+            <SuiButton onClick={() => changeStatus({ friendId: id, status: 'REJECTED' })} buttonType='secondary'>
               Отклонить
             </SuiButton>
           </div>
