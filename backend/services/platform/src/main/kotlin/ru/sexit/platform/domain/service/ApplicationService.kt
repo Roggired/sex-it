@@ -69,10 +69,14 @@ class ApplicationService(
             application
         }!!
 
-        val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
-        application.friendName = referProjection.name
-        application.referId = referProjection.referId
-        application.friendId = referProjection.friendId
+        transactionTemplate.executeWithoutResult {
+            val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
+            application.friendName = referProjection.name
+            application.referId = referProjection.referId
+            application.friendId = referProjection.friendId
+            applicationRepository.save(application)
+        }
+
         return application
     }
 
@@ -159,6 +163,9 @@ class ApplicationService(
                 description = it.description,
                 link = it.link,
                 address = it.address,
+                referId = it.referId,
+                friendId = it.friendId,
+                friendName = it.friendName,
             )
         }
     }
