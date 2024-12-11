@@ -13,7 +13,7 @@ export const FriendCreateProfile = () => {
   const [id, setId] = useState<number | undefined>();
   const [name, setName] = useState<string | undefined>();
   const [email, setEmail] = useState<string | undefined>();
-  const [percent, setPercent] = useState(0);
+  const [percent, setPercent] = useState(1);
 
   const [error, setError] = useState<string | undefined>()
 
