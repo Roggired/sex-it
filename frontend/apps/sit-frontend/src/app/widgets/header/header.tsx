@@ -34,6 +34,9 @@ export const Header = () => {
         <h4 onClick={() => navigate(routes.toCreateFriendShipPage())}>
           Друзья
         </h4>
+        <h4 onClick={() => navigate(routes.toFriendLinksPage())}>
+          Ссылки
+        </h4>
         {/*<h4 onClick={() => navigate(routes.toPsychoSubscriptionPage())}>*/}
         {/*  Подписка*/}
         {/*</h4>*/}

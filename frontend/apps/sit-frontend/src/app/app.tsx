@@ -17,6 +17,7 @@ import {AdminPage} from './pages/admin/AdminPage';
 import {FriendCreateProfile} from './pages/friend/create-profile/friend-create-profile';
 import {FriendshipPage} from './pages/friend/create-friendship/create-friendship-page';
 import {FriendshipStatusForPsychoPage} from './pages/psycho/friendship/friendship';
+import {FriendLinks} from "./pages/friend/links/friend-links";
 
 
 const psychoRoutes: RouteObject[] = [
@@ -121,6 +122,10 @@ const friendRoutes: RouteObject[] = [
           </>
           ),
         },
+  {
+    path: 'friend/links',
+    element: <FriendLinks />
+  }
   ]
 
 const adminRoutes: Array<RouteObject> = [
