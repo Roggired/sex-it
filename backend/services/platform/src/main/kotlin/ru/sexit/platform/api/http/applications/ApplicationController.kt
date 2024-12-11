@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import ru.sexit.platform.domain.model.Application
 import ru.sexit.platform.domain.model.SlotStatus
 import ru.sexit.platform.domain.model.toView
 import ru.sexit.platform.domain.service.ApplicationService
@@ -29,12 +30,14 @@ class ApplicationController(
     fun acceptApplication(
         @PathVariable("id") id: Long,
         @RequestBody @Validated request: AcceptApplicationRequest,
-    ): Unit = applicationService.acceptApplication(id, request)
+        @RequestParam(required = false) referId: Long?
+    ): Unit = applicationService.acceptApplication(id, request, referId)
 
     @PostMapping("/{id}/reject")
     fun rejectApplication(
-        @PathVariable("id") id: Long
-    ): Unit = applicationService.rejectApplication(id)
+        @PathVariable("id") id: Long,
+        @RequestParam(required = false) referId: Long?
+    ): Unit = applicationService.rejectApplication(id, referId)
 
     @PostMapping("/{id}/revoke")
     fun revokeApplication(

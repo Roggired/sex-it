@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import ru.sexit.platform.api.http.profile.FilterAvailablePsycho
 import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 import ru.sexit.platform.api.http.profile.friend.model.FriendProfileView
 import ru.sexit.platform.api.http.profile.friend.model.FriendRequest
@@ -126,11 +127,16 @@ class FriendService(
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    fun getFriendshipProjection(pageNumber: Int, pageSize: Int): Page<FriendRefersView> {
+    fun getFriendshipProjection(
+        pageNumber: Int,
+        pageSize: Int,
+        request: FilterAvailablePsycho
+    ): Page<FriendRefersView> {
         val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
         return friendshipService.getFriendshipProjectionForFriend(
             friendId,
-            pageable = PageRequest.of(pageNumber, pageSize)
+            pageable = PageRequest.of(pageNumber, pageSize),
+            request.name
         ).map { it.toView() }
     }
 
@@ -152,4 +158,26 @@ class FriendService(
         return referralService.getReferralProgramByFriendId(friendId, pageNumber, pageSize)
     }
 
+    fun getAcceptedReferralProgramByFriend(pageNumber: Int, pageSize: Int): Page<ReferralProgramView> {
+        val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
+        return referralService.getAcceptedReferralProgramByFriendId(
+            friendId,
+            pageNumber,
+            pageSize,
+            ReferralProgramStatus.ACCEPTED_APPLICATION.toString()
+        )
+    }
+
+    fun getPaidReferralProgramByFriend(pageNumber: Int, pageSize: Int): Page<ReferralProgramView> {
+        val friendId = getFriendIdByUserId(getRequestAuthorUserInfo().id).id
+        return referralService.getPaidReferralProgramByFriendId(
+            friendId,
+            pageNumber,
+            pageSize,
+        )
+    }
+
+    fun getFriendById(friendId: Long): FriendProfile {
+        return friendRepo.findById(friendId).orElseThrow { NotFoundException("no such friend") }
+    }
 }

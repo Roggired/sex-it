@@ -69,8 +69,9 @@ class FriendshipService(
     fun getFriendshipProjectionForFriend(
         friendId: Long,
         pageable: Pageable,
+        psychoName: String?,
     ): Page<FriendshipProjectionByFriend> {
-        return friendshipRepo.getFriendshipProjectionForFriend(friendId, pageable)
+        return friendshipRepo.getFriendshipProjectionForFriend(friendId, pageable, psychoName)
     }
 
     fun getFriendship(
@@ -89,7 +90,7 @@ class FriendshipService(
     }
 
     @Transactional
-    fun deleteFriendshipByFriend(friendshipId: Long) {
+    fun deleteFriendship(friendshipId: Long) {
         friendshipRepo.deleteById(friendshipId)
     }
 }

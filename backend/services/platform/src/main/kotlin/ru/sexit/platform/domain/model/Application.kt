@@ -26,7 +26,10 @@ class Application(
     var address: String?,
     var results: String?,
     var note: String?,
-    val userId: String
+    val userId: String,
+    var referId: Long?,
+    var friendName: String?,
+    var friendId: Long?,
 ) {
     @ManyToOne
     @JoinColumn(name = "slot_id")
@@ -45,6 +48,9 @@ class Application(
             results = null,
             note = null,
             userId = "",
+            referId = null,
+            friendId = null,
+            friendName = null,
         )
     }
 }
@@ -62,6 +68,9 @@ fun Application.toView(): ApplicationView = ApplicationView(
     address = address,
     notes = note,
     results = results,
+    referId = referId,
+    friendId = friendId,
+    friendName = friendName
 )
 
 data class AcceptedApplication(
@@ -79,7 +88,10 @@ data class AcceptedApplication(
     val visitType: VisitType,
     val link: String?,
     val address: String?,
-    val results: String?
+    val results: String?,
+    val friendId: Long?,
+    val friendName: String?,
+    val referId: Long?
 )
 
 fun AcceptedApplication.toAcceptedApplicationView(link: String?): AcceptedApplicationView = AcceptedApplicationView(
@@ -91,5 +103,6 @@ fun AcceptedApplication.toAcceptedApplicationView(link: String?): AcceptedApplic
     visitType = visitType,
     link = link,
     address = address,
-    results = results
+    results = results,
+    referId = referId
 )

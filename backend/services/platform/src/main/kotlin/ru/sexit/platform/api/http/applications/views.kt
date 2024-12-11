@@ -28,6 +28,9 @@ data class ApplicationView(
     val address: String?,
     val notes: String?,
     val results: String?,
+    var referId: Long?,
+    var friendId: Long?,
+    var friendName: String?,
 )
 
 data class ApplicationWithClientView(
@@ -40,7 +43,10 @@ data class ApplicationWithClientView(
     val status: SlotStatus,
     val description: String?,
     val link: String?,
-    val address: String?
+    val address: String?,
+    val referId: Long? = null,
+    val friendId: Long? = null,
+    val friendName: String? = null,
 )
 
 data class AcceptedApplicationView(
@@ -52,5 +58,8 @@ data class AcceptedApplicationView(
     val visitType: VisitType,
     val link: String?,
     val address: String?,
-    val results: String?
+    val results: String?,
+    val referId: Long? = null,
+    val friendId: Long? = null,
+    val friendName: String? = null,
 )

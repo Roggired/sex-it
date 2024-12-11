@@ -25,3 +25,7 @@ CREATE TABLE referral_program
     status                 VARCHAR(255),
     paid_status            VARCHAR(255)
 );
+
+ALTER TABLE applications ADD COLUMN refer_id BIGINT;
+ALTER TABLE applications ADD COLUMN friend_id BIGINT;
+ALTER TABLE applications ADD COLUMN friend_name VARCHAR(255);

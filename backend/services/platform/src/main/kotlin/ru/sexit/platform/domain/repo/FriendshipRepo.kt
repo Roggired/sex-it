@@ -18,11 +18,11 @@ interface FriendshipRepo: JpaRepository<Friendship, Long> {
             SELECT p.id as id, p.name as name, f.status as status
                 FROM friendship f
                 LEFT JOIN psycho_profiles p on p.id = f.psycho_id
-            WHERE f.friend_id = :friendId
+            WHERE f.friend_id = :friendId AND (coalesce(:psychoName, null) is null or lower(p.name) like lower(concat('%', cast(:psychoName as string), '%'))) 
            
         """, nativeQuery = true
     )
-    fun getFriendshipProjectionForFriend(friendId: Long, pageable: Pageable): Page<FriendshipProjectionByFriend>
+    fun getFriendshipProjectionForFriend(friendId: Long, pageable: Pageable, psychoName: String?): Page<FriendshipProjectionByFriend>
 
     @Query(
         """

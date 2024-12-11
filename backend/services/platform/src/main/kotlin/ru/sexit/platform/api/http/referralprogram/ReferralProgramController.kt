@@ -6,7 +6,6 @@ import ru.sexit.platform.api.http.profile.FilterAvailablePsycho
 import ru.sexit.platform.api.http.profile.PsychoProfileForFriendshipView
 import ru.sexit.platform.api.http.profile.friend.model.FriendshipRequest
 import ru.sexit.platform.api.http.toView
-import ru.sexit.platform.domain.model.FriendshipProjectionByPsycho
 import ru.sexit.platform.domain.service.FriendService
 import ru.sexit.platform.domain.service.FriendshipService
 import ru.sexit.platform.domain.service.PsychoProfileService
@@ -53,14 +52,16 @@ class ReferralProgramController(
     )
 
     //FIXME добавить фильтр по имени
-    @GetMapping("/my-psycho")
+    @PostMapping("/my-psycho")
     fun getFriendFriendship(
+        @RequestBody request: FilterAvailablePsycho,
         @RequestParam(required = false) pageNumber: Int? = 0,
         @RequestParam(required = false) pageSize: Int? = 6,
     ): PageView<FriendRefersView> {
         return profileService.getFriendshipProjection(
             pageNumber = pageNumber ?: 0,
             pageSize = pageSize ?: 6,
+            request
         ).toView()
     }
 
@@ -107,11 +108,33 @@ class ReferralProgramController(
         referralService.updateReferralPaidStatus(referId)
     }
 
-    @DeleteMapping("/my-friend")
+    @DeleteMapping("/my-friend/{friendshipId}")
     fun deleteFriendshipByFriend(
-        @PathVariable(required = true) friendshipId: Long
+        @PathVariable("friendshipId") friendshipId: Long
     ) {
-        friendshipService.deleteFriendshipByFriend(friendshipId)
+        friendshipService.deleteFriendship(friendshipId)
+    }
+
+    @GetMapping("/my-refer/accepted")
+    fun getAcceptedRefers(
+        @RequestParam(required = false) pageNumber: Int? = 0,
+        @RequestParam(required = false) pageSize: Int? = 6,
+    ): PageView<ReferralProgramView> {
+        return profileService.getAcceptedReferralProgramByFriend(
+            pageNumber = pageNumber ?: 0,
+            pageSize = pageSize ?: 6
+        ).toView()
+    }
+
+    @GetMapping("/my-refer/paid")
+    fun getPaidRefers(
+        @RequestParam(required = false) pageNumber: Int? = 0,
+        @RequestParam(required = false) pageSize: Int? = 6,
+    ): PageView<ReferralProgramView> {
+        return profileService.getPaidReferralProgramByFriend(
+            pageNumber = pageNumber ?: 0,
+            pageSize = pageSize ?: 6
+        ).toView()
     }
 
 //    @PostMapping("/cancel-refer")

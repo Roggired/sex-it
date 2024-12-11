@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import ru.sexit.platform.api.http.referralprogram.ReferralProgramView
-import ru.sexit.platform.domain.model.PaidStatus
-import ru.sexit.platform.domain.model.ReferralProgram
-import ru.sexit.platform.domain.model.ReferralProgramStatus
-import ru.sexit.platform.domain.model.toView
+import ru.sexit.platform.domain.model.*
 import ru.sexit.platform.domain.repo.ReferralProgramRepo
 import ru.sexit.platform.infrastructure.exception.NotFoundException
 
@@ -42,11 +39,37 @@ class ReferralService(
     }
 
     fun getReferralProgramByFriendId(friendId: Long, pageNumber: Int, pageSize: Int): Page<ReferralProgramView> {
-        return referralProgramRepo.findReferralProgramByFriendId(friendId, pageable = PageRequest.of(pageNumber, pageSize))
+        return referralProgramRepo.findReferralProgramByFriendId(
+            friendId,
+            pageable = PageRequest.of(pageNumber, pageSize)
+        )
             .map { it.toView() }
     }
 
+    fun getAcceptedReferralProgramByFriendId(
+        friendId: Long,
+        pageNumber: Int,
+        pageSize: Int,
+        status: String
+    ): Page<ReferralProgramView> {
+        return referralProgramRepo.findReferralProgramByFriendIdAndStatus(
+            friendId = friendId, pageable = PageRequest.of(pageNumber, pageSize),
+            status = status
+        ).map { it.toView() }
+    }
+
+    fun getPaidReferralProgramByFriendId(
+        friendId: Long,
+        pageNumber: Int,
+        pageSize: Int,
+    ): Page<ReferralProgramView> {
+        return referralProgramRepo.findReferralProgramByFriendIdAndStatusPaid(
+            friendId = friendId, pageable = PageRequest.of(pageNumber, pageSize),
+        ).map { it.toView() }
+    }
+
     @Modifying
+    @Transactional
     fun cancelReferralProgram(referId: Long) {
         referralProgramRepo.deleteById(referId)
     }
@@ -54,5 +77,9 @@ class ReferralService(
     @Transactional
     fun updateReferralPaidStatus(referId: Long) {
         referralProgramRepo.updateReferralProgramPaidStatus(referId)
+    }
+
+    fun getReferralProjectionByApplicationId(applicationId: Long): ReferralProgramForApplicationProjection{
+        return referralProgramRepo.getReferralProgramApplicationProjection(applicationId)
     }
 }

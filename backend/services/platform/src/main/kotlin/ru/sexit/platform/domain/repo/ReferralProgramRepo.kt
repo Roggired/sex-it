@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import ru.sexit.platform.domain.model.ReferralProgram
+import ru.sexit.platform.domain.model.ReferralProgramForApplicationProjection
 import ru.sexit.platform.domain.model.ReferralProgramProjection
 
 interface ReferralProgramRepo : JpaRepository<ReferralProgram, Long> {
@@ -21,7 +22,10 @@ interface ReferralProgramRepo : JpaRepository<ReferralProgram, Long> {
 
     @Query(
         """
-            SELECT p.name as name, r.paid_status as paidStatus from referral_program r LEFT JOIN psycho_profiles p on r.psycho_id = p.id WHERE r.friend_id = :friendId
+            SELECT r.id as id, p.name as name 
+            from referral_program r 
+            LEFT JOIN psycho_profiles p on r.psycho_id = p.id 
+            WHERE r.friend_id = :friendId and (r.status = 'CREATED' or r.status = 'CREATED_APPLICATION')
         """, nativeQuery = true
     )
     fun findReferralProgramByFriendId(
@@ -29,12 +33,52 @@ interface ReferralProgramRepo : JpaRepository<ReferralProgram, Long> {
         pageable: Pageable
     ): Page<ReferralProgramProjection>
 
+    @Query(
+        """
+            SELECT r.id as id, p.name as name
+                FROM referral_program r 
+                LEFT JOIN psycho_profiles p on r.psycho_id = p.id 
+            WHERE r.friend_id = :friendId AND r.status = :status 
+        """, nativeQuery = true
+    )
+    fun findReferralProgramByFriendIdAndStatus(
+        friendId: Long,
+        status: String,
+        pageable: Pageable
+    ): Page<ReferralProgramProjection>
+
+    @Query(
+        """
+            SELECT r.id as id, p.name as name
+                FROM referral_program r 
+                LEFT JOIN psycho_profiles p on r.psycho_id = p.id 
+            WHERE r.friend_id = :friendId AND r.paid_status = 'PAID' 
+        """, nativeQuery = true
+    )
+    fun findReferralProgramByFriendIdAndStatusPaid(
+        friendId: Long,
+        pageable: Pageable
+    ): Page<ReferralProgramProjection>
+
+
     @Modifying
     @Query(
         """
-          UPDATE referral_program SET paid_status = 'PAID' WHERE id = :id;  
+          UPDATE referral_program SET paid_status = 'PAID' WHERE id = :id
         """, nativeQuery = true
     )
     fun updateReferralProgramPaidStatus(id: Long)
+
+
+    @Query(
+        """
+            select 
+                r.id as referId, f.id as friendId, f.name as name 
+                from referral_program r 
+                left join friend f on r.friend_id = f.id
+             where r.application_id = :applicationId;
+        """, nativeQuery = true
+    )
+    fun getReferralProgramApplicationProjection(applicationId: Long): ReferralProgramForApplicationProjection
 }
 

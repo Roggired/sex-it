@@ -6,6 +6,7 @@ import ru.sexit.platform.api.http.referralprogram.ReferralProgramView
 enum class ReferralProgramStatus {
     CREATED,
     CREATED_APPLICATION,
+    ACCEPTED_APPLICATION,
     VISITED_MEET
     ;
 }
@@ -31,11 +32,15 @@ class ReferralProgram(
 interface ReferralProgramProjection {
     val id: Long
     val name: String
-    val paidStatus: String
 }
 
 fun ReferralProgramProjection.toView(): ReferralProgramView = ReferralProgramView(
     id = id,
     name = name,
-    paidStatus = paidStatus
 )
+
+interface ReferralProgramForApplicationProjection {
+    val referId: Long
+    val friendId: Long
+    val name: String
+}

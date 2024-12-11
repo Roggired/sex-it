@@ -30,6 +30,7 @@ class ApplicationService(
     private val referralService: ReferralService,
     @Qualifier("keycloakAdminIntegrationRetrofitClient")
     private val integrationClient: IntegrationRetrofitClient<KeycloakError>,
+    private val friendService: FriendService,
 ) {
     @Autowired
     @Lazy
@@ -51,21 +52,28 @@ class ApplicationService(
                 results = null,
                 note = null,
                 userId = getRequestAuthorUserInfo().id,
+                friendId = null,
+                friendName = null,
+                referId = null
             ).also { it.slot = slot }
         )
         if (referId != null) {
             val referralProgram = referralService.getReferralProgramById(referId)
+            val referProjection = referralService.getReferralProjectionByApplicationId(application.id)
             referralProgram.applicationId = application.id
+            application.friendName = referProjection.name
+            application.referId = referProjection.referId
+            application.friendId = referProjection.friendId
         }
         return application
     }
 
     @Transactional
-    fun acceptApplication(id: Long, request: AcceptApplicationRequest) {
+    fun acceptApplication(id: Long, request: AcceptApplicationRequest, referId: Long?) {
         val application =
             applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
         application.status = SlotStatus.PLANNED
-        if(application.visitType == VisitType.ONLINE) {
+        if (application.visitType == VisitType.ONLINE) {
             val currentSubscription = subscriptionService.getCurrentSubscription()
             if (currentSubscription.current == null || currentSubscription.usageStats == null) {
                 throw InvalidOperationException("NO_ACTIVE_SUBSCRIPTION")
@@ -84,12 +92,20 @@ class ApplicationService(
 
             application.address = request.address
         }
+        if (referId != null) {
+            val referralProgram = referralService.getReferralProgramById(referId)
+            referralProgram.status = ReferralProgramStatus.ACCEPTED_APPLICATION.toString()
+        }
+
     }
 
     @Transactional
-    fun rejectApplication(id: Long) {
+    fun rejectApplication(id: Long, referId: Long?) {
         val application = getById(id)
         application.status = SlotStatus.REJECTED
+        if (referId != null) {
+            referralService.cancelReferralProgram(referId)
+        }
     }
 
     @Transactional
@@ -117,7 +133,6 @@ class ApplicationService(
                 keycloakAdminAPI.getUserRepresentationById(it.userId)
             }.content!!
         }.associateBy { it.id }
-
         return applications.map {
             ApplicationWithClientView(
                 id = it.id,
@@ -140,7 +155,8 @@ class ApplicationService(
         }
     }
 
-    fun getById(id: Long): Application = applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
+    fun getById(id: Long): Application =
+        applicationRepository.findById(id).orElseThrow { NotFoundException("No such application with id: $id") }
 
     fun getAcceptedApplications(psychoName: String?, appStatus: SlotStatus?): List<AcceptedApplicationView> {
         if (appStatus != null && appStatus != SlotStatus.NEED_REVIEW && appStatus != SlotStatus.PLANNED && appStatus != SlotStatus.REJECTED) {
