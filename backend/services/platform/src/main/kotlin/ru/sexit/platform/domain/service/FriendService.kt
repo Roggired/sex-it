@@ -66,7 +66,7 @@ class FriendService(
             .also { log.info("Profile (id: $id) has been updated") }
     }
 
-    private fun update(id: Long, request: FriendRequest): FriendProfile {
+    fun update(id: Long, request: FriendRequest): FriendProfile {
         val profile = friendRepo.findById(id).orElseThrow { NotFoundException("no such friend") }
         val profileByEmail = friendRepo.findByEmail(request.email)
 

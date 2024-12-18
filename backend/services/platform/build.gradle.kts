@@ -96,6 +96,9 @@ tasks.withType<BootJar> {
 tasks.withType<Test> {
     useJUnitPlatform()
     this.environment["SPRING_PROFILES_ACTIVE"] = "test"
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.getByName<Jar>("jar") {

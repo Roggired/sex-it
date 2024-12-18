@@ -40,7 +40,7 @@ fun ReferralProgramProjection.toView(): ReferralProgramView = ReferralProgramVie
 )
 
 interface ReferralProgramForApplicationProjection {
-    val referId: Long
-    val friendId: Long
-    val name: String
+    var referId: Long
+    var friendId: Long
+    var name: String
 }
