@@ -83,6 +83,10 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    testImplementation("io.github.bonigarcia:webdrivermanager:5.9.2")
+    testImplementation("org.seleniumhq.selenium:selenium-java:4.27.0")
+    //testImplementation("org.seleniumhq.selenium:selenium-chrome-driver:4.27.0")
 }
 
 springBoot {

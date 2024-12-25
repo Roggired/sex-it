@@ -14,3 +14,5 @@ services:
   platform:
     ports:
       - "31505:8080"
+    environment:
+      - BBB_SECRET=secret1234
